@@ -1,9 +1,13 @@
 package com.bignerdranch.blastermind.android.blastermind;
 
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.bignerdranch.blastermind.andorid.core.Guess;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,6 +16,15 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        int size = 4;
+        Guess guess = new Guess(size);
+        ArrayList<Integer> colors = new ArrayList<>(size);
+        colors.add(1);
+        colors.add(3);
+        colors.add(4345);
+        colors.add(43);
+        guess.setValues(colors);
+        ArrayList<Integer> colors1 = guess.getValues();
     }
 
 
@@ -37,3 +50,5 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 }
+
+
