@@ -10,10 +10,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bignerdranch.blastermind.andorid.core.Feedback;
 import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.LiveDataManager;
+import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
@@ -40,7 +42,7 @@ public class MainFragment extends Fragment {
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
     private LiveDataManager mDataManager;
-
+    private int mMatchId = 123;
 
     public static Fragment newInstance() {
         return new MainFragment();
@@ -84,6 +86,15 @@ public class MainFragment extends Fragment {
 
     public void onEventMainThread(MatchEndedEvent matchEndedEvent) {
         Toast.makeText(getActivity(), "match ended", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onEventMainThread(FeedbackEvent feedbackEvent) {
+        Feedback feedback = feedbackEvent.getFeedback();
+        int matchId = feedback.getMatchId();
+        if (matchId == mMatchId) { // if this feedback is about this match
+            String toastText = "positions correct: " + feedback.getPositionCount() + "; color correct: " + feedback.getColorCount();
+            Toast.makeText(getActivity(), toastText, Toast.LENGTH_LONG).show();
+        }
     }
 
     @OnClick(R.id.update_button)

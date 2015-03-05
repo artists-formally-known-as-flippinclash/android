@@ -2,9 +2,11 @@ package com.bignerdranch.blastermind.android.blastermind.backend;
 
 import android.util.Log;
 
+import com.bignerdranch.blastermind.andorid.core.Feedback;
 import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.android.blastermind.backend.request.GuessBody;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.GuessResponse;
+import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
 import com.pusher.client.Pusher;
@@ -41,11 +43,12 @@ public class LiveDataManager implements DataManager {
     @Override
     public void sendGuess(Guess guess) {
         int matchId = 123;
-        GuessBody guessBody = GuessBody.buildBodyFromGuess(guess);
+        GuessBody guessBody = GuessBody.mapGuessToBody(guess);
         mRestService.sendGuess(matchId, guessBody, new Callback<GuessResponse>() {
             @Override
             public void success(GuessResponse guessResponse, Response response) {
-                Log.d(RETROFIT_TAG, "Success");
+                Feedback feedback = GuessResponse.mapResponseToFeedback(guessResponse);
+                EventBus.getDefault().post(new FeedbackEvent(feedback));
             }
 
             @Override

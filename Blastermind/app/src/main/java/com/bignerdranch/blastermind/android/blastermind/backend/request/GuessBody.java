@@ -8,7 +8,9 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-// GSON object to interface between Guess model object and webservice
+/**
+ *  GSON to POST Guess POJO to webservice
+ */
 public class GuessBody {
 
     @SerializedName("guess")
@@ -18,7 +20,7 @@ public class GuessBody {
        mGuess = new GuessRequest();
     }
 
-    public static GuessBody buildBodyFromGuess(Guess guess) {
+    public static GuessBody mapGuessToBody(Guess guess) {
 
         GuessBody guessBody = new GuessBody();
 

@@ -13,6 +13,9 @@ import com.bignerdranch.blastermind.andorid.core.Logic;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  GSON object to interface between Guess model object and webservice
+ */
 public class GuessRowView extends LinearLayout {
 
     private static final String TAG = GuessRowView.class.getSimpleName();
