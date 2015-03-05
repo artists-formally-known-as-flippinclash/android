@@ -5,11 +5,13 @@ import com.bignerdranch.blastermind.android.blastermind.backend.response.GuessRe
 
 import retrofit.Callback;
 import retrofit.http.Body;
+import retrofit.http.Headers;
 import retrofit.http.POST;
 import retrofit.http.Path;
 
 public interface BlasterRestService {
 
+    @Headers("Content-Type: application/json")
     @POST(API.GUESS)
     public void sendGuess(@Path("match_id") int matchId, @Body GuessBody body, Callback<GuessResponse> responseCallback);
 
