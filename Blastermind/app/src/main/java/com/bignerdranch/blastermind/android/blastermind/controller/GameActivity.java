@@ -6,18 +6,26 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.R;
 
 
 public class GameActivity extends SingleFragmentActivity {
 
-    public static Intent newIntent(Context context) {
-        return  new Intent(context, GameActivity.class);
+    private static final String EXTRA_PLAYER = "GameActivity.EXTRA_PLAYER";
+
+    public static Intent newIntent(Context context, Player player) {
+
+        Intent intent =  new Intent(context, GameActivity.class);
+        intent.putExtra(EXTRA_PLAYER, player);
+        return intent;
     }
+
 
     @Override
     protected Fragment createFragment() {
-        return GameFragment.newInstance();
+        Player player = (Player) getIntent().getSerializableExtra(EXTRA_PLAYER);
+        return GameFragment.newInstance(player);
     }
 
     @Override
