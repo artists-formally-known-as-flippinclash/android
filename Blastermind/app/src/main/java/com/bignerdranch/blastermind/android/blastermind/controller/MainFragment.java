@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
-import com.bignerdranch.blastermind.android.blastermind.backend.PusherWebManager;
+import com.bignerdranch.blastermind.android.blastermind.backend.LiveDataManager;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
@@ -38,7 +38,6 @@ public class MainFragment extends Fragment {
 
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
-    private PusherWebManager mPusherWebManager;
 
 
     public static Fragment newInstance() {
@@ -67,8 +66,8 @@ public class MainFragment extends Fragment {
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
-        mPusherWebManager = new PusherWebManager();
-        mPusherWebManager.setupConnection();
+        LiveDataManager dataManager = new LiveDataManager();
+        dataManager.setupConnection();
     }
 
     @Override
@@ -138,5 +137,4 @@ public class MainFragment extends Fragment {
         // if all pegs have a type then and only then enable update button
         mUpdateButton.setEnabled(mCurrentGuessRow.areAllPegsSet());
     }
-
 }

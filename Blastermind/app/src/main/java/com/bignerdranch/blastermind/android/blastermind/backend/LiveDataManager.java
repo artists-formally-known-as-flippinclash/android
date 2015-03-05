@@ -13,18 +13,20 @@ import com.pusher.client.connection.ConnectionStateChange;
 
 import de.greenrobot.event.EventBus;
 
-public class PusherWebManager implements WebManager {
+public class LiveDataManager implements DataManager {
 
     private static final String APP_KEY = "a8dc613841aa8963a8a4";
-    private static final String TAG = PusherWebManager.class.getSimpleName();
+    private static final String TAG = LiveDataManager.class.getSimpleName();
     private static final String CHANNEL_NAME = "game-us";
-
-    private Pusher mPusher;
 
     @Override
     public void setupConnection() {
-        mPusher = new Pusher(APP_KEY);
-        mPusher.connect(new ConnectionEventListener() {
+        setupPusher();
+    }
+
+    private void setupPusher() {
+        Pusher pusher = new Pusher(APP_KEY);
+        pusher.connect(new ConnectionEventListener() {
             @Override
             public void onConnectionStateChange(ConnectionStateChange change) {
                 Log.d(TAG, "state changed from :" + change.getPreviousState() + " to " + change.getCurrentState());
@@ -38,7 +40,7 @@ public class PusherWebManager implements WebManager {
 
 
         // subscribe to channel
-        Channel channel = mPusher.subscribe(CHANNEL_NAME);
+        Channel channel = pusher.subscribe(CHANNEL_NAME);
 
         // bind to events
         channel.bind("match-started", new SubscriptionEventListener() {
