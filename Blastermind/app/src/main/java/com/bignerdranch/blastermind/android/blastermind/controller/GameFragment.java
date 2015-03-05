@@ -3,7 +3,6 @@ package com.bignerdranch.blastermind.android.blastermind.controller;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +37,6 @@ public class GameFragment extends BaseFragment {
     private static final String TAG = GameFragment.class.getSimpleName();
     private static final String TAG_WINNER_DIALOG = "MainFragment.TAG_WINNER_DIALOG";
     private static final String TAG_LOSER_DIALOG = "MainFragment.TAG_LOSER_DIALOG";
-    private static final String ARG_PLAYER = "GameFragment.ARG_PLAYER";
 
     @InjectView(R.id.update_button)
     protected Button mUpdateButton;
@@ -55,23 +53,8 @@ public class GameFragment extends BaseFragment {
     private int mMatchId = 123;
     private Player mPlayer;
 
-    public static Fragment newInstance(Player player) {
-
-        GameFragment gameFragment = new GameFragment();
-        Bundle arguments = new Bundle();
-        arguments.putSerializable(ARG_PLAYER, player);
-        gameFragment.setArguments(arguments);
-        return gameFragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mPlayer = (Player) getArguments().getSerializable(ARG_PLAYER);
-        if (mPlayer == null) {
-            Log.e(TAG, "player is null!");
-            getActivity().finish();
-        }
+    public static Fragment newInstance() {
+        return new GameFragment();
     }
 
     @Nullable

@@ -48,7 +48,7 @@ public class CreateMatchFragment extends Fragment {
     public void onStartClicked() {
         String name = String.valueOf(mNameEditText.getText());
         Player player = new Player(name);
-        Intent intent = GameActivity.newIntent(getActivity(), player);
+        Intent intent = GamePendingActivity.newIntent(getActivity(), player);
         startActivity(intent);
     }
 

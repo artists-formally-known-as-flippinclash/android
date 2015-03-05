@@ -6,6 +6,8 @@ import com.bignerdranch.blastermind.android.blastermind.controller.CreateMatchAc
 import com.bignerdranch.blastermind.android.blastermind.controller.CreateMatchFragment;
 import com.bignerdranch.blastermind.android.blastermind.controller.GameActivity;
 import com.bignerdranch.blastermind.android.blastermind.controller.GameFragment;
+import com.bignerdranch.blastermind.android.blastermind.controller.GamePendingActivity;
+import com.bignerdranch.blastermind.android.blastermind.controller.GamePendingFragment;
 
 import javax.inject.Singleton;
 
@@ -13,10 +15,15 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module(
-        injects = {GameFragment.class,
+        injects = {
+                GameFragment.class,
                 GameActivity.class,
+
                 CreateMatchActivity.class,
-                CreateMatchFragment.class
+                CreateMatchFragment.class,
+
+                GamePendingActivity.class,
+                GamePendingFragment.class
         },
         library = true
 )
