@@ -3,7 +3,6 @@ package com.bignerdranch.blastermind.android.blastermind.view;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -29,30 +28,30 @@ public class GuessRowView extends LinearLayout {
     }
 
     public void setup(int numPegs) {
+        // setup LayoutParams
+        float weight = 100 / Logic.guessWidth;
+        LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight);
+        layoutParams.setMargins(8, 8, 8, 8);
+
         mPegViews = new ArrayList<>(numPegs);
 
         for (int i = 0; i < numPegs; i++) {
 
             final int index = i;
             final PegView pegView = new PegView(mContext);
-
-            float weight = 100 / Logic.guessWidth;
-            pegView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight));
-
+            pegView.setLayoutParams(layoutParams);
             pegView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d(TAG, "clicked on item: " + index);
                     mActivePegIndex = index;
 
                     makeAllPegsInactive();
-
                     // and set this one to active
                     pegView.setActive();
                 }
             });
 
-            // add to view and array
+            // add to view hierarchy and array
             addView(pegView);
             mPegViews.add(pegView);
 

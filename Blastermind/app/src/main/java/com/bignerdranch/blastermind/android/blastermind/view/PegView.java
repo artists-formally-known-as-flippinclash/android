@@ -33,7 +33,6 @@ public class PegView extends Button {
         setText("");
     }
 
-    // if peg has been set
     public boolean isSet() {
         return mColor != null;
     }
