@@ -57,6 +57,7 @@ public class MainFragment extends Fragment {
     @OnClick(R.id.update_button)
     public void onUpdateClick() {
         createEmptyGuessForNextTurn();
+        setStateOfUpdateButton();
     }
 
     private void createEmptyGuessForNextTurn() {
@@ -72,24 +73,39 @@ public class MainFragment extends Fragment {
     }
 
     private void setupInputButtons() {
-        int weight = 100/ Logic.guessWidth;
         // get types in order
         for (int i = 0; i < TYPE.values().length; i++) {
-            for (final TYPE type: TYPE.values()) {
+            for (final TYPE type : TYPE.values()) {
                 if (type.getPosition() == i) {
-                    // add input button to container
-                    InputButton inputButton = new InputButton(getActivity());
-                    inputButton.setColor(type.getRgb());
-                    inputButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight));
-                    inputButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mCurrentGuessRow.setActivePegType(type);
-                        }
-                    });
-                    mInputContainer.addView(inputButton);
+                    setupInputButton(type);
                 }
             }
         }
+
+        setStateOfUpdateButton();
     }
+
+    private void setupInputButton(final TYPE type) {
+        int weight = 100 / Logic.guessWidth;
+
+        // add input button to container
+        InputButton inputButton = new InputButton(getActivity());
+        inputButton.setColor(type.getRgb());
+        inputButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight));
+        inputButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCurrentGuessRow.setActivePegType(type);
+                setStateOfUpdateButton();
+
+            }
+        });
+        mInputContainer.addView(inputButton);
+    }
+
+    private void setStateOfUpdateButton() {
+        // if all pegs have a type then and only then enable update button
+        mUpdateButton.setEnabled(mCurrentGuessRow.areAllPegsSet());
+    }
+
 }

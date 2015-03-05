@@ -20,7 +20,7 @@ public class GuessRowView extends LinearLayout {
     private int mActivePegIndex; // index in mPegsVie for which peg is active; -1 == all pegs are set
 
     public GuessRowView(Context context) {
-        this (context, null);
+        this(context, null);
     }
 
     public GuessRowView(Context context, AttributeSet attrs) {
@@ -31,12 +31,12 @@ public class GuessRowView extends LinearLayout {
     public void setup(int numPegs) {
         mPegViews = new ArrayList<>(numPegs);
 
-        for (int i = 0; i< numPegs; i++) {
+        for (int i = 0; i < numPegs; i++) {
 
             final int index = i;
             final PegView pegView = new PegView(mContext);
 
-            float weight = 100/ Logic.guessWidth;
+            float weight = 100 / Logic.guessWidth;
             pegView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight));
 
             pegView.setOnClickListener(new OnClickListener() {
@@ -77,15 +77,25 @@ public class GuessRowView extends LinearLayout {
         advanceActivePeg();
     }
 
+    public boolean areAllPegsSet() {
+        for (PegView pegView : mPegViews) {
+            if (!pegView.isSet()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     /**
      * advance to the next activatable peg (i.e. the next peg that hasn't been set yet)
      */
     private void advanceActivePeg() {
         makeAllPegsInactive();
 
-        for (int i = 0; i< mPegViews.size(); i++) {
+        for (int i = 0; i < mPegViews.size(); i++) {
             PegView pegView = mPegViews.get(i);
-            if (!pegView.isSet()){
+            if (!pegView.isSet()) {
                 pegView.setActive();
                 mActivePegIndex = i;
                 return;
@@ -98,8 +108,10 @@ public class GuessRowView extends LinearLayout {
 
     private void makeAllPegsInactive() {
         // clear active state on all pegs
-        for (PegView tempPegView: mPegViews) {
+        for (PegView tempPegView : mPegViews) {
             tempPegView.setInactive();
         }
     }
+
+
 }
