@@ -1,13 +1,13 @@
 package com.bignerdranch.blastermind.android.blastermind.view;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
 
 import java.util.ArrayList;
@@ -15,10 +15,9 @@ import java.util.ArrayList;
 public class GuessRowView extends LinearLayout {
 
     private static final String TAG = GuessRowView.class.getSimpleName();
-    private Guess mGuess;
     private Context mContext;
     private ArrayList<PegView> mPegViews;
-    private int mActivePegIndex;
+    private int mActivePegIndex; // index in mPegsVie for which peg is active; -1 == all pegs are set
 
     public GuessRowView(Context context) {
         this (context, null);
@@ -27,16 +26,6 @@ public class GuessRowView extends LinearLayout {
     public GuessRowView(Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
-    }
-
-    public void setGuess(Guess guess) {
-        mGuess = guess;
-        // iterate through peg views and set color
-        ArrayList<Logic.TYPE> types = mGuess.getTypes();
-        for (int i = 0; i<types.size(); i++) {
-            Logic.TYPE type = types.get(i);
-            mPegViews.get(i).setColor(type.getRgb());
-        }
     }
 
     public void setup(int numPegs) {
@@ -69,19 +58,29 @@ public class GuessRowView extends LinearLayout {
 
             // set first item to active
             mPegViews.get(mActivePegIndex).setActive();
-
         }
     }
 
+    @Nullable
     public PegView getActivePeg() {
+        if (mActivePegIndex == -1) {
+            return null;
+        }
         return mPegViews.get(mActivePegIndex);
     }
 
+    public void setActivePegType(Logic.TYPE type) {
+        if (getActivePeg() == null) {
+            return;
+        }
+        getActivePeg().setColor(type.getRgb());
+        advanceActivePeg();
+    }
 
     /**
      * advance to the next activatable peg (i.e. the next peg that hasn't been set yet)
      */
-    public void advanceActivePeg() {
+    private void advanceActivePeg() {
         makeAllPegsInactive();
 
         for (int i = 0; i< mPegViews.size(); i++) {
@@ -92,6 +91,9 @@ public class GuessRowView extends LinearLayout {
                 return;
             }
         }
+
+        // all pegs are set
+        mActivePegIndex = -1;
     }
 
     private void makeAllPegsInactive() {

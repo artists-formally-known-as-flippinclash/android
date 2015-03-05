@@ -13,7 +13,6 @@ import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
-import com.bignerdranch.blastermind.android.blastermind.view.PegView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -49,6 +48,30 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.inject(this, view);
 
+        createEmptyGuessForNextTurn();
+        setupInputButtons();
+
+        return view;
+    }
+
+    @OnClick(R.id.update_button)
+    public void onUpdateClick() {
+        createEmptyGuessForNextTurn();
+    }
+
+    private void createEmptyGuessForNextTurn() {
+        if (mCurrentTurn > Logic.guessLimit) {
+            mUpdateButton.setEnabled(false);
+        }
+        mCurrentTurn++;
+
+        // create new row and add it
+        mCurrentGuessRow = new GuessRowView(getActivity());
+        mCurrentGuessRow.setup(Logic.guessWidth);
+        mGuessContainer.addView(mCurrentGuessRow);
+    }
+
+    private void setupInputButtons() {
         int weight = 100/ Logic.guessWidth;
         // get types in order
         for (int i = 0; i < TYPE.values().length; i++) {
@@ -61,35 +84,12 @@ public class MainFragment extends Fragment {
                     inputButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            updateActiveCell(type);
+                            mCurrentGuessRow.setActivePegType(type);
                         }
                     });
                     mInputContainer.addView(inputButton);
                 }
             }
         }
-
-        return view;
-    }
-
-    private void updateActiveCell(TYPE type) {
-        PegView activePeg = mCurrentGuessRow.getActivePeg();
-        activePeg.setColor(type.getRgb());
-        mCurrentGuessRow.advanceActivePeg();
-    }
-
-
-    @OnClick(R.id.update_button)
-    public void onUpdateClick() {
-
-        if (mCurrentTurn > Logic.guessLimit) {
-            mUpdateButton.setEnabled(false);
-        }
-        mCurrentTurn++;
-
-        // create new row and add it
-        mCurrentGuessRow = new GuessRowView(getActivity());
-        mCurrentGuessRow.setup(Logic.guessWidth);
-        mGuessContainer.addView(mCurrentGuessRow);
     }
 }
