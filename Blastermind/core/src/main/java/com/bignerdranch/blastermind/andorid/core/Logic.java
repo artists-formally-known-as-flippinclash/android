@@ -6,7 +6,6 @@ public class Logic {
     public static final int guessWidth = 4;
     public static final int guessLimit = 10;
 
-
     public enum TYPE {
         Red(0, "#FF0000"),
         Green(1, "#00FF00"),

@@ -13,6 +13,7 @@ import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
+import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,9 @@ public class MainFragment extends Fragment {
     protected Button mUpdateButton;
     @InjectView(R.id.fragment_main_guesses_container)
     protected LinearLayout mGuessContainer;
+    @InjectView(R.id.fragment_main_input_container)
+    protected LinearLayout mInputContainer;
+
     private int mCurrentTurn;
 
     public static Fragment newInstance() {
@@ -45,8 +49,25 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.inject(this, view);
+
+        int weight = 100/ Logic.guessWidth;
+        // get types in order
+        for (int i = 0; i < TYPE.values().length; i++) {
+            for (TYPE type: TYPE.values()) {
+                if (type.getPosition() == i) {
+                    // add input button to container
+                    InputButton inputButton = new InputButton(getActivity());
+                    inputButton.setColor(type.getRgb());
+                    inputButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight));
+                    mInputContainer.addView(inputButton);
+                }
+            }
+        }
+
         return view;
     }
+
+
 
     @OnClick(R.id.update_button)
     public void onUpdateClick() {
@@ -54,7 +75,6 @@ public class MainFragment extends Fragment {
         if (mCurrentTurn > Logic.guessLimit) {
             mUpdateButton.setEnabled(false);
         }
-
         mCurrentTurn++;
 
         // create new row and add it
