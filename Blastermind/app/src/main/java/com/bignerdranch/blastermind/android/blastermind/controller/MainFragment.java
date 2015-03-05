@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
+import com.bignerdranch.blastermind.android.blastermind.backend.PusherWebManager;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
 
@@ -31,6 +32,7 @@ public class MainFragment extends Fragment {
 
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
+    private PusherWebManager mPusherWebManager;
 
 
     public static Fragment newInstance() {
@@ -40,6 +42,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPusherWebManager = new PusherWebManager();
+        mPusherWebManager.setupConnection();
     }
 
     @Nullable
