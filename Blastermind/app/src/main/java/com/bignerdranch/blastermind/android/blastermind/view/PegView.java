@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
 
 import butterknife.ButterKnife;
@@ -23,7 +24,7 @@ public class PegView extends RelativeLayout {
     @InjectView(R.id.view_peg_button)
     protected Button mButton;
 
-    private String mColor;
+    private Logic.TYPE mType;
 
     public PegView(Context context) {
         this(context, null);
@@ -34,15 +35,13 @@ public class PegView extends RelativeLayout {
         init();
     }
 
-    private void init() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_peg, this);
-        ButterKnife.inject(this, view);
+    public Logic.TYPE getType() {
+        return mType;
     }
 
-    public void setColor(String color) {
-        mColor = color;
-        int rgbColor = Color.parseColor(color);
-        mButton.setBackgroundColor(rgbColor);
+    public void setType(Logic.TYPE type) {
+        mType = type;
+        setColor(mType.getRgb());
     }
 
     public void setActive() {
@@ -57,11 +56,23 @@ public class PegView extends RelativeLayout {
     }
 
     public boolean isSet() {
-        return mColor != null;
+        return mType != null;
     }
 
     public void reset() {
         setColor(EMPTY_COLOR);
-        mColor = null;
+        mType = null;
     }
+
+    private void init() {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_peg, this);
+        ButterKnife.inject(this, view);
+    }
+
+
+    private void setColor(String color) {
+        int rgbColor = Color.parseColor(color);
+        setBackgroundColor(rgbColor);
+    }
+
 }

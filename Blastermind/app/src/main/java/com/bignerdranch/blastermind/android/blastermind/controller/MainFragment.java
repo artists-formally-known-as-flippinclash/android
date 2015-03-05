@@ -8,19 +8,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.bignerdranch.blastermind.andorid.core.Feedback;
+import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
+import com.bignerdranch.blastermind.android.blastermind.backend.LiveDataManager;
+import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
+import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
+import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
 
 public class MainFragment extends Fragment {
+
+    private static final String TAG = MainFragment.class.getSimpleName();
 
     @InjectView(R.id.update_button)
     protected Button mUpdateButton;
@@ -31,7 +41,8 @@ public class MainFragment extends Fragment {
 
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
-
+    private LiveDataManager mDataManager;
+    private int mMatchId = 123;
 
     public static Fragment newInstance() {
         return new MainFragment();
@@ -40,6 +51,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Nullable
@@ -54,10 +66,43 @@ public class MainFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+        mDataManager = new LiveDataManager();
+        mDataManager.setupConnection();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void onEventMainThread(MatchStartedEvent matchStartedEvent) {
+        Toast.makeText(getActivity(), "match started", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onEventMainThread(MatchEndedEvent matchEndedEvent) {
+        Toast.makeText(getActivity(), "match ended", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onEventMainThread(FeedbackEvent feedbackEvent) {
+        Feedback feedback = feedbackEvent.getFeedback();
+        int matchId = feedback.getMatchId();
+        if (matchId == mMatchId) { // if this feedback is about this match
+            String toastText = "positions correct: " + feedback.getPositionCount() + "; color correct: " + feedback.getColorCount();
+            Toast.makeText(getActivity(), toastText, Toast.LENGTH_LONG).show();
+        }
+    }
+
     @OnClick(R.id.update_button)
     public void onUpdateClick() {
+        Guess guess = mCurrentGuessRow.getGuess();
+        mDataManager.sendGuess(guess);
+
         createEmptyGuessForNextTurn();
-        setStateOfUpdateButton();
     }
 
     private void createEmptyGuessForNextTurn() {
@@ -107,5 +152,4 @@ public class MainFragment extends Fragment {
         // if all pegs have a type then and only then enable update button
         mUpdateButton.setEnabled(mCurrentGuessRow.areAllPegsSet());
     }
-
 }

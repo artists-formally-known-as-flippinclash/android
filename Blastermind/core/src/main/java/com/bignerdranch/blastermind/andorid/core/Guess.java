@@ -1,21 +1,21 @@
 package com.bignerdranch.blastermind.andorid.core;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Guess {
 
     private final int mSize;
-    private ArrayList<Logic.TYPE> mTypes;
+    private List<Logic.TYPE> mTypes;
 
     public Guess(int size) {
         mSize = size;
     }
 
-    public ArrayList<Logic.TYPE> getTypes() {
+    public List<Logic.TYPE> getTypes() {
         return mTypes;
     }
 
-    public void setTypes(ArrayList<Logic.TYPE> types) {
+    public void setTypes(List<Logic.TYPE> types) {
         if (types.size() != mSize) {
             throw new IllegalArgumentException("types must be of size: " + mSize);
         }
