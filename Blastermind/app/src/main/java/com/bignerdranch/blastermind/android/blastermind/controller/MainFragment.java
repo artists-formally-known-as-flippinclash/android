@@ -74,6 +74,12 @@ public class MainFragment extends Fragment {
         types.add(TYPE.Red);
         types.add(TYPE.Yellow);
         types.add(TYPE.Green);
+
+        // swap
+        int modolo = mCurrentTurn % Logic.guessWidth;
+        TYPE type =types.get(modolo);
+        types.remove(1);
+        types.add(type);
         guess.setTypes(types);
         return guess;
     }

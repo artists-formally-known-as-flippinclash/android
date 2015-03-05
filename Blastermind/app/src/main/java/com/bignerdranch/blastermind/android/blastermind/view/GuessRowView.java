@@ -2,6 +2,7 @@ package com.bignerdranch.blastermind.android.blastermind.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.bignerdranch.blastermind.andorid.core.Guess;
@@ -39,7 +40,8 @@ public class GuessRowView extends LinearLayout {
         for (int i = 0; i< numPegs; i++) {
             PegView pegView = new PegView(mContext);
             // add to view and array
-            addView(pegView);
+            float weight = 100/ Logic.guessWidth;
+            addView(pegView, new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight));
             mPegViews.add(pegView);
         }
     }
