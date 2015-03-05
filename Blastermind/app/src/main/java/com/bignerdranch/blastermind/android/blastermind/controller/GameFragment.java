@@ -31,9 +31,9 @@ import de.greenrobot.event.EventBus;
 
 import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
 
-public class MainFragment extends BaseFragment {
+public class GameFragment extends BaseFragment {
 
-    private static final String TAG = MainFragment.class.getSimpleName();
+    private static final String TAG = GameFragment.class.getSimpleName();
     private static final String TAG_WINNER_DIALOG = "MainFragment.TAG_WINNER_DIALOG";
     private static final String TAG_LOSER_DIALOG = "MainFragment.TAG_LOSER_DIALOG";
 
@@ -52,7 +52,7 @@ public class MainFragment extends BaseFragment {
     private int mMatchId = 123;
 
     public static Fragment newInstance() {
-        return new MainFragment();
+        return new GameFragment();
     }
 
     @Nullable

@@ -10,4 +10,6 @@
 
     <!-- content descriptions -->
     <string name="content_description_princes_face">prince\'s face</string>
+    <string name="your_name">Your name</string>
+    <string name="start">Start</string>
 </resources>

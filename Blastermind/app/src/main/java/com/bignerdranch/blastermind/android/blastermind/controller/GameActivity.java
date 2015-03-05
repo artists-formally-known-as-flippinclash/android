@@ -7,11 +7,11 @@ import android.view.MenuItem;
 import com.bignerdranch.blastermind.android.blastermind.R;
 
 
-public class MainActivity extends SingleFragmentActivity {
+public class GameActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return MainFragment.newInstance();
+        return GameFragment.newInstance();
     }
 
     @Override
