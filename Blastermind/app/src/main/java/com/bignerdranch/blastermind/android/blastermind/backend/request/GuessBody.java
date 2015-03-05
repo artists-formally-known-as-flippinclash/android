@@ -12,13 +12,14 @@ import java.util.List;
 public class GuessBody {
 
     @SerializedName("guess")
-    GuessRequestObject guessRequestObject;
+    GuessRequest mGuess;
 
     public GuessBody() {
-        guessRequestObject = new GuessRequestObject();
+       mGuess = new GuessRequest();
     }
 
     public static GuessBody buildBodyFromGuess(Guess guess) {
+
         GuessBody guessBody = new GuessBody();
 
         List<Logic.TYPE> types = guess.getTypes();
@@ -29,7 +30,17 @@ public class GuessBody {
             sequence.add(type.name());
         }
 
-        guessBody.guessRequestObject.setTypes(sequence);
+        guessBody.mGuess.setTypes(sequence);
         return guessBody;
+    }
+
+    private class GuessRequest {
+
+        @SerializedName("sequence")
+        List<String> mTypes;
+
+        public void setTypes(List<String> types) {
+            mTypes = types;
+        }
     }
 }
