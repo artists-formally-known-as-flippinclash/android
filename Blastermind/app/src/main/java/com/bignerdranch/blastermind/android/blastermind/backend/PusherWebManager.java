@@ -2,12 +2,16 @@ package com.bignerdranch.blastermind.android.blastermind.backend;
 
 import android.util.Log;
 
+import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
+import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
 import com.pusher.client.Pusher;
 import com.pusher.client.channel.Channel;
 import com.pusher.client.channel.SubscriptionEventListener;
 import com.pusher.client.connection.ConnectionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
+
+import de.greenrobot.event.EventBus;
 
 public class PusherWebManager implements WebManager {
 
@@ -33,21 +37,21 @@ public class PusherWebManager implements WebManager {
         }, ConnectionState.ALL);
 
 
-        // subscribe
+        // subscribe to channel
         Channel channel = mPusher.subscribe(CHANNEL_NAME);
 
-        // bind
+        // bind to events
         channel.bind("match-started", new SubscriptionEventListener() {
             @Override
             public void onEvent(String channelName, String eventName, String data) {
-                Log.d(TAG, "match started! data: " + data);
+                EventBus.getDefault().post(new MatchStartedEvent());
             }
         });
 
         channel.bind("match-ended", new SubscriptionEventListener() {
             @Override
             public void onEvent(String channelName, String eventName, String data) {
-                Log.d(TAG, "match ended! data: " + data);
+                EventBus.getDefault().post(new MatchEndedEvent());
             }
         });
     }

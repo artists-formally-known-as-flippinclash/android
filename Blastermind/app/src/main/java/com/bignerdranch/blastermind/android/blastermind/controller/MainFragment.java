@@ -8,20 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.PusherWebManager;
+import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
+import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import de.greenrobot.event.EventBus;
 
 import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
 
 public class MainFragment extends Fragment {
+
+    private static final String TAG = MainFragment.class.getSimpleName();
 
     @InjectView(R.id.update_button)
     protected Button mUpdateButton;
@@ -42,8 +48,7 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPusherWebManager = new PusherWebManager();
-        mPusherWebManager.setupConnection();
+
     }
 
     @Nullable
@@ -56,6 +61,28 @@ public class MainFragment extends Fragment {
         setupInputButtons();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+        mPusherWebManager = new PusherWebManager();
+        mPusherWebManager.setupConnection();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void onEventMainThread(MatchStartedEvent matchStartedEvent) {
+        Toast.makeText(getActivity(), "match started", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onEventMainThread(MatchEndedEvent matchEndedEvent) {
+        Toast.makeText(getActivity(), "match ended", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.update_button)
