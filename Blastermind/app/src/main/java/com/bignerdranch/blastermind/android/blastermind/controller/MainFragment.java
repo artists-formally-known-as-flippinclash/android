@@ -14,6 +14,7 @@ import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
+import com.bignerdranch.blastermind.android.blastermind.view.PegView;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,8 @@ public class MainFragment extends Fragment {
     protected LinearLayout mInputContainer;
 
     private int mCurrentTurn;
+    private GuessRowView mCurrentGuessRow;
+
 
     public static Fragment newInstance() {
         return new MainFragment();
@@ -41,7 +44,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Nullable
@@ -53,12 +55,18 @@ public class MainFragment extends Fragment {
         int weight = 100/ Logic.guessWidth;
         // get types in order
         for (int i = 0; i < TYPE.values().length; i++) {
-            for (TYPE type: TYPE.values()) {
+            for (final TYPE type: TYPE.values()) {
                 if (type.getPosition() == i) {
                     // add input button to container
                     InputButton inputButton = new InputButton(getActivity());
                     inputButton.setColor(type.getRgb());
                     inputButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight));
+                    inputButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            updateActiveCell(type);
+                        }
+                    });
                     mInputContainer.addView(inputButton);
                 }
             }
@@ -67,7 +75,10 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-
+    private void updateActiveCell(TYPE type) {
+        PegView activePeg = mCurrentGuessRow.getActivePeg();
+        activePeg.setColor(type.getRgb());
+    }
 
     @OnClick(R.id.update_button)
     public void onUpdateClick() {
@@ -78,12 +89,9 @@ public class MainFragment extends Fragment {
         mCurrentTurn++;
 
         // create new row and add it
-        Guess guess = pullGuessFromInput();
-
-        GuessRowView guessRow = new GuessRowView(getActivity());
-        guessRow.setup(Logic.guessWidth);
-        guessRow.setGuess(guess);
-        mGuessContainer.addView(guessRow);
+        mCurrentGuessRow = new GuessRowView(getActivity());
+        mCurrentGuessRow.setup(Logic.guessWidth);
+        mGuessContainer.addView(mCurrentGuessRow);
     }
 
     private Guess pullGuessFromInput() {
@@ -95,11 +103,6 @@ public class MainFragment extends Fragment {
         types.add(TYPE.Yellow);
         types.add(TYPE.Green);
 
-        // swap
-        int modolo = mCurrentTurn % Logic.guessWidth;
-        TYPE type =types.get(modolo);
-        types.remove(1);
-        types.add(type);
         guess.setTypes(types);
         return guess;
     }

@@ -8,6 +8,7 @@ import android.widget.Button;
 public class PegView extends Button {
 
     private static final String EMPTY_COLOR = "#111111"; // near black
+    private static final String ACTIVE_COLOR = "#ffc0cb"; // pinkish
 
     public PegView(Context context) {
         super(context);
@@ -22,6 +23,13 @@ public class PegView extends Button {
         setBackgroundColor(rgbColor);
     }
 
+    public void setActive() {
+        setText("X");
+    }
+
+    public void setInactive() {
+        setText("");
+    }
 
     public void reset() {
         setColor(EMPTY_COLOR);

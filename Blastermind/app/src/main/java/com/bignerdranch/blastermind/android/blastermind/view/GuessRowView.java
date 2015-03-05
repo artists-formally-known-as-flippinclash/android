@@ -2,6 +2,8 @@ package com.bignerdranch.blastermind.android.blastermind.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -12,9 +14,11 @@ import java.util.ArrayList;
 
 public class GuessRowView extends LinearLayout {
 
+    private static final String TAG = GuessRowView.class.getSimpleName();
     private Guess mGuess;
     private Context mContext;
     private ArrayList<PegView> mPegViews;
+    private int mActivePegIndex;
 
     public GuessRowView(Context context) {
         this (context, null);
@@ -38,11 +42,35 @@ public class GuessRowView extends LinearLayout {
     public void setup(int numPegs) {
         mPegViews = new ArrayList<>(numPegs);
         for (int i = 0; i< numPegs; i++) {
-            PegView pegView = new PegView(mContext);
-            // add to view and array
+
+            final int index = i;
+
+            final PegView pegView = new PegView(mContext);
+
             float weight = 100/ Logic.guessWidth;
-            addView(pegView, new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight));
+            pegView.setLayoutParams(new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight));
+
+            pegView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "clicked on item: " + index);
+                    mActivePegIndex = index;
+                    // clear active state on all pegs
+                    for (PegView tempPegView: mPegViews) {
+                        tempPegView.setInactive();
+                    }
+                    // and set this one to active
+                    pegView.setActive();
+                }
+            });
+
+            // add to view and array
+            addView(pegView);
             mPegViews.add(pegView);
         }
+    }
+
+    public PegView getActivePeg() {
+        return mPegViews.get(mActivePegIndex);
     }
 }
