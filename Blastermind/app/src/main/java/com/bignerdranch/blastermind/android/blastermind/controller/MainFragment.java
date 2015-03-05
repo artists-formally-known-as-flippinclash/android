@@ -16,10 +16,18 @@ import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
 public class MainFragment extends Fragment {
 
     private Guess mGuess;
     private int mSize;
+
+    @InjectView(R.id.update_button)
+    Button mUpdateButton;
+    private GuessRowView mGuessRowView;
 
     public static Fragment newInstance() {
         return new MainFragment();
@@ -31,33 +39,41 @@ public class MainFragment extends Fragment {
 
         mSize = 4;
         mGuess = new Guess(mSize);
-        ArrayList<Logic.TYPE> colors = new ArrayList<>(mSize);
-        colors.add(Logic.TYPE.Blue);
-        colors.add(Logic.TYPE.Red);
-        colors.add(Logic.TYPE.Yellow);
-        colors.add(Logic.TYPE.Green);
-        mGuess.setTypes(colors);
+        ArrayList<Logic.TYPE> types = new ArrayList<>(mSize);
+        types.add(Logic.TYPE.Blue);
+        types.add(Logic.TYPE.Red);
+        types.add(Logic.TYPE.Yellow);
+        types.add(Logic.TYPE.Green);
+        mGuess.setTypes(types);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.inject(this, view);
+
         LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.fragment_main_root);
 
-        Button updateButton = (Button) view.findViewById(R.id.update_button);
-        updateButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        GuessRowView guessRowView = new GuessRowView(getActivity());
-        guessRowView.setup(mSize);
-        guessRowView.setGuess(mGuess);
-        linearLayout.addView(guessRowView);
+        mGuessRowView = new GuessRowView(getActivity());
+        mGuessRowView.setup(mSize);
+        mGuessRowView.setGuess(mGuess);
+        linearLayout.addView(mGuessRowView);
 
         return view;
     }
+
+    @OnClick(R.id.update_button)
+  public void onUpdateClick() {
+        // get guessRow an change guess
+        Guess newGuess = new Guess(mSize);
+        ArrayList<Logic.TYPE> types = new ArrayList<>(mSize);
+        types.add(Logic.TYPE.Purple);
+        types.add(Logic.TYPE.Red);
+        types.add(Logic.TYPE.Yellow);
+        types.add(Logic.TYPE.Green);
+        newGuess.setTypes(types);
+        mGuessRowView.setGuess(newGuess);
+  }
+
 }
