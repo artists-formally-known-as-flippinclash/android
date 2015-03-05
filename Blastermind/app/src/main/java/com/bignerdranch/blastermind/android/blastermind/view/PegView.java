@@ -5,11 +5,13 @@ import android.graphics.Color;
 import android.util.AttributeSet;
 import android.widget.Button;
 
+import com.bignerdranch.blastermind.andorid.core.Logic;
+
 public class PegView extends Button {
 
     private static final String EMPTY_COLOR = "#111111"; // near black
 
-    private String mColor;
+    private Logic.TYPE mType;
 
     public PegView(Context context) {
         super(context);
@@ -19,10 +21,13 @@ public class PegView extends Button {
         super(context, attrs);
     }
 
-    public void setColor(String color) {
-        mColor = color;
-        int rgbColor = Color.parseColor(color);
-        setBackgroundColor(rgbColor);
+    public Logic.TYPE getType() {
+        return mType;
+    }
+
+    public void setType(Logic.TYPE type) {
+        mType = type;
+        setColor(mType.getRgb());
     }
 
     public void setActive() {
@@ -34,11 +39,17 @@ public class PegView extends Button {
     }
 
     public boolean isSet() {
-        return mColor != null;
+        return mType != null;
     }
 
     public void reset() {
         setColor(EMPTY_COLOR);
-        mColor = null;
+        mType = null;
     }
+
+    private void setColor(String color) {
+        int rgbColor = Color.parseColor(color);
+        setBackgroundColor(rgbColor);
+    }
+
 }

@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.LiveDataManager;
@@ -38,6 +39,7 @@ public class MainFragment extends Fragment {
 
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
+    private LiveDataManager mDataManager;
 
 
     public static Fragment newInstance() {
@@ -66,8 +68,8 @@ public class MainFragment extends Fragment {
     public void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
-        LiveDataManager dataManager = new LiveDataManager();
-        dataManager.setupConnection();
+        mDataManager = new LiveDataManager();
+        mDataManager.setupConnection();
     }
 
     @Override
@@ -86,8 +88,10 @@ public class MainFragment extends Fragment {
 
     @OnClick(R.id.update_button)
     public void onUpdateClick() {
+        Guess guess = mCurrentGuessRow.getGuess();
+        mDataManager.sendGuess(guess);
+
         createEmptyGuessForNextTurn();
-        setStateOfUpdateButton();
     }
 
     private void createEmptyGuessForNextTurn() {

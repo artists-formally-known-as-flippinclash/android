@@ -7,16 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GuessRowView extends LinearLayout {
 
     private static final String TAG = GuessRowView.class.getSimpleName();
     private Context mContext;
     private ArrayList<PegView> mPegViews;
-    private int mActivePegIndex; // index in mPegsVie for which peg is active; -1 == all pegs are set
+    private int mActivePegIndex; // index in mPegView for which peg is active; -1 == all pegs are set
 
     public GuessRowView(Context context) {
         this(context, null);
@@ -72,7 +74,7 @@ public class GuessRowView extends LinearLayout {
         if (getActivePeg() == null) {
             return;
         }
-        getActivePeg().setColor(type.getRgb());
+        getActivePeg().setType(type);
         advanceActivePeg();
     }
 
@@ -85,6 +87,21 @@ public class GuessRowView extends LinearLayout {
         return true;
     }
 
+    @Nullable
+    public Guess getGuess() {
+        if (!areAllPegsSet()) {
+            return null;
+        }
+
+        // build guess from each PegView
+        Guess guess = new Guess(Logic.guessWidth);
+        List<Logic.TYPE> types = new ArrayList<>();
+        for (PegView pegView: mPegViews) {
+            types.add(pegView.getType());
+        }
+        guess.setTypes(types);
+        return guess;
+    }
 
     /**
      * advance to the next activatable peg (i.e. the next peg that hasn't been set yet)

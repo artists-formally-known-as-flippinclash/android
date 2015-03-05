@@ -26,6 +26,5 @@ dependencies {
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.pusher:pusher-java-client:0.3.3'
     compile 'de.greenrobot:eventbus:2.4.0'
-
-
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
 }
