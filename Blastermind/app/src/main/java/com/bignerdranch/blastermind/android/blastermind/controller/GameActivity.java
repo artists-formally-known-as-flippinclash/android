@@ -1,6 +1,8 @@
 package com.bignerdranch.blastermind.android.blastermind.controller;
 
 import android.app.Fragment;
+import android.content.Context;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -8,6 +10,10 @@ import com.bignerdranch.blastermind.android.blastermind.R;
 
 
 public class GameActivity extends SingleFragmentActivity {
+
+    public static Intent newIntent(Context context) {
+        return  new Intent(context, GameActivity.class);
+    }
 
     @Override
     protected Fragment createFragment() {
