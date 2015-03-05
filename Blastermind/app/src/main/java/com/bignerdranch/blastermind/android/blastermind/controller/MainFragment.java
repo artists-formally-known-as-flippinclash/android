@@ -9,14 +9,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
 import com.bignerdranch.blastermind.android.blastermind.view.PegView;
-
-import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -78,7 +75,9 @@ public class MainFragment extends Fragment {
     private void updateActiveCell(TYPE type) {
         PegView activePeg = mCurrentGuessRow.getActivePeg();
         activePeg.setColor(type.getRgb());
+        mCurrentGuessRow.advanceActivePeg();
     }
+
 
     @OnClick(R.id.update_button)
     public void onUpdateClick() {
@@ -93,18 +92,4 @@ public class MainFragment extends Fragment {
         mCurrentGuessRow.setup(Logic.guessWidth);
         mGuessContainer.addView(mCurrentGuessRow);
     }
-
-    private Guess pullGuessFromInput() {
-        Guess guess = new Guess(Logic.guessWidth);
-        ArrayList<TYPE> types = new ArrayList<>(Logic.guessWidth);
-
-        types.add(TYPE.Purple);
-        types.add(TYPE.Red);
-        types.add(TYPE.Yellow);
-        types.add(TYPE.Green);
-
-        guess.setTypes(types);
-        return guess;
-    }
-
 }

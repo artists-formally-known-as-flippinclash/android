@@ -41,10 +41,10 @@ public class GuessRowView extends LinearLayout {
 
     public void setup(int numPegs) {
         mPegViews = new ArrayList<>(numPegs);
+
         for (int i = 0; i< numPegs; i++) {
 
             final int index = i;
-
             final PegView pegView = new PegView(mContext);
 
             float weight = 100/ Logic.guessWidth;
@@ -55,10 +55,9 @@ public class GuessRowView extends LinearLayout {
                 public void onClick(View v) {
                     Log.d(TAG, "clicked on item: " + index);
                     mActivePegIndex = index;
-                    // clear active state on all pegs
-                    for (PegView tempPegView: mPegViews) {
-                        tempPegView.setInactive();
-                    }
+
+                    makeAllPegsInactive();
+
                     // and set this one to active
                     pegView.setActive();
                 }
@@ -67,10 +66,38 @@ public class GuessRowView extends LinearLayout {
             // add to view and array
             addView(pegView);
             mPegViews.add(pegView);
+
+            // set first item to active
+            mPegViews.get(mActivePegIndex).setActive();
+
         }
     }
 
     public PegView getActivePeg() {
         return mPegViews.get(mActivePegIndex);
+    }
+
+
+    /**
+     * advance to the next activatable peg (i.e. the next peg that hasn't been set yet)
+     */
+    public void advanceActivePeg() {
+        makeAllPegsInactive();
+
+        for (int i = 0; i< mPegViews.size(); i++) {
+            PegView pegView = mPegViews.get(i);
+            if (!pegView.isSet()){
+                pegView.setActive();
+                mActivePegIndex = i;
+                return;
+            }
+        }
+    }
+
+    private void makeAllPegsInactive() {
+        // clear active state on all pegs
+        for (PegView tempPegView: mPegViews) {
+            tempPegView.setInactive();
+        }
     }
 }
