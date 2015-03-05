@@ -20,14 +20,15 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
+import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
+
 public class MainFragment extends Fragment {
 
-    private Guess mGuess;
-    private int mSize;
-
     @InjectView(R.id.update_button)
-    Button mUpdateButton;
-    private GuessRowView mGuessRowView;
+    protected Button mUpdateButton;
+    @InjectView(R.id.fragment_main_guesses_container)
+    protected LinearLayout mGuessContainer;
+    private int mCurrentTurn;
 
     public static Fragment newInstance() {
         return new MainFragment();
@@ -37,14 +38,6 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mSize = 4;
-        mGuess = new Guess(mSize);
-        ArrayList<Logic.TYPE> types = new ArrayList<>(mSize);
-        types.add(Logic.TYPE.Blue);
-        types.add(Logic.TYPE.Red);
-        types.add(Logic.TYPE.Yellow);
-        types.add(Logic.TYPE.Green);
-        mGuess.setTypes(types);
     }
 
     @Nullable
@@ -52,28 +45,37 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.inject(this, view);
-
-        LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.fragment_main_root);
-
-        mGuessRowView = new GuessRowView(getActivity());
-        mGuessRowView.setup(mSize);
-        mGuessRowView.setGuess(mGuess);
-        linearLayout.addView(mGuessRowView);
-
         return view;
     }
 
     @OnClick(R.id.update_button)
-  public void onUpdateClick() {
-        // get guessRow an change guess
-        Guess newGuess = new Guess(mSize);
-        ArrayList<Logic.TYPE> types = new ArrayList<>(mSize);
-        types.add(Logic.TYPE.Purple);
-        types.add(Logic.TYPE.Red);
-        types.add(Logic.TYPE.Yellow);
-        types.add(Logic.TYPE.Green);
-        newGuess.setTypes(types);
-        mGuessRowView.setGuess(newGuess);
-  }
+    public void onUpdateClick() {
+
+        if (mCurrentTurn > Logic.guessLimit) {
+            mUpdateButton.setEnabled(false);
+        }
+
+        mCurrentTurn++;
+
+        // create new row and add it
+        Guess guess = pullGuessFromInput();
+
+        GuessRowView guessRow = new GuessRowView(getActivity());
+        guessRow.setup(Logic.guessWidth);
+        guessRow.setGuess(guess);
+        mGuessContainer.addView(guessRow);
+    }
+
+    private Guess pullGuessFromInput() {
+        Guess guess = new Guess(Logic.guessWidth);
+        ArrayList<TYPE> types = new ArrayList<>(Logic.guessWidth);
+
+        types.add(TYPE.Purple);
+        types.add(TYPE.Red);
+        types.add(TYPE.Yellow);
+        types.add(TYPE.Green);
+        guess.setTypes(types);
+        return guess;
+    }
 
 }
