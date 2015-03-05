@@ -31,6 +31,8 @@ import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
 public class MainFragment extends Fragment {
 
     private static final String TAG = MainFragment.class.getSimpleName();
+    private static final String TAG_WINNER_DIALOG = "MainFragment.TAG_WINNER_DIALOG";
+    private static final String TAG_LOSER_DIALOG = "MainFragment.TAG_LOSER_DIALOG";
 
     @InjectView(R.id.update_button)
     protected Button mUpdateButton;
@@ -92,8 +94,23 @@ public class MainFragment extends Fragment {
         Feedback feedback = feedbackEvent.getFeedback();
         int matchId = feedback.getMatchId();
         if (matchId == mMatchId) { // if this feedback is about this match
-            String toastText = "positions correct: " + feedback.getPositionCount() + "; color correct: " + feedback.getColorCount();
-            Toast.makeText(getActivity(), toastText, Toast.LENGTH_LONG).show();
+            handleFeedback(feedback);
+        }
+    }
+
+    private void handleFeedback(Feedback feedback) {
+        String outcome = feedback.getOutcome();
+        switch (outcome) {
+            case "winner":
+                displayWinnerDialog();
+                break;
+            case "loser":
+                displayLoserDialog();
+                break;
+            default:
+                String toastText = "positions correct: " + feedback.getPositionCount() + "; color correct: " + feedback.getColorCount();
+                Toast.makeText(getActivity(), toastText, Toast.LENGTH_LONG).show();
+                break;
         }
     }
 
@@ -152,4 +169,22 @@ public class MainFragment extends Fragment {
         // if all pegs have a type then and only then enable update button
         mUpdateButton.setEnabled(mCurrentGuessRow.areAllPegsSet());
     }
+
+    private void displayWinnerDialog() {
+        AlertDialogFragment alertDialog = new AlertDialogFragment.Builder()
+                .setTitleResId(R.string.you_won)
+                .setPositiveButtonResId(android.R.string.ok)
+                .setViewResId(R.layout.view_winner_dialog)
+                .build();
+        alertDialog.show(getFragmentManager(), TAG_WINNER_DIALOG);
+    }
+
+    private void displayLoserDialog() {
+        AlertDialogFragment alertDialog = new AlertDialogFragment.Builder()
+                .setTitleResId(R.string.you_lost)
+                .setPositiveButtonResId(android.R.string.ok)
+                .build();
+        alertDialog.show(getFragmentManager(), TAG_LOSER_DIALOG);
+    }
+
 }
