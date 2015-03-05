@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -60,13 +61,7 @@ public class PegView extends RelativeLayout {
 
     public void reset() {
         setInactive();
-
-        // clear button color
-        Drawable drawable = getResources().getDrawable(R.drawable.peg);
-        int inactiveColor = getResources().getColor(R.color.offblack);
-        drawable.setColorFilter(inactiveColor, PorterDuff.Mode.OVERLAY);
-        mButton.setBackground(drawable);
-
+        setColor(null);
         mType = null;
     }
 
@@ -85,10 +80,16 @@ public class PegView extends RelativeLayout {
         LayoutParams borderParams = new LayoutParams(borderSize, borderSize);
         borderParams.addRule(RelativeLayout.CENTER_IN_PARENT);
         mBorder.setLayoutParams(borderParams);
+
         reset();
     }
 
-    private void setColor(String color) {
+    private void setColor(@Nullable String color) {
+        if (color == null)  {
+            mButton.setBackground(null);
+            return;
+        }
+
         int rgbColor = Color.parseColor(color);
         Drawable drawable = getResources().getDrawable(R.drawable.peg);
         drawable.setColorFilter(rgbColor, PorterDuff.Mode.SRC_ATOP);

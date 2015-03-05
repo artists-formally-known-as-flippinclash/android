@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="offblack">#222222</color>
-    <color name="peg_border_color">#303030</color>
+    <color name="inactive_peg_color">#111111</color>
     <color name="active_peg_color">#ff1493</color>
 </resources>
