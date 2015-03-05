@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
+import com.bignerdranch.blastermind.android.blastermind.BlastermindApplication;
 import com.bignerdranch.blastermind.android.blastermind.R;
 
 
@@ -27,6 +28,8 @@ public abstract class SingleFragmentActivity extends Activity {
         }
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        ((BlastermindApplication) getApplication()).inject(this);
     }
 
     protected abstract Fragment createFragment();

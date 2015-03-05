@@ -14,12 +14,15 @@ import com.bignerdranch.blastermind.andorid.core.Feedback;
 import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.android.blastermind.R;
+import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
 import com.bignerdranch.blastermind.android.blastermind.backend.LiveDataManager;
 import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -28,7 +31,7 @@ import de.greenrobot.event.EventBus;
 
 import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends BaseFragment {
 
     private static final String TAG = MainFragment.class.getSimpleName();
     private static final String TAG_WINNER_DIALOG = "MainFragment.TAG_WINNER_DIALOG";
@@ -41,9 +44,11 @@ public class MainFragment extends Fragment {
     @InjectView(R.id.fragment_main_input_container)
     protected LinearLayout mInputContainer;
 
+    @Inject
+    protected DataManager mDataManager;
+
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
-    private LiveDataManager mDataManager;
     private int mMatchId = 123;
 
     public static Fragment newInstance() {
