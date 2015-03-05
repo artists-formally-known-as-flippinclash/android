@@ -1,32 +1,18 @@
-package com.bignerdranch.blastermind.android.blastermind;
+package com.bignerdranch.blastermind.android.blastermind.controller;
 
-import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.bignerdranch.blastermind.andorid.core.Guess;
-
-import java.util.ArrayList;
+import com.bignerdranch.blastermind.android.blastermind.R;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends SingleFragmentActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        int size = 4;
-        Guess guess = new Guess(size);
-        ArrayList<Integer> colors = new ArrayList<>(size);
-        colors.add(1);
-        colors.add(3);
-        colors.add(4345);
-        colors.add(43);
-        guess.setValues(colors);
-        ArrayList<Integer> colors1 = guess.getValues();
+    protected Fragment createFragment() {
+        return MainFragment.newInstance();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
