@@ -125,12 +125,17 @@ public class MainFragment extends Fragment {
     }
 
     private void setupInputButton(final TYPE type) {
-        int weight = 100 / Logic.guessWidth;
-
-        // add input button to container
         InputButton inputButton = new InputButton(getActivity());
         inputButton.setColor(type.getRgb());
-        inputButton.setLayoutParams(new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight));
+
+        // set layout params
+        int size = (int) getResources().getDimension(R.dimen.input_button_size);
+        int padding = (int) getResources().getDimension(R.dimen.input_button_padding);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
+        layoutParams.setMargins(padding, padding, padding, padding);
+        inputButton.setLayoutParams(layoutParams);
+
+        // setup click listener
         inputButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,6 +144,7 @@ public class MainFragment extends Fragment {
 
             }
         });
+
         mInputContainer.addView(inputButton);
     }
 

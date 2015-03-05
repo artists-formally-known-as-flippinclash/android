@@ -6,4 +6,7 @@
 
     <dimen name="peg_size">50dp</dimen>
     <dimen name="peg_border_thickness">56dp</dimen>
+
+    <dimen name="input_button_size">40dp</dimen>
+    <dimen name="input_button_padding">8dp</dimen>
 </resources>
