@@ -21,8 +21,6 @@ import com.pusher.client.connection.ConnectionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
 
-import java.util.Arrays;
-
 import de.greenrobot.event.EventBus;
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -32,8 +30,10 @@ import retrofit.client.Response;
 public class LiveDataManager implements DataManager {
 
     private static final String APP_KEY = "a8dc613841aa8963a8a4";
-    public static final String BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com";
-    public static final String REQUEST_BIN = "http://requestb.in/ohyr14oh";
+
+//        public static final String BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
+    public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
+
     private static final String TAG = LiveDataManager.class.getSimpleName();
     private static final String RETROFIT_TAG = "RETROFIT: ";
     private static final String CHANNEL_NAME = "game-us";
@@ -129,8 +129,7 @@ public class LiveDataManager implements DataManager {
     }
 
     private void handleRetrofitError(RetrofitError error) {
-        Log.e(RETROFIT_TAG, "Failure: " + error.toString()
-                + "\naccessing: " + error.getUrl()
-                + "\n" + Arrays.toString(error.getStackTrace()));
+        Log.e(RETROFIT_TAG, "Failure: " + error.toString() + " accessing: " + error.getUrl());
+        error.printStackTrace();
     }
 }
