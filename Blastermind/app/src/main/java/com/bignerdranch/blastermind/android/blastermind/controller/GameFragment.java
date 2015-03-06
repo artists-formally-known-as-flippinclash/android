@@ -23,6 +23,9 @@ import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -51,6 +54,7 @@ public class GameFragment extends BaseFragment {
     private GuessRowView mCurrentGuessRow;
     private int mRowHeightPx;
     private int mGuessContainerHeightPx;
+    private List<GuessRowView> mGuessRows;
 
     public static Fragment newInstance() {
         return new GameFragment();
@@ -75,8 +79,7 @@ public class GameFragment extends BaseFragment {
 
                 // now that we have the height of the container, only now can we create our first guess row
                 mRowHeightPx = mGuessContainerHeightPx / Logic.guessLimit;
-                createEmptyGuessForNextTurn();
-
+                createRows();
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
                     mGuessContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 else
@@ -93,12 +96,34 @@ public class GameFragment extends BaseFragment {
 
     public void onEventMainThread(FeedbackEvent feedbackEvent) {
         Feedback feedback = feedbackEvent.getFeedback();
-        mCurrentGuessRow.setFeedback(feedback);
         handleFeedback(feedback);
-        createEmptyGuessForNextTurn();
+
+        mCurrentGuessRow.setNotCurrent();
+
+        mCurrentTurn++;
+        mCurrentGuessRow = mGuessRows.get(mCurrentTurn);
+        mCurrentGuessRow.setCurrent();
+
+    }
+
+    private void createRows() {
+        mGuessRows = new ArrayList<>();
+
+        for (int i = 0; i < Logic.guessLimit - 1; i++) {
+            GuessRowView rowView = setupSingleRow();
+            rowView.setNotCurrent();
+            mGuessRows.add(rowView);
+            mGuessContainer.addView(rowView);
+        }
+
+        // set first row to current
+        mCurrentGuessRow = mGuessRows.get(0);
+        mCurrentGuessRow.setCurrent();
     }
 
     private void handleFeedback(Feedback feedback) {
+        mCurrentGuessRow.setFeedback(feedback);
+
         String outcome = feedback.getOutcome();
         switch (outcome) {
             case "winner":
@@ -118,27 +143,19 @@ public class GameFragment extends BaseFragment {
         mDataManager.sendGuess(guess);
     }
 
-    private void createEmptyGuessForNextTurn() {
-        if (mCurrentTurn > Logic.guessLimit - 1) {
-            mUpdateButton.setEnabled(false);
-            return;
-        }
-
-        mCurrentTurn++;
-        // create new row and add it
-        mCurrentGuessRow = new GuessRowView(getActivity());
+    private GuessRowView setupSingleRow() {
+        GuessRowView guessRow = new GuessRowView(getActivity());
 
         int rowPaddingDp = (int) getResources().getDimension(R.dimen.row_padding);
         int rowPaddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowPaddingDp, getResources().getDisplayMetrics());
         int mRowHeightMinusPaddingPx = mRowHeightPx - rowPaddingPx; // remove padding
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mRowHeightMinusPaddingPx);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0, 1);
         layoutParams.setMargins(0, 0, 0, rowPaddingDp);
-
-        mCurrentGuessRow.setLayoutParams(layoutParams);
+        guessRow.setLayoutParams(layoutParams);
 
         // set height
-        mCurrentGuessRow.setup(Logic.guessWidth, mRowHeightMinusPaddingPx);
-        mGuessContainer.addView(mCurrentGuessRow);
+        guessRow.setup(Logic.guessWidth, mRowHeightMinusPaddingPx);
+        return guessRow;
     }
 
     private void setupInputButtons() {

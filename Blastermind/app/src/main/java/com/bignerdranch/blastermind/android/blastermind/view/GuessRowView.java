@@ -118,10 +118,31 @@ public class GuessRowView extends LinearLayout {
         mFeedbackView.update(feedback);
     }
 
+    public void setCurrent() {
+        // set first peg active
+        mPegViews.get(0).setActive();
+    }
+
+    public void setNotCurrent(){
+        setAllPegsInactive();
+    }
+
+    private void setAllPegsInactive() {
+        for (PegView pegView: mPegViews) {
+            pegView.setInactive();
+        }
+    }
+
     /**
      * advance to the next activatable peg (i.e. the next peg that hasn't been set yet)
      */
     private void advanceActivePeg() {
+
+        // if all pegs are set, don't advance, stay on current peg
+        if (areAllPegsSet()) {
+            return;
+        }
+
         makeAllPegsInactive();
 
         for (int i = 0; i < mPegViews.size(); i++) {
