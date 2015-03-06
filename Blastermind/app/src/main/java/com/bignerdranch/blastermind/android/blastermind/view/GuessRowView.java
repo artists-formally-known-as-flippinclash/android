@@ -37,7 +37,7 @@ public class GuessRowView extends LinearLayout {
     public void setup(int numPegs) {
         // setup LayoutParams
         float weight = 100 / (Logic.guessWidth + 1);
-        LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight);
+        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(8, 8, 8, 8);
 
         // add feedback view

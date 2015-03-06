@@ -75,6 +75,7 @@ public class LiveDataManager implements DataManager {
 
     @Override
     public void sendGuess(Guess guess) {
+
         int playerId = mPlayer.getId();
         GuessBody guessBody = GuessBody.mapGuessToBody(guess);
         mRestService.sendGuess(mCurrentMatchId, playerId, guessBody, new Callback<GuessResponse>() {

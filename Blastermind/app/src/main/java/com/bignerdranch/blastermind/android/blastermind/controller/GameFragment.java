@@ -1,11 +1,13 @@
 package com.bignerdranch.blastermind.android.blastermind.controller;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -47,6 +49,7 @@ public class GameFragment extends BaseFragment {
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
     private int mRowHeight;
+    private int mGuessContainerHeight;
 
     public static Fragment newInstance() {
         return new GameFragment();
@@ -59,8 +62,25 @@ public class GameFragment extends BaseFragment {
         ButterKnife.inject(this, view);
 
         setupInputButtons();
-        mRowHeight = mGuessContainer.getMeasuredHeight() / Logic.guessLimit;
-        createEmptyGuessForNextTurn();
+
+        // TODO move to helper method
+        mGuessContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @SuppressLint("NewApi")
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onGlobalLayout() {
+                //now we can retrieve the width and height
+                mGuessContainerHeight = mGuessContainer.getHeight();
+
+                // now that we have the height of the container, only now can we create our first guess row
+                mRowHeight = mGuessContainerHeight / Logic.guessLimit;
+                createEmptyGuessForNextTurn();
+                if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
+                    mGuessContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                else
+                    mGuessContainer.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+            }
+        });
 
         return view;
     }
@@ -142,7 +162,6 @@ public class GameFragment extends BaseFragment {
             public void onClick(View v) {
                 mCurrentGuessRow.setActivePegType(type);
                 setStateOfUpdateButton();
-
             }
         });
 
