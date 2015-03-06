@@ -31,8 +31,8 @@ public class LiveDataManager implements DataManager {
 
     private static final String APP_KEY = "a8dc613841aa8963a8a4";
 
-        public static final String BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
-//    public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
+//        public static final String BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
+    public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
 
     private static final String TAG = LiveDataManager.class.getSimpleName();
     private static final String RETROFIT_TAG = "RETROFIT: ";
@@ -40,6 +40,7 @@ public class LiveDataManager implements DataManager {
     private BlasterRestService mRestService;
     private Pusher mPusher;
     private int mCurrentMatchId;
+    private Player mPlayer;
 
     public LiveDataManager() {
         mPusher = new Pusher(APP_KEY);
@@ -48,14 +49,19 @@ public class LiveDataManager implements DataManager {
 
     @Override
     public void startMatch(Player player) {
+        mPlayer = player;
         PlayerBody playerBody = PlayerBody.mapPlayerToBody(player);
         mRestService.startMatch(playerBody, new Callback<StartMatchResponse>() {
             @Override
             public void success(StartMatchResponse startMatchResponse, Response response) {
+
                 String channel = startMatchResponse.getChannel();
                 mCurrentMatchId = startMatchResponse.getMatchId();
-                // TODO do somethign with existing player names
+                mPlayer.setId(startMatchResponse.getMyId());
+
+                // TODO do something with existing player names
                 // List<String> existingPlayers = startMatchResponse.getExistingPlayers();
+
                 subscribeToPusherChannel(channel);
                 EventBus.getDefault().post(new MatchCreateSuccessEvent());
             }
@@ -70,8 +76,7 @@ public class LiveDataManager implements DataManager {
 
     @Override
     public void sendGuess(Guess guess) {
-        // TODO get from somewhere
-        int playerId = 321;
+        int playerId = mPlayer.getId();
         GuessBody guessBody = GuessBody.mapGuessToBody(guess);
         mRestService.sendGuess(mCurrentMatchId, playerId, guessBody, new Callback<GuessResponse>() {
             @Override

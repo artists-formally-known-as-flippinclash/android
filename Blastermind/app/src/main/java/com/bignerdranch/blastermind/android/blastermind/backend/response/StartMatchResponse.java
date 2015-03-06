@@ -18,7 +18,7 @@ public class StartMatchResponse {
         @SerializedName("state")
         String state;
         @SerializedName("players")
-        List<ExistingPlayer> players;
+        List<ExistingPlayer> players; // the last player in this list is ME. get my ID from there
 
         private class ExistingPlayer {
             @SerializedName("id")
@@ -30,6 +30,12 @@ public class StartMatchResponse {
 
     public String getChannel() {
         return data.channel;
+    }
+
+    public int getMyId() {
+        // ugly hack: assume that the last player in the list (the most recent) is me
+        Data.ExistingPlayer me = data.players.get(data.players.size() - 1);
+        return me.id;
     }
 
     public List<String> getExistingPlayers() {
