@@ -21,6 +21,7 @@ public class GuessRowView extends LinearLayout {
     private static final String TAG = GuessRowView.class.getSimpleName();
     private Context mContext;
     private ArrayList<PegView> mPegViews;
+    private FeedbackView mFeedbackView;
     private int mActivePegIndex; // index in mPegView for which peg is active; -1 == all pegs are set
 
     public GuessRowView(Context context) {
@@ -34,10 +35,16 @@ public class GuessRowView extends LinearLayout {
 
     public void setup(int numPegs) {
         // setup LayoutParams
-        float weight = 100 / Logic.guessWidth;
+        float weight = 100 / (Logic.guessWidth + 1);
         LayoutParams layoutParams = new LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, weight);
         layoutParams.setMargins(8, 8, 8, 8);
 
+        // add feedback view
+        mFeedbackView = new FeedbackView(mContext);
+        mFeedbackView.setLayoutParams(layoutParams);
+        addView(mFeedbackView);
+
+        // add peg views
         mPegViews = new ArrayList<>(numPegs);
 
         for (int i = 0; i < numPegs; i++) {
