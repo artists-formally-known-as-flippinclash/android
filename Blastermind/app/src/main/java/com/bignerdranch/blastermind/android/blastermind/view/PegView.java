@@ -101,4 +101,17 @@ public class PegView extends RelativeLayout {
         // intercept touch events for button and border
         return onTouchEvent(ev);
     }
+
+    /**
+     * Maintain aspect ratio when scaling to match parent
+     * @param widthMeasureSpec
+     * @param heightMeasureSpec
+     */
+    @Override protected void onMeasure(int widthMeasureSpec,
+                                       int heightMeasureSpec) {
+        int height = MeasureSpec.getSize(heightMeasureSpec);
+        Drawable temp = getResources().getDrawable(R.drawable.peg);
+        int width = height* temp.getIntrinsicWidth() / temp.getIntrinsicHeight();
+        setMeasuredDimension(width, height);
+    }
 }
