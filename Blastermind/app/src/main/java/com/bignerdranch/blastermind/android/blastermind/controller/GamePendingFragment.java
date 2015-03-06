@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.R;
@@ -54,14 +55,9 @@ public class GamePendingFragment extends BaseFragment {
     }
 
     public void onEventMainThread(MatchCreateFailedEvent event) {
-//        dismissProgressDialog();
-//        Toast.makeText(getActivity(), R.string.failed_to_create_match_msg, Toast.LENGTH_SHORT).show();
-//        getActivity().finish();
-
-        // TODO temporarily start match anyways since server isn't returning correct json
         dismissProgressDialog();
-        Intent intent = GameActivity.newIntent(getActivity());
-        startActivity(intent);
+        Toast.makeText(getActivity(), R.string.failed_to_create_match_msg, Toast.LENGTH_SHORT).show();
+        getActivity().finish();
     }
 
     // TODO move to base fragment
