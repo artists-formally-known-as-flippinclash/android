@@ -58,9 +58,9 @@ public class GameFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_game, container, false);
         ButterKnife.inject(this, view);
 
+        setupInputButtons();
         mRowHeight = mGuessContainer.getMeasuredHeight() / Logic.guessLimit;
         createEmptyGuessForNextTurn();
-        setupInputButtons();
 
         return view;
     }
@@ -150,6 +150,11 @@ public class GameFragment extends BaseFragment {
     }
 
     private void setStateOfUpdateButton() {
+        if (mCurrentGuessRow == null) { // setting state for the first time
+            mUpdateButton.setEnabled(false);
+            return;
+        }
+
         // if all pegs have a type then and only then enable update button
         mUpdateButton.setEnabled(mCurrentGuessRow.areAllPegsSet());
     }
