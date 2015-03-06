@@ -16,7 +16,6 @@ import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
-import com.bignerdranch.blastermind.android.blastermind.backend.LiveDataManager;
 import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
@@ -72,9 +71,8 @@ public class GameFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        // TODO move up to base fragment
         EventBus.getDefault().register(this);
-        mDataManager = new LiveDataManager();
-        mDataManager.setupConnection();
     }
 
     @Override

@@ -16,10 +16,6 @@ public class GuessBody {
     @SerializedName("guess")
     GuessRequest mGuess;
 
-    public GuessBody() {
-       mGuess = new GuessRequest();
-    }
-
     public static GuessBody mapGuessToBody(Guess guess) {
 
         GuessBody guessBody = new GuessBody();
@@ -34,6 +30,10 @@ public class GuessBody {
 
         guessBody.mGuess.setTypes(sequence);
         return guessBody;
+    }
+
+    public GuessBody() {
+        mGuess = new GuessRequest();
     }
 
     private class GuessRequest {

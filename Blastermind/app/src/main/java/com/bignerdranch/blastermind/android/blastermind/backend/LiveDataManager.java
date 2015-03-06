@@ -4,8 +4,11 @@ import android.util.Log;
 
 import com.bignerdranch.blastermind.andorid.core.Feedback;
 import com.bignerdranch.blastermind.andorid.core.Guess;
+import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.backend.request.GuessBody;
+import com.bignerdranch.blastermind.android.blastermind.backend.request.PlayerBody;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.GuessResponse;
+import com.bignerdranch.blastermind.android.blastermind.backend.response.StartMatchResponse;
 import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
@@ -34,10 +37,25 @@ public class LiveDataManager implements DataManager {
     private static final String CHANNEL_NAME = "game-us";
     private BlasterRestService mRestService;
 
-    @Override
-    public void setupConnection() {
+    public LiveDataManager() {
         setupPusher();
         setupRestAdapter();
+    }
+
+    @Override
+    public void startMatch(Player player) {
+        PlayerBody playerBody = PlayerBody.mapPlayerToBody(player);
+        mRestService.startMatch(playerBody, new Callback<StartMatchResponse>() {
+            @Override
+            public void success(StartMatchResponse startMatchResponse, Response response) {
+                Log.d(TAG, "success match start");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                handleRetrofitError(error);
+            }
+        });
     }
 
     @Override
@@ -53,9 +71,7 @@ public class LiveDataManager implements DataManager {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(RETROFIT_TAG, "Failure: " + error.toString()
-                        + "\naccessing: " + error.getUrl()
-                        + "\n" + Arrays.toString(error.getStackTrace()));
+                handleRetrofitError(error);
             }
         });
     }
@@ -100,5 +116,11 @@ public class LiveDataManager implements DataManager {
                 EventBus.getDefault().post(new MatchEndedEvent());
             }
         });
+    }
+
+    private void handleRetrofitError(RetrofitError error) {
+        Log.e(RETROFIT_TAG, "Failure: " + error.toString()
+                + "\naccessing: " + error.getUrl()
+                + "\n" + Arrays.toString(error.getStackTrace()));
     }
 }

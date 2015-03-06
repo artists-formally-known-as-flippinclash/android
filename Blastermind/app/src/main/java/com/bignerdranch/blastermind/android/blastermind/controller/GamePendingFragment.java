@@ -5,11 +5,18 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.bignerdranch.blastermind.andorid.core.Player;
+import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
+
+import javax.inject.Inject;
 
 public class GamePendingFragment extends BaseFragment {
 
     private static final String ARG_PLAYER = "GamePendingFragment.ARG_PLAYER";
     private static final String TAG = GamePendingFragment.class.getSimpleName();
+
+    @Inject
+    protected DataManager mDataManager;
+
     private Player mPlayer;
 
     public static Fragment newInstance(Player player) {
@@ -28,5 +35,10 @@ public class GamePendingFragment extends BaseFragment {
             Log.e(TAG, "player is null!");
             getActivity().finish();
         }
+
+        // display loading dialog
+
+        // create game
+        mDataManager.startMatch(mPlayer);
     }
 }

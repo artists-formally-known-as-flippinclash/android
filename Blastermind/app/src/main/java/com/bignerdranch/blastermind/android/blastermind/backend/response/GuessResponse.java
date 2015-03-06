@@ -11,8 +11,6 @@ public class GuessResponse {
     Data data;
 
     private class Data {
-        @SerializedName("type")
-        String dataTtype;
         @SerializedName("id")
         int matchId;
         @SerializedName("outcome")

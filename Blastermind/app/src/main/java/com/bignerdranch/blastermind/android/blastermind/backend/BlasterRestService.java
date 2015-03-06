@@ -1,7 +1,9 @@
 package com.bignerdranch.blastermind.android.blastermind.backend;
 
 import com.bignerdranch.blastermind.android.blastermind.backend.request.GuessBody;
+import com.bignerdranch.blastermind.android.blastermind.backend.request.PlayerBody;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.GuessResponse;
+import com.bignerdranch.blastermind.android.blastermind.backend.response.StartMatchResponse;
 
 import retrofit.Callback;
 import retrofit.http.Body;
@@ -14,6 +16,10 @@ public interface BlasterRestService {
     @Headers("Content-Type: application/json")
     @POST(API.GUESS)
     public void sendGuess(@Path("match_id") int matchId, @Body GuessBody body, Callback<GuessResponse> responseCallback);
+
+    @Headers("Content-Type: application/json")
+    @POST(API.MATCHES)
+    public void startMatch(@Body PlayerBody body, Callback<StartMatchResponse> responseCallback);
 
     public static class API {
         public static final String MATCHES = "/matches";
