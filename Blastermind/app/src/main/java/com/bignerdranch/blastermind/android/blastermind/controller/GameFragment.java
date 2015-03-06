@@ -46,6 +46,7 @@ public class GameFragment extends BaseFragment {
 
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
+    private int mRowHeight;
 
     public static Fragment newInstance() {
         return new GameFragment();
@@ -54,9 +55,10 @@ public class GameFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_game, container, false);
         ButterKnife.inject(this, view);
 
+        mRowHeight = mGuessContainer.getMeasuredHeight() / Logic.guessLimit;
         createEmptyGuessForNextTurn();
         setupInputButtons();
 
@@ -102,6 +104,10 @@ public class GameFragment extends BaseFragment {
 
         // create new row and add it
         mCurrentGuessRow = new GuessRowView(getActivity());
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mRowHeight);
+        mCurrentGuessRow.setLayoutParams(layoutParams);
+
+        // set height
         mCurrentGuessRow.setup(Logic.guessWidth);
         mGuessContainer.addView(mCurrentGuessRow);
     }

@@ -36,7 +36,6 @@ public class LiveDataManager implements DataManager {
 
     private static final String TAG = LiveDataManager.class.getSimpleName();
     private static final String RETROFIT_TAG = "RETROFIT: ";
-    private static final String CHANNEL_NAME = "game-us";
     private BlasterRestService mRestService;
     private Pusher mPusher;
     private int mCurrentMatchId;
