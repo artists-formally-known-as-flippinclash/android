@@ -31,8 +31,8 @@ public class LiveDataManager implements DataManager {
 
     private static final String APP_KEY = "a8dc613841aa8963a8a4";
 
-//        public static final String BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
-    public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
+            public static final String BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
+//    public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
 
     private static final String TAG = LiveDataManager.class.getSimpleName();
     private static final String RETROFIT_TAG = "RETROFIT: ";
@@ -55,13 +55,15 @@ public class LiveDataManager implements DataManager {
             @Override
             public void success(StartMatchResponse startMatchResponse, Response response) {
 
-                String channel = startMatchResponse.getChannel();
+                // update model
                 mCurrentMatchId = startMatchResponse.getMatchId();
                 mPlayer.setId(startMatchResponse.getMyId());
 
                 // TODO do something with existing player names
                 // List<String> existingPlayers = startMatchResponse.getExistingPlayers();
 
+                // setup pusher
+                String channel = startMatchResponse.getChannel();
                 subscribeToPusherChannel(channel);
                 EventBus.getDefault().post(new MatchCreateSuccessEvent());
             }
@@ -116,6 +118,7 @@ public class LiveDataManager implements DataManager {
 
 
         // subscribe to channel
+        Log.d(TAG, "subscribing to channel: " + channelName);
         Channel channel = mPusher.subscribe(channelName);
 
         // bind to events
