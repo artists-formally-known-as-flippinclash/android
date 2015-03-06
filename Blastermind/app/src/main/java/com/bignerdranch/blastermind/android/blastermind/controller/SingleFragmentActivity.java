@@ -5,9 +5,11 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 
 import com.bignerdranch.blastermind.android.blastermind.BlastermindApplication;
 import com.bignerdranch.blastermind.android.blastermind.R;
+import com.bignerdranch.blastermind.android.blastermind.utils.DialogUtils;
 
 
 public abstract class SingleFragmentActivity extends Activity {
@@ -33,4 +35,14 @@ public abstract class SingleFragmentActivity extends Activity {
     }
 
     protected abstract Fragment createFragment();
+
+    protected void showProgressDialog(@StringRes int messageResId) {
+        DialogUtils.showLoadingDialog(getFragmentManager(), messageResId);
+    }
+
+    protected void dismissProgressDialog() {
+        DialogUtils.hideLoadingDialog(getFragmentManager());
+    }
+
+
 }

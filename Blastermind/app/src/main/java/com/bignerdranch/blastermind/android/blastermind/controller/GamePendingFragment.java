@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.bignerdranch.blastermind.andorid.core.Player;
+import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
 
 import javax.inject.Inject;
@@ -37,8 +38,11 @@ public class GamePendingFragment extends BaseFragment {
         }
 
         // display loading dialog
+        ((SingleFragmentActivity) getActivity()).showProgressDialog(R.string.waiting_for_other_players);
 
         // create game
         mDataManager.startMatch(mPlayer);
     }
+
+
 }

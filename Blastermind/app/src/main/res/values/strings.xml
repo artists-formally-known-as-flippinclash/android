@@ -12,4 +12,6 @@
     <string name="content_description_princes_face">prince\'s face</string>
     <string name="your_name">Your name</string>
     <string name="start">Start</string>
+    <string name="loading">loading</string>
+    <string name="waiting_for_other_players">Waiting for other players</string>
 </resources>
