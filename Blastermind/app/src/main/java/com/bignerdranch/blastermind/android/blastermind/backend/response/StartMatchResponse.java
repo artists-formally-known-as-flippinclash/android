@@ -40,4 +40,8 @@ public class StartMatchResponse {
         }
         return existingPlayers;
     }
+
+    public int getMatchId() {
+        return data.matchId;
+    }
 }

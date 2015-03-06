@@ -31,14 +31,15 @@ public class LiveDataManager implements DataManager {
 
     private static final String APP_KEY = "a8dc613841aa8963a8a4";
 
-//        public static final String BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
-    public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
+        public static final String BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
+//    public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
 
     private static final String TAG = LiveDataManager.class.getSimpleName();
     private static final String RETROFIT_TAG = "RETROFIT: ";
     private static final String CHANNEL_NAME = "game-us";
     private BlasterRestService mRestService;
     private Pusher mPusher;
+    private int mCurrentMatchId;
 
     public LiveDataManager() {
         mPusher = new Pusher(APP_KEY);
@@ -52,6 +53,7 @@ public class LiveDataManager implements DataManager {
             @Override
             public void success(StartMatchResponse startMatchResponse, Response response) {
                 String channel = startMatchResponse.getChannel();
+                mCurrentMatchId = startMatchResponse.getMatchId();
                 // TODO do somethign with existing player names
                 // List<String> existingPlayers = startMatchResponse.getExistingPlayers();
                 subscribeToPusherChannel(channel);
@@ -69,10 +71,9 @@ public class LiveDataManager implements DataManager {
     @Override
     public void sendGuess(Guess guess) {
         // TODO get from somewhere
-        int matchId = 123;
         int playerId = 321;
         GuessBody guessBody = GuessBody.mapGuessToBody(guess);
-        mRestService.sendGuess(matchId, playerId, guessBody, new Callback<GuessResponse>() {
+        mRestService.sendGuess(mCurrentMatchId, playerId, guessBody, new Callback<GuessResponse>() {
             @Override
             public void success(GuessResponse guessResponse, Response response) {
                 Feedback feedback = GuessResponse.mapResponseToFeedback(guessResponse);
@@ -123,6 +124,7 @@ public class LiveDataManager implements DataManager {
         channel.bind("match-ended", new SubscriptionEventListener() {
             @Override
             public void onEvent(String channelName, String eventName, String data) {
+                mCurrentMatchId = -1; // reset match id
                 EventBus.getDefault().post(new MatchEndedEvent());
             }
         });
