@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.bignerdranch.blastermind.andorid.core.Feedback;
 import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
-import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
 import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
@@ -47,8 +46,6 @@ public class GameFragment extends BaseFragment {
 
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
-    private int mMatchId = 123;
-    private Player mPlayer;
 
     public static Fragment newInstance() {
         return new GameFragment();
@@ -73,11 +70,7 @@ public class GameFragment extends BaseFragment {
     public void onEventMainThread(FeedbackEvent feedbackEvent) {
         Feedback feedback = feedbackEvent.getFeedback();
         mCurrentGuessRow.setFeedback(feedback);
-        int matchId = feedback.getMatchId();
-        if (matchId == mMatchId) { // if this feedback is about this match
-            handleFeedback(feedback);
-        }
-
+        handleFeedback(feedback);
         createEmptyGuessForNextTurn();
     }
 
@@ -91,8 +84,6 @@ public class GameFragment extends BaseFragment {
                 displayLoserDialog();
                 break;
             default:
-                String toastText = "positions correct: " + feedback.getPositionCount() + "; color correct: " + feedback.getColorCount();
-                Toast.makeText(getActivity(), toastText, Toast.LENGTH_LONG).show();
                 break;
         }
     }
@@ -173,5 +164,4 @@ public class GameFragment extends BaseFragment {
                 .build();
         alertDialog.show(getFragmentManager(), TAG_LOSER_DIALOG);
     }
-
 }

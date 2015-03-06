@@ -54,8 +54,6 @@ public class LiveDataManager implements DataManager {
         mRestService.startMatch(playerBody, new Callback<StartMatchResponse>() {
             @Override
             public void success(StartMatchResponse startMatchResponse, Response response) {
-
-                // update model
                 mCurrentMatchId = startMatchResponse.getMatchId();
                 mPlayer.setId(startMatchResponse.getMyId());
 
