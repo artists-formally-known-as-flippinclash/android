@@ -31,8 +31,9 @@ public class LiveDataManager implements DataManager {
 
     private static final String APP_KEY = "a8dc613841aa8963a8a4";
 
-            public static final String BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
-//    public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
+    private static final boolean DEBUG = true;
+    public static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
+    public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
 
     private static final String TAG = LiveDataManager.class.getSimpleName();
     private static final String RETROFIT_TAG = "RETROFIT: ";
@@ -93,8 +94,15 @@ public class LiveDataManager implements DataManager {
     }
 
     private void setupRestAdapter() {
+        String url;
+        if (DEBUG) {
+            url = TEST_BASE_REST_URL;
+        } else {
+            url = BASE_REST_URL;
+        }
+
         RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(BASE_REST_URL)
+                .setEndpoint(url)
                 .build();
 
         mRestService = restAdapter.create(BlasterRestService.class);
@@ -134,6 +142,11 @@ public class LiveDataManager implements DataManager {
                 EventBus.getDefault().post(new MatchEndedEvent());
             }
         });
+
+
+        if (DEBUG) { // immediately start game
+            EventBus.getDefault().post(new MatchStartedEvent());
+        }
     }
 
     private void handleRetrofitError(RetrofitError error) {
