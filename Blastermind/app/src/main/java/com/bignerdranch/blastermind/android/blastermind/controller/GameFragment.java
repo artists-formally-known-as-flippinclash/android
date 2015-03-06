@@ -109,7 +109,7 @@ public class GameFragment extends BaseFragment {
     private void createRows() {
         mGuessRows = new ArrayList<>();
 
-        for (int i = 0; i < Logic.guessLimit - 1; i++) {
+        for (int i = 0; i < Logic.guessLimit; i++) {
             GuessRowView rowView = setupSingleRow();
             rowView.setNotCurrent();
             mGuessRows.add(rowView);
