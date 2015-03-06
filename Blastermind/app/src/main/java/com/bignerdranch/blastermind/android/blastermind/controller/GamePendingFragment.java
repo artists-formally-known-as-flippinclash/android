@@ -1,12 +1,15 @@
 package com.bignerdranch.blastermind.android.blastermind.controller;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
+import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateFailedEvent;
+import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateSuccessEvent;
 
 import javax.inject.Inject;
 
@@ -44,5 +47,26 @@ public class GamePendingFragment extends BaseFragment {
         mDataManager.startMatch(mPlayer);
     }
 
+    public void onEventMainThread(MatchCreateSuccessEvent event) {
+        dismissProgressDialog();
+        Intent intent = GameActivity.newIntent(getActivity());
+        startActivity(intent);
+    }
 
+    public void onEventMainThread(MatchCreateFailedEvent event) {
+//        dismissProgressDialog();
+//        Toast.makeText(getActivity(), R.string.failed_to_create_match_msg, Toast.LENGTH_SHORT).show();
+//        getActivity().finish();
+
+        // TODO temporarily start match anyways since server isn't returning correct json
+        dismissProgressDialog();
+        Intent intent = GameActivity.newIntent(getActivity());
+        startActivity(intent);
+    }
+
+    // TODO move to base fragment
+    private void dismissProgressDialog() {
+        ((SingleFragmentActivity) getActivity()).dismissProgressDialog();
+    }
 }
+

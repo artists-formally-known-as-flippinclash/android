@@ -14,4 +14,5 @@
     <string name="start">Start</string>
     <string name="loading">loading</string>
     <string name="waiting_for_other_players">Waiting for other players</string>
+    <string name="failed_to_create_match_msg">Failed to create game. Try again.</string>
 </resources>

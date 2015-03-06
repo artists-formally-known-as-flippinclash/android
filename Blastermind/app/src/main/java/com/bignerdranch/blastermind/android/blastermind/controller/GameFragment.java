@@ -27,7 +27,6 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import de.greenrobot.event.EventBus;
 
 import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
 
@@ -66,19 +65,6 @@ public class GameFragment extends BaseFragment {
         setupInputButtons();
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // TODO move up to base fragment
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        EventBus.getDefault().unregister(this);
     }
 
     public void onEventMainThread(MatchStartedEvent matchStartedEvent) {

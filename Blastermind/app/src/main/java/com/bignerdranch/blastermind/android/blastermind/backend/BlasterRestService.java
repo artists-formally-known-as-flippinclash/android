@@ -15,7 +15,7 @@ public interface BlasterRestService {
 
     @Headers("Content-Type: application/json")
     @POST(API.GUESS)
-    public void sendGuess(@Path("match_id") int matchId, @Body GuessBody body, Callback<GuessResponse> responseCallback);
+    public void sendGuess(@Path("match_id") int matchId, @Path("player_id") int playerId, @Body GuessBody body, Callback<GuessResponse> responseCallback);
 
     @Headers("Content-Type: application/json")
     @POST(API.MATCHES)
@@ -24,6 +24,6 @@ public interface BlasterRestService {
     public static class API {
         public static final String MATCHES = "/matches";
         public static final String MATCH = MATCHES + "/{match_id}";
-        public static final String GUESS = MATCH + "/guesses";
+        public static final String GUESS = MATCH + "/players/{player_id}/guesses";
     }
 }

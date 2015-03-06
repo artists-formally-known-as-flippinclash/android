@@ -10,6 +10,8 @@ import com.bignerdranch.blastermind.android.blastermind.backend.request.PlayerBo
 import com.bignerdranch.blastermind.android.blastermind.backend.response.GuessResponse;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.StartMatchResponse;
 import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
+import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateFailedEvent;
+import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateSuccessEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
 import com.pusher.client.Pusher;
@@ -48,21 +50,24 @@ public class LiveDataManager implements DataManager {
         mRestService.startMatch(playerBody, new Callback<StartMatchResponse>() {
             @Override
             public void success(StartMatchResponse startMatchResponse, Response response) {
-                Log.d(TAG, "success match start");
+                EventBus.getDefault().post(new MatchCreateSuccessEvent());
             }
 
             @Override
             public void failure(RetrofitError error) {
                 handleRetrofitError(error);
+                EventBus.getDefault().post(new MatchCreateFailedEvent());
             }
         });
     }
 
     @Override
     public void sendGuess(Guess guess) {
+        // TODO get from somewhere
         int matchId = 123;
+        int playerId = 321;
         GuessBody guessBody = GuessBody.mapGuessToBody(guess);
-        mRestService.sendGuess(matchId, guessBody, new Callback<GuessResponse>() {
+        mRestService.sendGuess(matchId, playerId, guessBody, new Callback<GuessResponse>() {
             @Override
             public void success(GuessResponse guessResponse, Response response) {
                 Feedback feedback = GuessResponse.mapResponseToFeedback(guessResponse);
