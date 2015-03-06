@@ -13,15 +13,13 @@
             android:id="@+id/feedback_peg1"
             android:layout_width="@dimen/feedback_peg_size"
             android:layout_height="@dimen/feedback_peg_size"
-            android:layout_margin="3dp"
-            android:background="@android:color/holo_blue_dark"/>
+            android:layout_margin="3dp"/>
 
         <ImageView
             android:id="@+id/feedback_peg2"
             android:layout_width="@dimen/feedback_peg_size"
             android:layout_height="@dimen/feedback_peg_size"
-            android:layout_margin="3dp"
-            android:background="@android:color/holo_orange_dark"/>
+            android:layout_margin="3dp"/>
 
     </LinearLayout>
 
@@ -34,15 +32,13 @@
             android:id="@+id/feedback_peg3"
             android:layout_width="@dimen/feedback_peg_size"
             android:layout_height="@dimen/feedback_peg_size"
-            android:layout_margin="3dp"
-            android:background="@android:color/holo_orange_dark"/>
+            android:layout_margin="3dp"/>
 
         <ImageView
             android:id="@+id/feedback_peg4"
             android:layout_width="@dimen/feedback_peg_size"
             android:layout_height="@dimen/feedback_peg_size"
-            android:layout_margin="3dp"
-            android:background="@android:color/holo_blue_dark"/>
+            android:layout_margin="3dp"/>
 
     </LinearLayout>
 

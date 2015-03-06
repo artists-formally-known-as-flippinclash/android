@@ -72,10 +72,13 @@ public class GameFragment extends BaseFragment {
 
     public void onEventMainThread(FeedbackEvent feedbackEvent) {
         Feedback feedback = feedbackEvent.getFeedback();
+        mCurrentGuessRow.setFeedback(feedback);
         int matchId = feedback.getMatchId();
         if (matchId == mMatchId) { // if this feedback is about this match
             handleFeedback(feedback);
         }
+
+        createEmptyGuessForNextTurn();
     }
 
     private void handleFeedback(Feedback feedback) {
@@ -98,8 +101,6 @@ public class GameFragment extends BaseFragment {
     public void onUpdateClick() {
         Guess guess = mCurrentGuessRow.getGuess();
         mDataManager.sendGuess(guess);
-
-        createEmptyGuessForNextTurn();
     }
 
     private void createEmptyGuessForNextTurn() {

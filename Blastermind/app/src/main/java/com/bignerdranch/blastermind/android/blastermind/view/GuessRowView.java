@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.bignerdranch.blastermind.andorid.core.Feedback;
 import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
 
@@ -111,6 +112,10 @@ public class GuessRowView extends LinearLayout {
         }
         guess.setTypes(types);
         return guess;
+    }
+
+    public void setFeedback(Feedback feedback) {
+        mFeedbackView.update(feedback);
     }
 
     /**
