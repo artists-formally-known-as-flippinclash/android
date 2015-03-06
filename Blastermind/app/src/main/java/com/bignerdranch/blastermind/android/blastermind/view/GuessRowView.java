@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  GSON object to interface between Guess model object and webservice
+ * GSON object to interface between Guess model object and webservice
  */
 public class GuessRowView extends LinearLayout {
 
@@ -24,7 +24,6 @@ public class GuessRowView extends LinearLayout {
     private ArrayList<PegView> mPegViews;
     private FeedbackView mFeedbackView;
     private int mActivePegIndex; // index in mPegView for which peg is active; -1 == all pegs are set
-    private boolean mIsCurrent;
 
     public GuessRowView(Context context) {
         this(context, null);
@@ -108,7 +107,7 @@ public class GuessRowView extends LinearLayout {
         // build guess from each PegView
         Guess guess = new Guess(Logic.guessWidth);
         List<Logic.TYPE> types = new ArrayList<>();
-        for (PegView pegView: mPegViews) {
+        for (PegView pegView : mPegViews) {
             types.add(pegView.getType());
         }
         guess.setTypes(types);
@@ -120,28 +119,26 @@ public class GuessRowView extends LinearLayout {
     }
 
     public void setCurrent() {
-        mIsCurrent = true;
         // set first peg active
         mPegViews.get(0).setActive();
         setAllPegsEnabled(true);
     }
 
-    public void setNotCurrent(){
-        mIsCurrent = false;
+    public void setNotCurrent() {
         setAllPegsInactive();
         setAllPegsEnabled(false);
     }
 
     // inactive meaning not currently selected peg
     private void setAllPegsInactive() {
-        for (PegView pegView: mPegViews) {
+        for (PegView pegView : mPegViews) {
             pegView.setInactive();
         }
     }
 
     // enabled meaning clickable
-    private void setAllPegsEnabled(boolean enabled){
-        for (PegView pegView: mPegViews) {
+    private void setAllPegsEnabled(boolean enabled) {
+        for (PegView pegView : mPegViews) {
             pegView.setEnabled(enabled);
         }
     }

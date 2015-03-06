@@ -1,10 +1,7 @@
 <resources>
-    <dimen name="peg_size">50dp</dimen>
-    <dimen name="peg_border_thickness">56dp</dimen>
 
     <dimen name="input_button_size">40dp</dimen>
     <dimen name="input_button_padding">8dp</dimen>
     <dimen name="layout_padding">10dp</dimen>
     <dimen name="row_padding">5dp</dimen>
-    <dimen name="feedback_peg_size">20dp</dimen>
 </resources>
