@@ -18,7 +18,6 @@ import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
 import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
-import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
 
@@ -65,10 +64,6 @@ public class GameFragment extends BaseFragment {
         setupInputButtons();
 
         return view;
-    }
-
-    public void onEventMainThread(MatchStartedEvent matchStartedEvent) {
-        Toast.makeText(getActivity(), "match started", Toast.LENGTH_SHORT).show();
     }
 
     public void onEventMainThread(MatchEndedEvent matchEndedEvent) {

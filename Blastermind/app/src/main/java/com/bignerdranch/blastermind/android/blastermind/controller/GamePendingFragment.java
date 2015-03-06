@@ -10,7 +10,7 @@ import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateFailedEvent;
-import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateSuccessEvent;
+import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
 
 import javax.inject.Inject;
 
@@ -48,8 +48,9 @@ public class GamePendingFragment extends BaseFragment {
         mDataManager.startMatch(mPlayer);
     }
 
-    public void onEventMainThread(MatchCreateSuccessEvent event) {
+    public void onEventMainThread(MatchStartedEvent matchStartedEvent) {
         dismissProgressDialog();
+        Toast.makeText(getActivity(), "match started", Toast.LENGTH_SHORT).show();
         Intent intent = GameActivity.newIntent(getActivity());
         startActivity(intent);
     }

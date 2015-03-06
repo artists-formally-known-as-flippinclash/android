@@ -2,6 +2,7 @@ package com.bignerdranch.blastermind.android.blastermind.backend.response;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StartMatchResponse {
@@ -17,13 +18,26 @@ public class StartMatchResponse {
         @SerializedName("state")
         String state;
         @SerializedName("players")
-        List<PlayerBody> players;
+        List<ExistingPlayer> players;
 
-        private class PlayerBody {
+        private class ExistingPlayer {
             @SerializedName("id")
             int id;
             @SerializedName("name")
             String name;
         }
+    }
+
+    public String getChannel() {
+        return data.channel;
+    }
+
+    public List<String> getExistingPlayers() {
+        List<String> existingPlayers = new ArrayList<>();
+
+        for (Data.ExistingPlayer existingPlayer : data.players) {
+            existingPlayers.add(existingPlayer.name);
+        }
+        return existingPlayers;
     }
 }

@@ -38,9 +38,10 @@ public class LiveDataManager implements DataManager {
     private static final String RETROFIT_TAG = "RETROFIT: ";
     private static final String CHANNEL_NAME = "game-us";
     private BlasterRestService mRestService;
+    private Pusher mPusher;
 
     public LiveDataManager() {
-        setupPusher();
+        mPusher = new Pusher(APP_KEY);
         setupRestAdapter();
     }
 
@@ -50,6 +51,10 @@ public class LiveDataManager implements DataManager {
         mRestService.startMatch(playerBody, new Callback<StartMatchResponse>() {
             @Override
             public void success(StartMatchResponse startMatchResponse, Response response) {
+                String channel = startMatchResponse.getChannel();
+                // TODO do somethign with existing player names
+                // List<String> existingPlayers = startMatchResponse.getExistingPlayers();
+                subscribeToPusherChannel(channel);
                 EventBus.getDefault().post(new MatchCreateSuccessEvent());
             }
 
@@ -89,9 +94,9 @@ public class LiveDataManager implements DataManager {
         mRestService = restAdapter.create(BlasterRestService.class);
     }
 
-    private void setupPusher() {
-        Pusher pusher = new Pusher(APP_KEY);
-        pusher.connect(new ConnectionEventListener() {
+    private void subscribeToPusherChannel(String channelName) {
+
+        mPusher.connect(new ConnectionEventListener() {
             @Override
             public void onConnectionStateChange(ConnectionStateChange change) {
                 Log.d(TAG, "state changed from :" + change.getPreviousState() + " to " + change.getCurrentState());
@@ -105,7 +110,7 @@ public class LiveDataManager implements DataManager {
 
 
         // subscribe to channel
-        Channel channel = pusher.subscribe(CHANNEL_NAME);
+        Channel channel = mPusher.subscribe(channelName);
 
         // bind to events
         channel.bind("match-started", new SubscriptionEventListener() {
