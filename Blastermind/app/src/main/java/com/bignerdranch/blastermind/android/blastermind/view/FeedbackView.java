@@ -16,6 +16,9 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * This class is hacky and gross. Don't go looking for good ideas here.
+ */
 public class FeedbackView extends LinearLayout {
 
     private static final String TAG = FeedbackView.class.getSimpleName();
@@ -38,16 +41,6 @@ public class FeedbackView extends LinearLayout {
         init();
     }
 
-    private void init() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_feedback, this);
-        ButterKnife.inject(this, view);
-        mFeedbackPegs = new ArrayList<>();
-        mFeedbackPegs.add(mFeedbackPeg1);
-        mFeedbackPegs.add(mFeedbackPeg2);
-        mFeedbackPegs.add(mFeedbackPeg3);
-        mFeedbackPegs.add(mFeedbackPeg4);
-    }
-
     public void update(Feedback feedback) {
         int index = 0;
         int numPositionColor = feedback.getPositionCount();
@@ -59,15 +52,24 @@ public class FeedbackView extends LinearLayout {
         }
 
         // then set color pegs
-        for (int i = index; i< numColor+numPositionColor; i++, index++)  {
+        for (int i = index; i < numColor + numPositionColor; i++, index++) {
             markPegColor(index);
         }
+    }
+
+    private void init() {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.view_feedback, this);
+        ButterKnife.inject(this, view);
+        mFeedbackPegs = new ArrayList<>();
+        mFeedbackPegs.add(mFeedbackPeg1);
+        mFeedbackPegs.add(mFeedbackPeg2);
+        mFeedbackPegs.add(mFeedbackPeg3);
+        mFeedbackPegs.add(mFeedbackPeg4);
     }
 
     private void markPegPositionColor(int i) {
         int color = getResources().getColor(R.color.feedback_position_and_color_color);
         mFeedbackPegs.get(i).setBackgroundColor(color);
-
     }
 
     private void markPegColor(int i) {
