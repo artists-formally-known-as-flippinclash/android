@@ -76,6 +76,7 @@ public class GameFragment extends BaseFragment {
                 // now that we have the height of the container, only now can we create our first guess row
                 mRowHeightPx = mGuessContainerHeightPx / Logic.guessLimit;
                 createEmptyGuessForNextTurn();
+
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
                     mGuessContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 else
@@ -131,7 +132,7 @@ public class GameFragment extends BaseFragment {
         int rowPaddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowPaddingDp, getResources().getDisplayMetrics());
         int mRowHeightMinusPaddingPx = mRowHeightPx - rowPaddingPx; // remove padding
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mRowHeightMinusPaddingPx);
-        layoutParams.setMargins(0, rowPaddingDp, 0, rowPaddingDp);
+        layoutParams.setMargins(0, 0, 0, rowPaddingDp);
 
         mCurrentGuessRow.setLayoutParams(layoutParams);
 
