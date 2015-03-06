@@ -3,8 +3,8 @@ package com.bignerdranch.blastermind.android.blastermind.view;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.bignerdranch.blastermind.andorid.core.Feedback;
@@ -34,11 +34,11 @@ public class GuessRowView extends LinearLayout {
         mContext = context;
     }
 
-    public void setup(int numPegs) {
-        // setup LayoutParams
-        float weight = 100 / (Logic.guessWidth + 1);
-        LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(8, 8, 8, 8);
+    public void setup(int numPegs, int sizePx) {
+        setGravity(Gravity.CENTER);
+        // circumvent layout process by forcing this to be square and but match parent on height
+        LayoutParams layoutParams = new LayoutParams(sizePx, sizePx); // make square
+        layoutParams.setMargins(8, 0, 8, 0);
 
         // add feedback view
         mFeedbackView = new FeedbackView(mContext);
@@ -143,6 +143,4 @@ public class GuessRowView extends LinearLayout {
             tempPegView.setInactive();
         }
     }
-
-
 }

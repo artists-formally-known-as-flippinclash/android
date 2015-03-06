@@ -5,4 +5,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="SquareButton" parent="android:Widget.Button">
+        <!-- height = width -->
+        <item name="android:minHeight">3dip</item>
+        <item name="android:minWidth">3dip</item>
+    </style>
+
 </resources>

@@ -68,19 +68,6 @@ public class PegView extends RelativeLayout {
     private void init() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.view_peg, this);
         ButterKnife.inject(this, view);
-
-        // setup button
-        int buttonSize = (int) getResources().getDimension(R.dimen.peg_size);
-        LayoutParams buttonParams = new LayoutParams(buttonSize, buttonSize);
-        buttonParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        mButton.setLayoutParams(buttonParams);
-
-        // setup border
-        int borderSize = (int) getResources().getDimension(R.dimen.peg_border_thickness);
-        LayoutParams borderParams = new LayoutParams(borderSize, borderSize);
-        borderParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-        mBorder.setLayoutParams(borderParams);
-
         reset();
     }
 
@@ -100,18 +87,5 @@ public class PegView extends RelativeLayout {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         // intercept touch events for button and border
         return onTouchEvent(ev);
-    }
-
-    /**
-     * Maintain aspect ratio when scaling to match parent
-     * @param widthMeasureSpec
-     * @param heightMeasureSpec
-     */
-    @Override protected void onMeasure(int widthMeasureSpec,
-                                       int heightMeasureSpec) {
-        int height = MeasureSpec.getSize(heightMeasureSpec);
-        Drawable temp = getResources().getDrawable(R.drawable.peg);
-        int width = height* temp.getIntrinsicWidth() / temp.getIntrinsicHeight();
-        setMeasuredDimension(width, height);
     }
 }

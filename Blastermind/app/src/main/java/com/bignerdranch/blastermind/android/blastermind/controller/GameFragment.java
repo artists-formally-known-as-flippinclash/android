@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +49,8 @@ public class GameFragment extends BaseFragment {
 
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
-    private int mRowHeight;
-    private int mGuessContainerHeight;
+    private int mRowHeightPx;
+    private int mGuessContainerHeightPx;
 
     public static Fragment newInstance() {
         return new GameFragment();
@@ -70,12 +71,12 @@ public class GameFragment extends BaseFragment {
             @Override
             public void onGlobalLayout() {
                 //now we can retrieve the width and height
-                mGuessContainerHeight = mGuessContainer.getHeight();
+                mGuessContainerHeightPx = mGuessContainer.getHeight();
 
                 // now that we have the height of the container, only now can we create our first guess row
-                mRowHeight = mGuessContainerHeight / Logic.guessLimit;
+                mRowHeightPx = mGuessContainerHeightPx / Logic.guessLimit;
                 createEmptyGuessForNextTurn();
-                if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
                     mGuessContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 else
                     mGuessContainer.getViewTreeObserver().removeGlobalOnLayoutListener(this);
@@ -117,18 +118,25 @@ public class GameFragment extends BaseFragment {
     }
 
     private void createEmptyGuessForNextTurn() {
-        if (mCurrentTurn > Logic.guessLimit) {
+        if (mCurrentTurn > Logic.guessLimit - 1) {
             mUpdateButton.setEnabled(false);
+            return;
         }
-        mCurrentTurn++;
 
+        mCurrentTurn++;
         // create new row and add it
         mCurrentGuessRow = new GuessRowView(getActivity());
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mRowHeight);
+
+        int rowPaddingDp = (int) getResources().getDimension(R.dimen.row_padding);
+        int rowPaddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowPaddingDp, getResources().getDisplayMetrics());
+        int mRowHeightMinusPaddingPx = mRowHeightPx - rowPaddingPx; // remove padding
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mRowHeightMinusPaddingPx);
+        layoutParams.setMargins(0, rowPaddingDp, 0, rowPaddingDp);
+
         mCurrentGuessRow.setLayoutParams(layoutParams);
 
         // set height
-        mCurrentGuessRow.setup(Logic.guessWidth);
+        mCurrentGuessRow.setup(Logic.guessWidth, mRowHeightMinusPaddingPx);
         mGuessContainer.addView(mCurrentGuessRow);
     }
 
