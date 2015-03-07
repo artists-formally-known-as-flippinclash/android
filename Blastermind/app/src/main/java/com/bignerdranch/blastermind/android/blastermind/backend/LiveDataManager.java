@@ -39,7 +39,7 @@ public class LiveDataManager implements DataManager {
 
     private static final String APP_KEY = "a8dc613841aa8963a8a4";
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     public static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
     public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
