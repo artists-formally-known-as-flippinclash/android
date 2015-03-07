@@ -17,7 +17,8 @@
 
         <activity
             android:name=".controller.GamePendingActivity"
-            android:icon="@drawable/ic_actionbar"/>
+            android:icon="@drawable/ic_actionbar"
+            android:noHistory="true"/>
 
         <activity android:name=".controller.CreateMatchActivity"
                   android:icon="@drawable/ic_actionbar">

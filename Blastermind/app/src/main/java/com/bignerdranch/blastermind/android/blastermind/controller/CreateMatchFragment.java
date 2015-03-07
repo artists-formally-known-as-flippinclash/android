@@ -56,5 +56,4 @@ public class CreateMatchFragment extends Fragment {
         boolean isNameValid = !TextUtils.isEmpty(mNameEditText.getText());
         mStartMatchButton.setEnabled(isNameValid);
     }
-
 }
