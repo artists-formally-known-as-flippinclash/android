@@ -9,12 +9,14 @@ import com.bignerdranch.blastermind.android.blastermind.backend.request.GuessBod
 import com.bignerdranch.blastermind.android.blastermind.backend.request.PlayerBody;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.GuessResponse;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.NullResponse;
+import com.bignerdranch.blastermind.android.blastermind.backend.response.RoundEndResponse;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.StartMatchResponse;
 import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateFailedEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateSuccessEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
+import com.google.gson.Gson;
 import com.pusher.client.Pusher;
 import com.pusher.client.channel.Channel;
 import com.pusher.client.channel.SubscriptionEventListener;
@@ -35,7 +37,9 @@ public class LiveDataManager implements DataManager {
 
     private static final String APP_KEY = "a8dc613841aa8963a8a4";
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
+
+
     public static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
     public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
 
@@ -164,6 +168,13 @@ public class LiveDataManager implements DataManager {
             }
         });
 
+        channel.bind("round-ended", new SubscriptionEventListener() {
+            @Override
+            public void onEvent(String channelName, String eventName, String data) {
+                parseRoundEndJson(data);
+            }
+        });
+
 
         if (DEBUG) { // immediately start game
             EventBus.getDefault().post(new MatchStartedEvent());
@@ -191,5 +202,15 @@ public class LiveDataManager implements DataManager {
                 // we don't care
             }
         });
+    }
+
+    private void parseRoundEndJson(String json) {
+        Gson gson = new Gson();
+        RoundEndResponse response = gson.fromJson(json, RoundEndResponse.class);
+        int id = response.getMatchId();
+        Guess solution = response.getSolution();
+        int winnerId = response.getWinnerId();
+        String winnerName = response.getWinnerName();
+        int i;
     }
 }
