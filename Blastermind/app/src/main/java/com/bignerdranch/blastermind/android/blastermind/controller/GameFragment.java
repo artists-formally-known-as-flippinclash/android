@@ -44,8 +44,9 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     private static final String TAG = GameFragment.class.getSimpleName();
     private static final String TAG_WINNER_DIALOG = "MainFragment.TAG_WINNER_DIALOG";
     private static final String TAG_LOSER_DIALOG = "MainFragment.TAG_LOSER_DIALOG";
-    private static final int EXIT_MATCH_REQUEST_CODE = 1;
+    private static final int REQUEST_EXIT_MATCH_DIALOG = 1;
     private static final String EXIT_MATCH_TAG = "GameFragment.EXIT_MATCH_TAG";
+    private static final int REQUEST_END_OF_GAME_DIALOG = 2;
 
     @InjectView(R.id.update_button)
     protected Button mUpdateButton;
@@ -139,7 +140,11 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == EXIT_MATCH_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_EXIT_MATCH_DIALOG && resultCode == Activity.RESULT_OK) {
+            getActivity().finish();
+        }
+
+        if (requestCode == REQUEST_END_OF_GAME_DIALOG) {
             getActivity().finish();
         }
     }
@@ -168,18 +173,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
     private void handleFeedback(Feedback feedback) {
         mCurrentGuessRow.setFeedback(feedback);
-
-//        String outcome = feedback.getOutcome();
-//        switch (outcome) {
-//            case "winner":
-//                displayWinnerDialog();
-//                break;
-//            case "loser":
-//                displayLoserDialog();
-//                break;
-//            default:
-//                break;
-//        }
     }
 
     private GuessRowView setupSingleRow() {
@@ -249,6 +242,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
                 .setPositiveButtonResId(android.R.string.ok)
                 .setViewResId(R.layout.view_winner_dialog)
                 .build();
+        alertDialog.setTargetFragment(this, REQUEST_END_OF_GAME_DIALOG);
         alertDialog.show(getFragmentManager(), TAG_WINNER_DIALOG);
     }
 
@@ -257,6 +251,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
                 .setTitle(title)
                 .setPositiveButtonResId(android.R.string.ok)
                 .build();
+        alertDialog.setTargetFragment(this, REQUEST_END_OF_GAME_DIALOG);
         alertDialog.show(getFragmentManager(), TAG_LOSER_DIALOG);
     }
 
@@ -270,7 +265,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
                 .setNegativeButtonResId(R.string.cancel)
                 .build();
 
-        alertDialogFragment.setTargetFragment(this, EXIT_MATCH_REQUEST_CODE);
+        alertDialogFragment.setTargetFragment(this, REQUEST_EXIT_MATCH_DIALOG);
         alertDialogFragment.show(getActivity().getFragmentManager(), EXIT_MATCH_TAG);
 
         Log.d(TAG, "display dialog");

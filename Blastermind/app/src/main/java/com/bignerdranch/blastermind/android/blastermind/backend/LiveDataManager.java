@@ -41,7 +41,6 @@ public class LiveDataManager implements DataManager {
 
     private static final boolean DEBUG = true;
 
-
     public static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
     public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
 
