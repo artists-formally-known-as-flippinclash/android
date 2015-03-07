@@ -1,6 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Holo">
+    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:colorBackground">@color/background_material_dark</item>
     </style>
 
@@ -8,6 +8,11 @@
         <!-- height = width -->
         <item name="android:minHeight">3dip</item>
         <item name="android:minWidth">3dip</item>
+    </style>
+
+    <style name="CustomEditText" parent="android:Widget.Holo.Light.EditText">
+        <item name="android:textColor">@color/light_text</item>
+        <item name="android:textColorHint">@color/light_text</item>
     </style>
 
 </resources>
