@@ -7,12 +7,12 @@ public class Logic {
     public static final int guessLimit = 10;
 
     public enum TYPE {
-        alpha(0, "#FF0000"),
-        beta(1, "#00FF00"),
-        gamma(2, "#0000FF"),
-        delta(3, "#FFFF00"),
-        epsilon(4, "#800080"),
-        zeta(5, "#FFA500");
+        alpha(0, "#F2220F"),
+        beta(1, "#F29F05"),
+        gamma(2, "#F2CB05"),
+        delta(3, "#027333"),
+        epsilon(4, "#034C8C"),
+        zeta(5, "#A302EE");
 
         private int mPosition;
         private String mRgb;
