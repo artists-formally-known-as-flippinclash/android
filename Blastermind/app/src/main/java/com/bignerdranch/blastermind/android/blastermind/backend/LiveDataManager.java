@@ -8,6 +8,7 @@ import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.backend.request.GuessBody;
 import com.bignerdranch.blastermind.android.blastermind.backend.request.PlayerBody;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.GuessResponse;
+import com.bignerdranch.blastermind.android.blastermind.backend.response.NullResponse;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.StartMatchResponse;
 import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateFailedEvent;
@@ -20,6 +21,9 @@ import com.pusher.client.channel.SubscriptionEventListener;
 import com.pusher.client.connection.ConnectionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.greenrobot.event.EventBus;
 import retrofit.Callback;
@@ -73,6 +77,14 @@ public class LiveDataManager implements DataManager {
                 EventBus.getDefault().post(new MatchCreateFailedEvent());
             }
         });
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                manuallyTriggerMatchStart();
+            }
+        }, 1000*5); // five seconds
     }
 
     @Override
@@ -154,5 +166,23 @@ public class LiveDataManager implements DataManager {
     private void handleRetrofitError(RetrofitError error) {
         Log.e(RETROFIT_TAG, "Failure: " + error.toString() + " accessing: " + error.getUrl());
         error.printStackTrace();
+    }
+
+    /**
+     * Server isn't always sending Pusher notifications after 30 seconds to start a match
+     * But there is an API endpoint to manually trigger the Pusher Notification ourselves
+     */
+    private void manuallyTriggerMatchStart() {
+        mRestService.triggerMatchStart(mCurrentMatchId, new Callback<NullResponse>() {
+            @Override
+            public void success(NullResponse nullResponse, Response response) {
+                // we don't care
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                // we don't care
+            }
+        });
     }
 }
