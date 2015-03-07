@@ -218,18 +218,18 @@ public class AlertDialogFragment extends DialogFragment {
 
     public static class Builder {
 
-        int mTitleResId;
-        int mMessageResId;
-        int mPositiveButtonResId;
-        int mNeutralButtonResId;
-        int mNegativeButtonResId;
-        int mRequestCode;
-        String mTitle;
-        String mMessage;
-        String mPositiveButtonTitle;
-        CharSequence[] mItems;
+        private int mTitleResId;
+        private int mMessageResId;
+        private int mPositiveButtonResId;
+        private int mNeutralButtonResId;
+        private int mNegativeButtonResId;
+        private int mRequestCode;
+        private String mTitle;
+        private String mMessage;
+        private String mPositiveButtonTitle;
+        private CharSequence[] mItems;
         private boolean mCancelable;
-        int mViewResId;
+        private int mViewResId;
 
         public Builder setTitleResId(int titleResId) {
             mTitleResId = titleResId;

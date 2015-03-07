@@ -2,9 +2,12 @@ package com.bignerdranch.blastermind.android.blastermind.controller;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,11 +38,13 @@ import butterknife.OnClick;
 
 import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
 
-public class GameFragment extends BaseFragment {
+public class GameFragment extends BaseFragment implements GameActivity.BackPressedCallback {
 
     private static final String TAG = GameFragment.class.getSimpleName();
     private static final String TAG_WINNER_DIALOG = "MainFragment.TAG_WINNER_DIALOG";
     private static final String TAG_LOSER_DIALOG = "MainFragment.TAG_LOSER_DIALOG";
+    private static final int EXIT_MATCH_REQUEST_CODE = 1;
+    private static final String EXIT_MATCH_TAG = "GameFragment.EXIT_MATCH_TAG";
 
     @InjectView(R.id.update_button)
     protected Button mUpdateButton;
@@ -111,6 +116,21 @@ public class GameFragment extends BaseFragment {
         mCurrentGuessRow.setCurrent();
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EXIT_MATCH_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            getActivity().finish();
+        }
+    }
+
+    @OnClick(R.id.update_button)
+    public void onUpdateClick() {
+        Guess guess = mCurrentGuessRow.getGuess();
+        mDataManager.sendGuess(guess);
+        mUpdateButton.setEnabled(false); // don't allow spamming
+    }
+
     private void createRows() {
         mGuessRows = new ArrayList<>();
 
@@ -140,13 +160,6 @@ public class GameFragment extends BaseFragment {
             default:
                 break;
         }
-    }
-
-    @OnClick(R.id.update_button)
-    public void onUpdateClick() {
-        Guess guess = mCurrentGuessRow.getGuess();
-        mDataManager.sendGuess(guess);
-        mUpdateButton.setEnabled(false); // don't allow spamming
     }
 
     private GuessRowView setupSingleRow() {
@@ -225,5 +238,21 @@ public class GameFragment extends BaseFragment {
                 .setPositiveButtonResId(android.R.string.ok)
                 .build();
         alertDialog.show(getFragmentManager(), TAG_LOSER_DIALOG);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // todo display dialog
+        AlertDialogFragment alertDialogFragment = new AlertDialogFragment.Builder()
+                .setMessage("Do you want to leave the match?")
+                .setTitle("Exit match")
+                .setPositiveButtonResId(android.R.string.ok)
+                .setNegativeButtonResId(R.string.cancel)
+                .build();
+
+        alertDialogFragment.setTargetFragment(this, EXIT_MATCH_REQUEST_CODE);
+        alertDialogFragment.show(getActivity().getFragmentManager(), EXIT_MATCH_TAG);
+
+        Log.d(TAG, "display dialog");
     }
 }
