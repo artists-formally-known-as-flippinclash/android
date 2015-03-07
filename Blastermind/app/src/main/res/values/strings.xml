@@ -3,7 +3,7 @@
 
     <string name="you_won">You won, %1$s!</string>
     <string name="you_lost">You lost =(</string>
-    <string name="update">Update</string>
+    <string name="update">Guess</string>
 
     <!-- content descriptions -->
     <string name="content_description_princes_face">prince\'s face</string>

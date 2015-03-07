@@ -133,6 +133,10 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         mCurrentGuessRow.setNotCurrent();
 
         mCurrentTurn++;
+        if (mCurrentTurn >= Logic.guessLimit) {
+            return; // don't respond to feedback on last turn
+        }
+
         mCurrentGuessRow = mGuessRows.get(mCurrentTurn);
         mCurrentGuessRow.setCurrent();
     }

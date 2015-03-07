@@ -44,8 +44,10 @@ public class LiveDataManager implements DataManager {
     public static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
     public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
 
+    private static final int MANUALLY_TRIGGER_MATCH_START_TIMEOUT = 10 * 1000; // ten seconds, in milliseconds
     private static final String TAG = LiveDataManager.class.getSimpleName();
     private static final String RETROFIT_TAG = "RETROFIT: ";
+
     private BlasterRestService mRestService;
     private Pusher mPusher;
     private int mCurrentMatchId;
@@ -65,7 +67,7 @@ public class LiveDataManager implements DataManager {
             @Override
             public void success(StartMatchResponse startMatchResponse, Response response) {
                 Log.d(RETROFIT_TAG, "my id: " + startMatchResponse.getMyId()
-                + "; match name: " + startMatchResponse.getMatchName());
+                        + "; match name: " + startMatchResponse.getMatchName());
                 mCurrentMatchId = startMatchResponse.getMatchId();
                 mPlayer.setId(startMatchResponse.getMyId());
                 mCurrentMatchName = startMatchResponse.getMatchName();
@@ -92,7 +94,7 @@ public class LiveDataManager implements DataManager {
             public void run() {
                 manuallyTriggerMatchStart();
             }
-        }, 1000*5); // five seconds
+        }, MANUALLY_TRIGGER_MATCH_START_TIMEOUT);
     }
 
     @Override
@@ -105,6 +107,8 @@ public class LiveDataManager implements DataManager {
             public void success(GuessResponse guessResponse, Response response) {
                 Log.d(RETROFIT_TAG, guessResponse.toString());
                 Feedback feedback = GuessResponse.mapResponseToFeedback(guessResponse);
+
+
                 EventBus.getDefault().post(new FeedbackEvent(feedback));
             }
 
