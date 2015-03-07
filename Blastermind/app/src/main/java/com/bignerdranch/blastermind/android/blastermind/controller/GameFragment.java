@@ -109,7 +109,6 @@ public class GameFragment extends BaseFragment {
         mCurrentTurn++;
         mCurrentGuessRow = mGuessRows.get(mCurrentTurn);
         mCurrentGuessRow.setCurrent();
-
     }
 
     private void createRows() {
@@ -147,6 +146,7 @@ public class GameFragment extends BaseFragment {
     public void onUpdateClick() {
         Guess guess = mCurrentGuessRow.getGuess();
         mDataManager.sendGuess(guess);
+        mUpdateButton.setEnabled(false); // don't allow spamming
     }
 
     private GuessRowView setupSingleRow() {
