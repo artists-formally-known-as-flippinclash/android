@@ -8,6 +8,7 @@ import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.backend.request.GuessBody;
 import com.bignerdranch.blastermind.android.blastermind.backend.request.PlayerBody;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.GuessResponse;
+import com.bignerdranch.blastermind.android.blastermind.backend.response.MatchEndResponse;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.NullResponse;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.RoundEndResponse;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.StartMatchResponse;
@@ -164,6 +165,7 @@ public class LiveDataManager implements DataManager {
             @Override
             public void onEvent(String channelName, String eventName, String data) {
                 mCurrentMatchId = -1; // reset match id
+                parseMatchEndedJson(data);
                 EventBus.getDefault().post(new MatchEndedEvent());
             }
         });
@@ -211,6 +213,14 @@ public class LiveDataManager implements DataManager {
         Guess solution = response.getSolution();
         int winnerId = response.getWinnerId();
         String winnerName = response.getWinnerName();
-        int i;
+    }
+
+
+    private void parseMatchEndedJson(String json) {
+        Gson gson = new Gson();
+        MatchEndResponse response = gson.fromJson(json, MatchEndResponse.class);
+        int id = response.getMatchId();
+        int winnerId = response.getWinnerId();
+        String winnerName = response.getWinnerName();
     }
 }
