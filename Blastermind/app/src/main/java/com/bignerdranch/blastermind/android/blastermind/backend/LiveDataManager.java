@@ -122,8 +122,8 @@ public class LiveDataManager implements DataManager {
     }
 
     @Override
-    public int getMyPlayerId() {
-        return mPlayer.getId();
+    public Player getCurrentPlayer() {
+        return mPlayer;
     }
 
     private void setupRestAdapter() {

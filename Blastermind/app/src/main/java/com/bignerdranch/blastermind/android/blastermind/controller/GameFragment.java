@@ -15,12 +15,12 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.bignerdranch.blastermind.andorid.core.Feedback;
 import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
 import com.bignerdranch.blastermind.andorid.core.MatchEnd;
+import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
 import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
@@ -62,6 +62,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     private int mRowHeightPx;
     private int mGuessContainerHeightPx;
     private List<GuessRowView> mGuessRows;
+    private Player mCurrentPlayer;
 
     public static Fragment newInstance() {
         return new GameFragment();
@@ -105,21 +106,23 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     public void onEventMainThread(MatchEndedEvent matchEndedEvent) {
 
         MatchEnd matchEnd = matchEndedEvent.getMatchEnd();
-        int myPlayerId = mDataManager.getMyPlayerId();
+        mCurrentPlayer = mDataManager.getCurrentPlayer();
         int winnerId = matchEnd.getWinnerId();
+        String winnerName = matchEnd.getWinnerName();
 
         if (winnerId == -1) {
             // nobody won
-            Toast.makeText(getActivity(), "match ended; nobody won", Toast.LENGTH_SHORT).show();
-        } else if (myPlayerId == winnerId) {
-            // I won
-            Toast.makeText(getActivity(), "match ended; you won", Toast.LENGTH_SHORT).show();
+            displayLoserDialog("You all lose!");
+        } else if (mCurrentPlayer.getId() == winnerId) {
+            // you won
+            mDataManager.getCurrentPlayer();
+            String dialogText = String.format(getResources().getString(R.string.you_won), mCurrentPlayer.getName());
+            displayWinnerDialog(dialogText);
         } else {
-            // i lost; somebody else won
-            Toast.makeText(getActivity(), "match ended: somebody else won", Toast.LENGTH_SHORT).show();
+            // you lost; somebody else won
+            String dialogText = String.format(getResources().getString(R.string.somebody_else_won), winnerName);
+            displayLoserDialog(dialogText);
         }
-
-
     }
 
     public void onEventMainThread(FeedbackEvent feedbackEvent) {
@@ -166,17 +169,17 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     private void handleFeedback(Feedback feedback) {
         mCurrentGuessRow.setFeedback(feedback);
 
-        String outcome = feedback.getOutcome();
-        switch (outcome) {
-            case "winner":
-                displayWinnerDialog();
-                break;
-            case "loser":
-                displayLoserDialog();
-                break;
-            default:
-                break;
-        }
+//        String outcome = feedback.getOutcome();
+//        switch (outcome) {
+//            case "winner":
+//                displayWinnerDialog();
+//                break;
+//            case "loser":
+//                displayLoserDialog();
+//                break;
+//            default:
+//                break;
+//        }
     }
 
     private GuessRowView setupSingleRow() {
@@ -240,18 +243,18 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         mUpdateButton.setEnabled(mCurrentGuessRow.areAllPegsSet());
     }
 
-    private void displayWinnerDialog() {
+    private void displayWinnerDialog(String title) {
         AlertDialogFragment alertDialog = new AlertDialogFragment.Builder()
-                .setTitleResId(R.string.you_won)
+                .setTitle(title)
                 .setPositiveButtonResId(android.R.string.ok)
                 .setViewResId(R.layout.view_winner_dialog)
                 .build();
         alertDialog.show(getFragmentManager(), TAG_WINNER_DIALOG);
     }
 
-    private void displayLoserDialog() {
+    private void displayLoserDialog(String title) {
         AlertDialogFragment alertDialog = new AlertDialogFragment.Builder()
-                .setTitleResId(R.string.you_lost)
+                .setTitle(title)
                 .setPositiveButtonResId(android.R.string.ok)
                 .build();
         alertDialog.show(getFragmentManager(), TAG_LOSER_DIALOG);

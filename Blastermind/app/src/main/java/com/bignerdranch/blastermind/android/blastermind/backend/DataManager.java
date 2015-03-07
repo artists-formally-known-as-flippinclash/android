@@ -11,5 +11,5 @@ public interface DataManager {
 
     public String getCurrentMatchName();
 
-    public int getMyPlayerId();
+    public Player getCurrentPlayer();
 }

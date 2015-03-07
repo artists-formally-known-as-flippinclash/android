@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Blasterminds</string>
 
-    <string name="you_won">You won!</string>
+    <string name="you_won">You won, %1$s!</string>
     <string name="you_lost">You lost =(</string>
     <string name="update">Update</string>
 
@@ -14,4 +14,5 @@
     <string name="failed_to_create_match_msg">Failed to create game. Try again.</string>
     <string name="creating_match">Creating match...</string>
     <string name="cancel">Cancel</string>
+    <string name="somebody_else_won">You lose! %1$s won.</string>
 </resources>
