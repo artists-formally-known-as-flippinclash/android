@@ -221,6 +221,7 @@ public class LiveDataManager implements DataManager {
         MatchEndResponse response = gson.fromJson(json, MatchEndResponse.class);
         int id = response.getMatchId();
         int winnerId = response.getWinnerId();
+        Guess solution = response.getSolution();
         String winnerName = response.getWinnerName();
     }
 }

@@ -1,5 +1,9 @@
 package com.bignerdranch.blastermind.android.blastermind.backend.response;
 
+import com.bignerdranch.blastermind.andorid.core.Guess;
+
+import java.util.List;
+
 public class MatchEndResponse {
     Data data;
 
@@ -9,10 +13,16 @@ public class MatchEndResponse {
         String state;
         String name;
         Winner winner;
+        List<Round> rounds;
 
         private class Winner {
             int id;
             String name;
+        }
+
+        private class Round {
+            int id;
+            List<String> solution;
         }
     }
 
@@ -34,6 +44,14 @@ public class MatchEndResponse {
 
     public String getWinnerName() {
         return data.winner.name;
+    }
+
+    // for now return solution of the last round only (assume a match has only one round)
+    public Guess getSolution() {
+        int numRounds = data.rounds.size();
+        Data.Round lastRound = data.rounds.get(numRounds - 1);
+        List<String> solutionStrings = lastRound.solution;
+        return ParseSolutionUtil.parseGuessFromSolution(solutionStrings);
     }
 
     // TODO parse the rest of the response
