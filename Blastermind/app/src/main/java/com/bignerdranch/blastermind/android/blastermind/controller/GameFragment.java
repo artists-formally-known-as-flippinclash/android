@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.bignerdranch.blastermind.andorid.core.Feedback;
 import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.Logic;
+import com.bignerdranch.blastermind.andorid.core.MatchEnd;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
 import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
@@ -102,7 +103,23 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     }
 
     public void onEventMainThread(MatchEndedEvent matchEndedEvent) {
-        Toast.makeText(getActivity(), "match ended", Toast.LENGTH_SHORT).show();
+
+        MatchEnd matchEnd = matchEndedEvent.getMatchEnd();
+        int myPlayerId = mDataManager.getMyPlayerId();
+        int winnerId = matchEnd.getWinnerId();
+
+        if (winnerId == -1) {
+            // nobody won
+            Toast.makeText(getActivity(), "match ended; nobody won", Toast.LENGTH_SHORT).show();
+        } else if (myPlayerId == winnerId) {
+            // I won
+            Toast.makeText(getActivity(), "match ended; you won", Toast.LENGTH_SHORT).show();
+        } else {
+            // i lost; somebody else won
+            Toast.makeText(getActivity(), "match ended: somebody else won", Toast.LENGTH_SHORT).show();
+        }
+
+
     }
 
     public void onEventMainThread(FeedbackEvent feedbackEvent) {
@@ -168,7 +185,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         int rowPaddingDp = (int) getResources().getDimension(R.dimen.row_padding);
         int rowPaddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rowPaddingDp, getResources().getDisplayMetrics());
         int mRowHeightMinusPaddingPx = mRowHeightPx - rowPaddingPx; // remove padding
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,0, 1);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1);
         layoutParams.setMargins(0, 0, 0, rowPaddingDp);
         guessRow.setLayoutParams(layoutParams);
 

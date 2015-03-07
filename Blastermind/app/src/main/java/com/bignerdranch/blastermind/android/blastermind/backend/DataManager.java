@@ -10,4 +10,6 @@ public interface DataManager {
     public void sendGuess(Guess guess);
 
     public String getCurrentMatchName();
+
+    public int getMyPlayerId();
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.bignerdranch.blastermind.andorid.core.Feedback;
 import com.bignerdranch.blastermind.andorid.core.Guess;
+import com.bignerdranch.blastermind.andorid.core.MatchEnd;
 import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.backend.request.GuessBody;
 import com.bignerdranch.blastermind.android.blastermind.backend.request.PlayerBody;
@@ -64,7 +65,8 @@ public class LiveDataManager implements DataManager {
         mRestService.startMatch(playerBody, new Callback<StartMatchResponse>() {
             @Override
             public void success(StartMatchResponse startMatchResponse, Response response) {
-                Log.d(RETROFIT_TAG, startMatchResponse.toString());
+                Log.d(RETROFIT_TAG, "my id: " + startMatchResponse.getMyId()
+                + "; match name: " + startMatchResponse.getMatchName());
                 mCurrentMatchId = startMatchResponse.getMatchId();
                 mPlayer.setId(startMatchResponse.getMyId());
                 mCurrentMatchName = startMatchResponse.getMatchName();
@@ -119,6 +121,11 @@ public class LiveDataManager implements DataManager {
         return mCurrentMatchName;
     }
 
+    @Override
+    public int getMyPlayerId() {
+        return mPlayer.getId();
+    }
+
     private void setupRestAdapter() {
         String url;
         if (DEBUG) {
@@ -165,8 +172,8 @@ public class LiveDataManager implements DataManager {
             @Override
             public void onEvent(String channelName, String eventName, String data) {
                 mCurrentMatchId = -1; // reset match id
-                parseMatchEndedJson(data);
-                EventBus.getDefault().post(new MatchEndedEvent());
+                MatchEnd matchEnd = parseMatchEndedJson(data);
+                EventBus.getDefault().post(new MatchEndedEvent(matchEnd));
             }
         });
 
@@ -216,12 +223,19 @@ public class LiveDataManager implements DataManager {
     }
 
 
-    private void parseMatchEndedJson(String json) {
+    private MatchEnd parseMatchEndedJson(String json) {
         Gson gson = new Gson();
         MatchEndResponse response = gson.fromJson(json, MatchEndResponse.class);
         int id = response.getMatchId();
         int winnerId = response.getWinnerId();
         Guess solution = response.getSolution();
         String winnerName = response.getWinnerName();
+
+        MatchEnd matchEnd = new MatchEnd();
+        matchEnd.setMatchId(id);
+        matchEnd.setWinnerId(winnerId);
+        matchEnd.setWinnerName(winnerName);
+        matchEnd.setSolution(solution);
+        return matchEnd;
     }
 }
