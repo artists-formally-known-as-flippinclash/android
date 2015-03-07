@@ -19,20 +19,45 @@ public class GuessResponse {
         FeedbackResponse feedback;
 
         private class FeedbackResponse {
-            @SerializedName("color-count")
-            int colorCount;
-            @SerializedName("position-count")
+            @SerializedName("peg_count")
+            int typeCount;
+            @SerializedName("position_count")
             int positionCount;
+
+            @Override
+            public String toString() {
+                return "FeedbackResponse{" +
+                        "typeCount=" + typeCount +
+                        ", positionCount=" + positionCount +
+                        '}';
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "matchId=" + matchId +
+                    ", outcome='" + outcome + '\'' +
+                    ", feedback=" + feedback +
+                    '}';
         }
     }
 
     public static Feedback mapResponseToFeedback(GuessResponse response) {
         Feedback feedback = new Feedback();
-        feedback.setColorCount(response.data.feedback.colorCount);
+        feedback.setTypeCount(response.data.feedback.typeCount);
         feedback.setPositionCount(response.data.feedback.positionCount);
         feedback.setMatchId(response.data.matchId);
         feedback.setOutcome(response.data.outcome);
 
         return feedback;
+    }
+
+
+    @Override
+    public String toString() {
+        return "GuessResponse{" +
+                "data=" + data +
+                '}';
     }
 }

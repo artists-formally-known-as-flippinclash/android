@@ -38,7 +38,7 @@ public class GuessBody {
 
     private class GuessRequest {
 
-        @SerializedName("types")
+        @SerializedName("code_pegs")
         List<String> mTypes;
 
         public void setTypes(List<String> types) {

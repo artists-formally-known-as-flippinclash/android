@@ -4,8 +4,8 @@ public class Feedback {
 
     private int mMatchId;
     private String mOutcome;
-    private int mPositionCount; // how many pegs are the right color AND in the right position
-    private int mColorCount; // how many pegs are the right color;
+    private int mPositionCount; // how many pegs are the right type AND in the right position
+    private int mTypeCount; // how many pegs are the right type;
 
     public int getMatchId() {
         return mMatchId;
@@ -31,11 +31,11 @@ public class Feedback {
         mPositionCount = positionCount;
     }
 
-    public int getColorCount() {
-        return mColorCount;
+    public int getTypeCount() {
+        return mTypeCount;
     }
 
-    public void setColorCount(int colorCount) {
-        mColorCount = colorCount;
+    public void setTypeCount(int typeCount) {
+        mTypeCount = typeCount;
     }
 }

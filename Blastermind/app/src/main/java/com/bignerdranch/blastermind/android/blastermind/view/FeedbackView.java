@@ -44,7 +44,7 @@ public class FeedbackView extends LinearLayout {
     public void update(Feedback feedback) {
         int index = 0;
         int numPositionColor = feedback.getPositionCount();
-        int numColor = feedback.getColorCount();
+        int numColor = feedback.getTypeCount();
 
         // set position and color pegs
         for (int i = index; i < numPositionColor; i++, index++) {
