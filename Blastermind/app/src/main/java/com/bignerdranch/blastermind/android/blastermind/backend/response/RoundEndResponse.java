@@ -33,10 +33,16 @@ public class RoundEndResponse {
    }
 
     public int getWinnerId() {
+        if (data.winner == null)  {
+            return -1; // nobody won
+        }
         return data.winner.id;
     }
 
     public String getWinnerName() {
+        if (data.winner == null) {
+            return null; // nobody won
+        }
         return data.winner.name;
     }
 }
