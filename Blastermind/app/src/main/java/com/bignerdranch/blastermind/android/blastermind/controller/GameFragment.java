@@ -13,7 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -47,7 +47,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     private static final String EXIT_MATCH_TAG = "GameFragment.EXIT_MATCH_TAG";
 
     @InjectView(R.id.update_button)
-    protected Button mUpdateButton;
+    protected ImageButton mUpdateButton;
     @InjectView(R.id.fragment_main_guesses_container)
     protected LinearLayout mGuessContainer;
     @InjectView(R.id.fragment_main_input_container)
@@ -198,7 +198,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         int size = (int) getResources().getDimension(R.dimen.input_button_size);
         int padding = (int) getResources().getDimension(R.dimen.input_button_padding);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
-        layoutParams.setMargins(padding, padding, padding, padding);
+        layoutParams.setMargins(padding, padding, padding, 0);
         inputButton.setLayoutParams(layoutParams);
 
         // setup click listener

@@ -11,6 +11,6 @@
     <color name="background_material_dark">#ff303030</color>
     <color name="less_transparent">#BB303030</color>
     <color name="light_text">#DDDDDD</color>
-
+    <color name="transparent">#00000000</color>
 
 </resources>
