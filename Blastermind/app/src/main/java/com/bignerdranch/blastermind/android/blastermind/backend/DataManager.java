@@ -8,4 +8,6 @@ public interface DataManager {
     public void startMatch(Player player);
 
     public void sendGuess(Guess guess);
+
+    public String getCurrentMatchName();
 }

@@ -10,6 +10,7 @@ import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateFailedEvent;
+import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateSuccessEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchStartedEvent;
 
 import javax.inject.Inject;
@@ -42,10 +43,19 @@ public class GamePendingFragment extends BaseFragment {
         }
 
         // display loading dialog
-        ((SingleFragmentActivity) getActivity()).showProgressDialog(R.string.waiting_for_other_players);
+        String message = getResources().getString(R.string.creating_match);
+        ((SingleFragmentActivity) getActivity()).showProgressDialog(message);
 
         // create game
         mDataManager.startMatch(mPlayer);
+    }
+
+    public void onEventMainThread(MatchCreateSuccessEvent matchCreateSuccessEvent) {
+        dismissProgressDialog();
+        String matchName = matchCreateSuccessEvent.getMatchName();
+        // display loading dialog
+        String dialogText = String.format(getResources().getString(R.string.waiting_for_other_players), matchName);
+        ((SingleFragmentActivity) getActivity()).showProgressDialog(dialogText);
     }
 
     public void onEventMainThread(MatchStartedEvent matchStartedEvent) {

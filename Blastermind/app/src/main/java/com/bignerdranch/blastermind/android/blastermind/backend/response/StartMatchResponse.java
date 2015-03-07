@@ -19,6 +19,8 @@ public class StartMatchResponse {
         String channel;
         @SerializedName("state")
         String state;
+        @SerializedName("name")
+        String matchName;
         @SerializedName("players")
         List<ExistingPlayer> players; // one of these players will be "you"
 
@@ -39,6 +41,10 @@ public class StartMatchResponse {
 
     public String getChannel() {
         return data.channel;
+    }
+
+    public String getMatchName() {
+        return data.matchName;
     }
 
     public int getMyId() {

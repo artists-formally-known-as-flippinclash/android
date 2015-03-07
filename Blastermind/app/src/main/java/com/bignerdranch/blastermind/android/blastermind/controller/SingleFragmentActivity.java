@@ -36,8 +36,8 @@ public abstract class SingleFragmentActivity extends Activity {
 
     protected abstract Fragment createFragment();
 
-    protected void showProgressDialog(@StringRes int messageResId) {
-        DialogUtils.showLoadingDialog(getFragmentManager(), messageResId);
+    protected void showProgressDialog(@StringRes String message) {
+        DialogUtils.showLoadingDialog(getFragmentManager(), message);
     }
 
     protected void dismissProgressDialog() {

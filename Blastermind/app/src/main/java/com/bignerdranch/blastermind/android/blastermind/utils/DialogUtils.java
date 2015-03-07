@@ -5,12 +5,13 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.text.TextUtils;
 
 public class DialogUtils {
 
     private static final String TAG_PROGRESS_DIALOG = "DialogUtils.progressDialog";
 
-    public static void showLoadingDialog(FragmentManager fragmentManager, int messageResId) {
+    public static void showLoadingDialog(FragmentManager fragmentManager, String message) {
         if (fragmentManager == null) {
             return;
         }
@@ -19,10 +20,10 @@ public class DialogUtils {
         boolean dialogExists = existingDialogFragment != null;
 
         DialogFragment updatedDialogFragment = null;
-        if (messageResId > 0) {
-            updatedDialogFragment = ProgressDialogFragment.newInstance(messageResId);
-        } else {
+        if (TextUtils.isEmpty(message)) {
             updatedDialogFragment = ProgressDialogFragment.newInstance();
+        } else {
+            updatedDialogFragment = ProgressDialogFragment.newInstance(message);
         }
         updatedDialogFragment.setCancelable(false);
 

@@ -45,6 +45,7 @@ public class LiveDataManager implements DataManager {
     private Pusher mPusher;
     private int mCurrentMatchId;
     private Player mPlayer;
+    private String mCurrentMatchName;
 
     public LiveDataManager() {
         mPusher = new Pusher(APP_KEY);
@@ -61,6 +62,7 @@ public class LiveDataManager implements DataManager {
                 Log.d(RETROFIT_TAG, startMatchResponse.toString());
                 mCurrentMatchId = startMatchResponse.getMatchId();
                 mPlayer.setId(startMatchResponse.getMyId());
+                mCurrentMatchName = startMatchResponse.getMatchName();
 
                 // TODO do something with existing player names
                 // List<String> existingPlayers = startMatchResponse.getExistingPlayers();
@@ -68,7 +70,7 @@ public class LiveDataManager implements DataManager {
                 // setup pusher
                 String channel = startMatchResponse.getChannel();
                 subscribeToPusherChannel(channel);
-                EventBus.getDefault().post(new MatchCreateSuccessEvent());
+                EventBus.getDefault().post(new MatchCreateSuccessEvent(mCurrentMatchName));
             }
 
             @Override
@@ -105,6 +107,11 @@ public class LiveDataManager implements DataManager {
                 handleRetrofitError(error);
             }
         });
+    }
+
+    @Override
+    public String getCurrentMatchName() {
+        return mCurrentMatchName;
     }
 
     private void setupRestAdapter() {

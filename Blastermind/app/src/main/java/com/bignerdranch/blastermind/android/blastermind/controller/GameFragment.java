@@ -1,6 +1,7 @@
 package com.bignerdranch.blastermind.android.blastermind.controller;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -86,6 +87,11 @@ public class GameFragment extends BaseFragment {
                     mGuessContainer.getViewTreeObserver().removeGlobalOnLayoutListener(this);
             }
         });
+
+        ActionBar actionBar = getActivity().getActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(mDataManager.getCurrentMatchName());
+        }
 
         return view;
     }

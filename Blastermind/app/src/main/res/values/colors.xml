@@ -7,4 +7,10 @@
     <color name="feedback_color_color">#BBBBBB</color>
     <color name="feedback_position_and_color_color">#222222</color>
 
+    <!-- styling -->
+    <color name="background_material_dark">#ff303030</color>
+    <color name="less_transparent">#BB303030</color>
+    <color name="light_text">#DDDDDD</color>
+
+
 </resources>

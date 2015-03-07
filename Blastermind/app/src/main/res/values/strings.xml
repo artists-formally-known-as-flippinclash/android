@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Blastermind</string>
+    <string name="app_name">Blasterminds</string>
 
     <string name="you_won">You won!</string>
     <string name="you_lost">You lost =(</string>
@@ -10,6 +10,7 @@
     <string name="your_name">Your name</string>
     <string name="start">Start</string>
     <string name="loading">loading</string>
-    <string name="waiting_for_other_players">Waiting for other players</string>
+    <string name="waiting_for_other_players">Waiting for other players to join match: \n\n\t %1$s</string>
     <string name="failed_to_create_match_msg">Failed to create game. Try again.</string>
+    <string name="creating_match">Creating match...</string>
 </resources>
