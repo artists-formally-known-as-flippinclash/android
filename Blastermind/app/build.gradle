@@ -5,7 +5,7 @@ android {
     buildToolsVersion "21.1.2"
 
     defaultConfig {
-        applicationId "com.bignerdranch.blastermind.android.blastermind"
+        applicationId "com.tir38.android.blastermind"
         minSdkVersion 16
         targetSdkVersion 21
         versionCode 1
