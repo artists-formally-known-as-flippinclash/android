@@ -15,7 +15,7 @@ public class BlastermindApplication extends Application {
     }
 
     protected ObjectGraph createObjectGraph() {
-        return ObjectGraph.create(new BlastermindModule());
+        return ObjectGraph.create(new BlastermindModule(getApplicationContext()));
     }
 
     public final void inject(Object object) {

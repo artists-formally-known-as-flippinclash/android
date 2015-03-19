@@ -1,5 +1,7 @@
 package com.bignerdranch.blastermind.android.blastermind;
 
+import android.content.Context;
+
 import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
 import com.bignerdranch.blastermind.android.blastermind.backend.LiveDataManager;
 import com.bignerdranch.blastermind.android.blastermind.controller.CreateMatchActivity;
@@ -29,13 +31,16 @@ import dagger.Provides;
 )
 public class BlastermindModule {
 
-    public BlastermindModule() {
+    private Context mContext;
+
+    public BlastermindModule(Context context) {
+        mContext = context;
     }
 
     @Provides
     @Singleton
     DataManager provideDataManager() {
-        return new LiveDataManager();
+        return new LiveDataManager(mContext);
     }
 }
 

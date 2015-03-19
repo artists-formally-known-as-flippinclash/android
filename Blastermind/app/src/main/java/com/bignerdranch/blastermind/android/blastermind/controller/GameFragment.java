@@ -117,7 +117,13 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         } else if (mCurrentPlayer.getId() == winnerId) {
             // you won
             mDataManager.getCurrentPlayer();
-            String dialogText = String.format(getResources().getString(R.string.you_won), mCurrentPlayer.getName());
+
+            String dialogText;
+            if (mDataManager.hasUnlockedScreen()) {
+                dialogText = String.format(getResources().getString(R.string.you_won_and_unlocked), mCurrentPlayer.getName());
+            } else {
+                dialogText = String.format(getResources().getString(R.string.you_won), mCurrentPlayer.getName());
+            }
             displayWinnerDialog(dialogText);
         } else {
             // you lost; somebody else won

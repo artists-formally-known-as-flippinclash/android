@@ -1,5 +1,7 @@
 package com.bignerdranch.blastermind.android.blastermind.backend;
 
+import android.content.Context;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.bignerdranch.blastermind.andorid.core.Feedback;
@@ -47,16 +49,23 @@ public class LiveDataManager implements DataManager {
     private static final int MANUALLY_TRIGGER_MATCH_START_TIMEOUT = 15 * 1000; // fifteen seconds, in milliseconds
     private static final String TAG = LiveDataManager.class.getSimpleName();
     private static final String RETROFIT_TAG = "RETROFIT: ";
+    private static final String PREF_UNLOCKED = "DataManager.PREF_UNLOCKED";
 
     private BlasterRestService mRestService;
     private Pusher mPusher;
     private int mCurrentMatchId;
     private Player mPlayer;
     private String mCurrentMatchName;
+    private boolean mUnlocked;
+    private Context mContext;
 
-    public LiveDataManager() {
+    public LiveDataManager(Context context) {
+        mContext = context;
         mPusher = new Pusher(APP_KEY);
         setupRestAdapter();
+
+        mUnlocked = PreferenceManager.getDefaultSharedPreferences(mContext)
+                .getBoolean(PREF_UNLOCKED, false);
     }
 
     @Override
@@ -129,6 +138,11 @@ public class LiveDataManager implements DataManager {
         return mPlayer;
     }
 
+    @Override
+    public boolean hasUnlockedScreen() {
+        return mUnlocked;
+    }
+
     private void setupRestAdapter() {
         String url;
         if (DEBUG) {
@@ -176,7 +190,7 @@ public class LiveDataManager implements DataManager {
             public void onEvent(String channelName, String eventName, String data) {
                 mCurrentMatchId = -1; // reset match id
                 MatchEnd matchEnd = parseMatchEndedJson(data);
-                EventBus.getDefault().post(new MatchEndedEvent(matchEnd));
+                handleMatchEndEvent(matchEnd);
             }
         });
 
@@ -225,7 +239,6 @@ public class LiveDataManager implements DataManager {
         String winnerName = response.getWinnerName();
     }
 
-
     private MatchEnd parseMatchEndedJson(String json) {
         Gson gson = new Gson();
         MatchEndResponse response = gson.fromJson(json, MatchEndResponse.class);
@@ -240,5 +253,22 @@ public class LiveDataManager implements DataManager {
         matchEnd.setWinnerName(winnerName);
         matchEnd.setSolution(solution);
         return matchEnd;
+    }
+
+    private void handleMatchEndEvent(MatchEnd matchEnd) {
+        // if player won for the fist time then unlock
+        boolean playerWon = (matchEnd.getWinnerId() == mPlayer.getId());
+        if (playerWon && !mUnlocked) {
+            mUnlocked = true;
+            updateUnlockedScreenFlag();
+        }
+        EventBus.getDefault().post(new MatchEndedEvent(matchEnd));
+    }
+
+    private void updateUnlockedScreenFlag() {
+        PreferenceManager.getDefaultSharedPreferences(mContext)
+                .edit()
+                .putBoolean(PREF_UNLOCKED, mUnlocked)
+                .commit();
     }
 }
