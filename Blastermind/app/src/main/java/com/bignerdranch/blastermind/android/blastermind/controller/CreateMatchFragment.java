@@ -19,7 +19,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-public class CreateMatchFragment extends Fragment {
+public class CreateMatchFragment extends BaseFragment {
 
     @InjectView(R.id.fragment_create_match_start_match_button)
     protected Button mStartMatchButton;

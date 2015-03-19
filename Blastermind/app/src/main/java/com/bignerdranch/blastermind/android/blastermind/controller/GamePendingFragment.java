@@ -50,6 +50,11 @@ public class GamePendingFragment extends BaseFragment {
         mDataManager.startMatch(mPlayer);
     }
 
+    @Override
+    public boolean registerForEvents() {
+        return true;
+    }
+
     public void onEventMainThread(MatchCreateSuccessEvent matchCreateSuccessEvent) {
         dismissProgressDialog();
         String matchName = matchCreateSuccessEvent.getMatchName();

@@ -274,4 +274,9 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
         Log.d(TAG, "display dialog");
     }
+
+    @Override
+    public boolean registerForEvents() {
+        return true;
+    }
 }

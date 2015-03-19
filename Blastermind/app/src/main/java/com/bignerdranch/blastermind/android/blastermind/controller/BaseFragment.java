@@ -7,26 +7,31 @@ import com.bignerdranch.blastermind.android.blastermind.BlastermindApplication;
 
 import de.greenrobot.event.EventBus;
 
-public class BaseFragment extends Fragment{
+public abstract class BaseFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         ((BlastermindApplication) getActivity().getApplication()).inject(this);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        EventBus.getDefault().register(this);
-
+        if (registerForEvents()) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        EventBus.getDefault().unregister(this);
+        if (registerForEvents()) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 
+    public boolean registerForEvents() {
+        return false;
     }
 }
