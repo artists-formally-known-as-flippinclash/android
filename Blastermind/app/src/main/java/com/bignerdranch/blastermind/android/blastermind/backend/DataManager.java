@@ -12,6 +12,4 @@ public interface DataManager {
     public String getCurrentMatchName();
 
     public Player getCurrentPlayer();
-
-    public boolean hasUnlockedScreen();
 }

@@ -7,27 +7,21 @@ public class Logic {
     public static final int guessLimit = 10;
 
     public enum TYPE {
-        alpha(0, "#F2220F"),
-        beta(1, "#F29F05"),
-        gamma(2, "#F2CB05"),
-        delta(3, "#027333"),
-        epsilon(4, "#034C8C"),
-        zeta(5, "#A302EE");
+        alpha(0),
+        beta(1),
+        gamma(2),
+        delta(3),
+        epsilon(4),
+        zeta(5);
 
         private int mPosition;
-        private String mRgb;
 
-        TYPE(int position, String rgb) {
+        TYPE(int position) {
             mPosition = position;
-            mRgb = rgb;
         }
 
         public int getPosition() {
             return mPosition;
-        }
-
-        public String getRgb() {
-            return mRgb;
         }
     }
 }
