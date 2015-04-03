@@ -1,15 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:gravity="center"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/fragment_create_match_splash_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/splash"/>
+        android:layout_width="@dimen/splash_screen_circle_diameter"
+        android:layout_height="@dimen/splash_screen_circle_diameter"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/circle_purple"/>
+
+    <ImageView
+        android:layout_width="@dimen/splash_screen_circle_diameter"
+        android:layout_height="@dimen/splash_screen_circle_diameter"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="-40dp"
+        android:layout_marginLeft="-60dp"
+        android:src="@drawable/circle_red"/>
+
+
+    <ImageView
+        android:layout_width="@dimen/splash_screen_circle_diameter"
+        android:layout_height="@dimen/splash_screen_circle_diameter"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="-10dp"
+        android:layout_marginRight="30dp"
+        android:src="@drawable/circle_blue"/>
+
+    <ImageView
+        android:layout_width="@dimen/splash_screen_circle_diameter"
+        android:layout_height="@dimen/splash_screen_circle_diameter"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="-70dp"
+        android:layout_marginLeft="40dp"
+        android:src="@drawable/circle_yellow"/>
+
+    <ImageView
+        android:layout_width="@dimen/splash_screen_circle_diameter"
+        android:layout_height="@dimen/splash_screen_circle_diameter"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="-40dp"
+        android:layout_marginRight="-70dp"
+        android:src="@drawable/circle_orange"/>
+
+    <ImageView
+        android:layout_width="@dimen/splash_screen_circle_diameter"
+        android:layout_height="@dimen/splash_screen_circle_diameter"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="-110dp"
+        android:layout_marginRight="60dp"
+        android:src="@drawable/circle_green"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -57,4 +99,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+</FrameLayout>

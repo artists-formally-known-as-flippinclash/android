@@ -1,9 +1,9 @@
 package com.bignerdranch.blastermind.android.blastermind.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.ColorRes;
 import android.util.AttributeSet;
 import android.widget.Button;
 
@@ -18,10 +18,9 @@ public class InputButton extends Button {
         super(context, attrs);
     }
 
-    public void setColor(String color) {
-        int rgbColor = Color.parseColor(color);
+    public void setColor(@ColorRes int color) {
         Drawable drawable = getResources().getDrawable(R.drawable.input_button);
-        drawable.setColorFilter(rgbColor, PorterDuff.Mode.SRC_ATOP);
+        drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         setBackground(drawable);
     }
 }

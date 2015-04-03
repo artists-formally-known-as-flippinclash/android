@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -118,12 +119,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
             // you won
             mDataManager.getCurrentPlayer();
 
-            String dialogText;
-            if (mDataManager.hasUnlockedScreen()) {
-                dialogText = String.format(getResources().getString(R.string.you_won_and_unlocked), mCurrentPlayer.getName());
-            } else {
-                dialogText = String.format(getResources().getString(R.string.you_won), mCurrentPlayer.getName());
-            }
+            String dialogText = String.format(getResources().getString(R.string.you_won), mCurrentPlayer.getName());
             displayWinnerDialog(dialogText);
         } else {
             // you lost; somebody else won
@@ -215,7 +211,12 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
     private void setupInputButton(final TYPE type) {
         InputButton inputButton = new InputButton(getActivity());
-        inputButton.setColor(type.getRgb());
+
+        TypedArray typedArray = getResources().obtainTypedArray(R.array.guess_colors);
+        int index = type.getPosition();
+        int color = typedArray.getColor(index, 0);
+        typedArray.recycle();
+        inputButton.setColor(color);
 
         // set layout params
         int size = (int) getResources().getDimension(R.dimen.input_button_size);

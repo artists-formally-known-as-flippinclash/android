@@ -1,7 +1,7 @@
 package com.bignerdranch.blastermind.android.blastermind.view;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.content.res.TypedArray;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -42,7 +42,7 @@ public class PegView extends RelativeLayout {
 
     public void setType(Logic.TYPE type) {
         mType = type;
-        setColor(mType.getRgb());
+        setColor(type);
     }
 
     public void setActive() {
@@ -71,15 +71,18 @@ public class PegView extends RelativeLayout {
         reset();
     }
 
-    private void setColor(@Nullable String color) {
-        if (color == null)  {
+    private void setColor(@Nullable Logic.TYPE type) {
+        if (type == null)  {
             mButton.setBackground(null);
             return;
         }
 
-        int rgbColor = Color.parseColor(color);
+        TypedArray typedArray = getResources().obtainTypedArray(R.array.guess_colors);
+        int index = type.getPosition();
+        int color = typedArray.getColor(index, 0);
+        typedArray.recycle();
         Drawable drawable = getResources().getDrawable(R.drawable.peg);
-        drawable.setColorFilter(rgbColor, PorterDuff.Mode.SRC_ATOP);
+        drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         mButton.setBackground(drawable);
     }
 
