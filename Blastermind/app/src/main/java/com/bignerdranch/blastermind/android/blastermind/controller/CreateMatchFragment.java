@@ -10,13 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 
 import com.bignerdranch.blastermind.andorid.core.Player;
 import com.bignerdranch.blastermind.android.blastermind.R;
-import com.bignerdranch.blastermind.android.blastermind.backend.DataManager;
-
-import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -29,11 +25,6 @@ public class CreateMatchFragment extends BaseFragment {
     protected Button mStartMatchButton;
     @InjectView(R.id.fragment_create_match_name_edit_text)
     protected EditText mNameEditText;
-    @InjectView(R.id.fragment_create_match_splash_image_view)
-    protected ImageView mSplashImageView;
-
-    @Inject
-    protected DataManager mDataManager;
 
     public static Fragment newInstance() {
         return new CreateMatchFragment();
@@ -46,14 +37,6 @@ public class CreateMatchFragment extends BaseFragment {
         ButterKnife.inject(this, view);
         mStartMatchButton.setEnabled(false);
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (mDataManager.hasUnlockedScreen()) {
-            mSplashImageView.setImageResource(R.drawable.unlocked_splash_screen);
-        }
     }
 
     @OnTextChanged(R.id.fragment_create_match_name_edit_text)

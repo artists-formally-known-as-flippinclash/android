@@ -2,7 +2,6 @@
     <string name="app_name">Blasterminds</string>
 
     <string name="you_won">You won, %1$s!</string>
-    <string name="you_won_and_unlocked">You won, %1$s and unlocked a new screen!</string>
     <string name="you_lost">You lost =(</string>
     <string name="update">Guess</string>
 
