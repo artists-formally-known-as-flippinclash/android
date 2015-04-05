@@ -2,6 +2,11 @@ package com.bignerdranch.blastermind.andorid.core;
 
 import java.io.Serializable;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(prefix = "m")
 public class Player implements Serializable {
 
     private final String mName; // unique identifier on client
@@ -9,17 +14,5 @@ public class Player implements Serializable {
 
     public Player(String name) {
         mName = name;
-    }
-
-    public String getName() {
-        return mName;
-    }
-
-    public int getId() {
-        return mId;
-    }
-
-    public void setId(int id) {
-        mId = id;
     }
 }

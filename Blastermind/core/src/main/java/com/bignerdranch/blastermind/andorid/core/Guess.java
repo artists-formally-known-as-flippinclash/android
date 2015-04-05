@@ -2,22 +2,18 @@ package com.bignerdranch.blastermind.andorid.core;
 
 import java.util.List;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(prefix = "m")
 public class Guess {
 
-    private final int mSize;
-    private List<Logic.TYPE> mTypes;
+    private final List<Logic.TYPE> mTypes;
 
-    public Guess(int size) {
-        mSize = size;
-    }
-
-    public List<Logic.TYPE> getTypes() {
-        return mTypes;
-    }
-
-    public void setTypes(List<Logic.TYPE> types) {
-        if (types.size() != mSize) {
-            throw new IllegalArgumentException("types must be of size: " + mSize);
+    public Guess(List<Logic.TYPE> types) {
+        if (types.size() != Logic.guessWidth) {
+            throw new IllegalArgumentException("types must be of size: " + Logic.guessWidth);
         }
         this.mTypes = types;
     }

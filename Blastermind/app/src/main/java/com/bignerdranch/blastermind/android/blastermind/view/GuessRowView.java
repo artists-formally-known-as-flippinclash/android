@@ -105,13 +105,11 @@ public class GuessRowView extends LinearLayout {
         }
 
         // build guess from each PegView
-        Guess guess = new Guess(Logic.guessWidth);
         List<Logic.TYPE> types = new ArrayList<>();
         for (PegView pegView : mPegViews) {
             types.add(pegView.getType());
         }
-        guess.setTypes(types);
-        return guess;
+        return new Guess(types);
     }
 
     public void setFeedback(Feedback feedback) {
