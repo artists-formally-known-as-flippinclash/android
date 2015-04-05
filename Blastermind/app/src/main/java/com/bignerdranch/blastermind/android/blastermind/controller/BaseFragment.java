@@ -31,7 +31,19 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
-    public boolean registerForEvents() {
+    protected void showProgressDialog(String message) {
+        if (getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).showProgressDialog(message);
+        }
+    }
+
+    protected void dismissProgressDialog() {
+        if (getActivity() instanceof BaseActivity) {
+            ((BaseActivity) getActivity()).dismissProgressDialog();
+        }
+    }
+
+    protected boolean registerForEvents() {
         return false;
     }
 }
