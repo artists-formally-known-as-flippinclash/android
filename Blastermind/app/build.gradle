@@ -11,6 +11,12 @@ android {
         versionCode 4
         versionName "0.4"
     }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'LICENSE' // two dependencies are both trying to add a file called LICENSE
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -20,7 +26,7 @@ android {
 }
 
 dependencies {
-    compile project (':core')
+    compile project(':core')
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.jakewharton:butterknife:6.1.0'
@@ -29,4 +35,8 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.dagger:dagger:1.2.1'
     provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+
+    testCompile 'org.robolectric:robolectric:2.4'
+    testCompile 'junit:junit:4.12'
+    compile 'com.squareup.assertj:assertj-android:1.0.0'
 }
