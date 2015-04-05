@@ -26,8 +26,7 @@ public class ParseSolutionUtil {
             }
         }
 
-        Guess solution = new Guess(Logic.guessWidth);
-        solution.setTypes(solutionTypes);
+        Guess solution = new Guess(solutionTypes);
         return solution;
     }
 }
