@@ -125,7 +125,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         mCurrentGuessRow.setCurrent();
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_EXIT_MATCH_DIALOG && resultCode == Activity.RESULT_OK) {
