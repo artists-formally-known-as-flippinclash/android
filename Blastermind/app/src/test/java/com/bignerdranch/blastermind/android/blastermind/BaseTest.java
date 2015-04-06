@@ -18,7 +18,6 @@ public class BaseTest {
     }
 
     /**
-     *
      * @return Object; must be annotated with Dagger's @Module annotation
      */
     protected Object getTestModule() {
