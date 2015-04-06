@@ -44,15 +44,10 @@ public class GamePendingFragment extends BaseFragment {
 
         // display loading dialog
         String message = getResources().getString(R.string.creating_match);
-        ((SingleFragmentActivity) getActivity()).showProgressDialog(message);
+        showProgressDialog(message);
 
         // create game
         mDataManager.startMatch(mPlayer);
-    }
-
-    @Override
-    public boolean registerForEvents() {
-        return true;
     }
 
     public void onEventMainThread(MatchCreateSuccessEvent matchCreateSuccessEvent) {
@@ -60,12 +55,12 @@ public class GamePendingFragment extends BaseFragment {
         String matchName = matchCreateSuccessEvent.getMatchName();
         // display loading dialog
         String dialogText = String.format(getResources().getString(R.string.waiting_for_other_players), matchName);
-        ((SingleFragmentActivity) getActivity()).showProgressDialog(dialogText);
+        showProgressDialog(dialogText);
     }
 
     public void onEventMainThread(MatchStartedEvent matchStartedEvent) {
         dismissProgressDialog();
-        Toast.makeText(getActivity(), "match started", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.match_started), Toast.LENGTH_SHORT).show();
         Intent intent = GameActivity.newIntent(getActivity());
         startActivity(intent);
     }
@@ -76,9 +71,9 @@ public class GamePendingFragment extends BaseFragment {
         getActivity().finish();
     }
 
-    // TODO move to base fragment
-    private void dismissProgressDialog() {
-        ((SingleFragmentActivity) getActivity()).dismissProgressDialog();
+    @Override
+    public boolean registerForEvents() {
+        return true;
     }
 }
 

@@ -9,7 +9,7 @@ import android.text.TextUtils;
 
 public class DialogUtils {
 
-    private static final String TAG_PROGRESS_DIALOG = "DialogUtils.progressDialog";
+    public static final String TAG_PROGRESS_DIALOG = "DialogUtils.progressDialog";
 
     public static void showLoadingDialog(FragmentManager fragmentManager, String message) {
         if (fragmentManager == null) {
