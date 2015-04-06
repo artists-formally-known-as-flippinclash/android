@@ -11,9 +11,9 @@ import java.lang.reflect.Field;
 import static org.assertj.android.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
-public class ProgressDialogHelper {
+public class ProgressDialogTestHelper {
 
-    private static final String TAG = ProgressDialogHelper.class.getSimpleName();
+    private static final String TAG = ProgressDialogTestHelper.class.getSimpleName();
 
     /**
      * @param dialogFragment A DialogFragment hosting a ProgressDialog
