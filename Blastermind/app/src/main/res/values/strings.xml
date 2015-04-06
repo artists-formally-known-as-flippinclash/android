@@ -12,7 +12,8 @@
     <string name="loading">loading</string>
     <string name="waiting_for_other_players">Waiting for other players to join match: \n\n\t %1$s</string>
     <string name="failed_to_create_match_msg">Failed to create game. Try again.</string>
-    <string name="creating_match">Creating match...</string>
+    <string name="creating_match">Creating match…</string>
     <string name="cancel">Cancel</string>
     <string name="somebody_else_won">You lose! %1$s won.</string>
+    <string name="match_started">Match started</string>
 </resources>
