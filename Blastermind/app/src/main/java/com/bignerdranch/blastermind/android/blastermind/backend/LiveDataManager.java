@@ -75,7 +75,6 @@ public class LiveDataManager implements DataManager {
                 mPlayer.setId(startMatchResponse.getMyId());
                 mCurrentMatchName = startMatchResponse.getMatchName();
 
-                // TODO do something with existing player names
                 // List<String> existingPlayers = startMatchResponse.getExistingPlayers();
 
                 // setup pusher

@@ -77,25 +77,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         ButterKnife.inject(this, view);
 
         setupInputButtons();
-
-        // TODO move to helper method
-        mGuessContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @SuppressLint("NewApi")
-            @SuppressWarnings("deprecation")
-            @Override
-            public void onGlobalLayout() {
-                //now we can retrieve the width and height
-                mGuessContainerHeightPx = mGuessContainer.getHeight();
-
-                // now that we have the height of the container, only now can we create our first guess row
-                mRowHeightPx = mGuessContainerHeightPx / Logic.guessLimit;
-                createRows();
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
-                    mGuessContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                else
-                    mGuessContainer.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-            }
-        });
+        createRows();
 
         ActionBar actionBar = getActivity().getActionBar();
         if (actionBar != null) {
@@ -163,6 +145,31 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     }
 
     private void createRows() {
+        // we need to manually compute the height of a guess container
+        // so that all guesses can fit on the screen and take up the whole screen
+        // we can only do this after the view tree has been layed out
+
+        mGuessContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @SuppressLint("NewApi")
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onGlobalLayout() {
+                mGuessContainerHeightPx = mGuessContainer.getHeight();
+
+                // now that we have the height of the container, only now can we create our first guess row
+                mRowHeightPx = mGuessContainerHeightPx / Logic.guessLimit;
+                populateEmptyRows();
+
+                // cleanup by removing listener
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
+                    mGuessContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                else
+                    mGuessContainer.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+            }
+        });
+    }
+
+    private void populateEmptyRows() {
         mGuessRows = new ArrayList<>();
 
         for (int i = 0; i < Logic.guessLimit; i++) {
@@ -268,7 +275,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
     @Override
     public void onBackPressed() {
-        // todo display dialog
         AlertDialogFragment alertDialogFragment = new AlertDialogFragment.Builder()
                 .setMessage("Do you want to leave the match?")
                 .setTitle("Exit match")
