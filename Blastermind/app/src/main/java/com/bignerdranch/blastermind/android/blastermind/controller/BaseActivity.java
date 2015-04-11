@@ -45,8 +45,11 @@ public abstract class BaseActivity extends Activity {
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         // intercept ACTION_UP on volume keys so that we don't pass on to OS and hear volume adjusting "beep"
-        return keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP;
-    }
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
+    } q
 
     /**
      * volume buttons control screen brightness
@@ -57,7 +60,6 @@ public abstract class BaseActivity extends Activity {
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         switch (keyCode) {
             case android.view.KeyEvent.KEYCODE_VOLUME_DOWN:
                 if (mCallbacks != null && mBrightness > 0) { // if callbacks are registered and brightness is not already at lowest setting
@@ -77,7 +79,7 @@ public abstract class BaseActivity extends Activity {
                 }
                 return true;
         }
-        return false;
+        return super.onKeyDown(keyCode, event);
     }
 
     private void updateSharedPref() {
