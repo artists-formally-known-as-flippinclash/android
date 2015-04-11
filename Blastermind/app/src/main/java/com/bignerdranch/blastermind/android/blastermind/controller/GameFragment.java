@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.bignerdranch.blastermind.andorid.core.Feedback;
@@ -28,6 +27,7 @@ import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
+import com.bignerdranch.blastermind.android.blastermind.view.SubmitButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,6 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
 
@@ -45,20 +44,20 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     private static final String TAG = GameFragment.class.getSimpleName();
     private static final String TAG_WINNER_DIALOG = "MainFragment.TAG_WINNER_DIALOG";
     private static final String TAG_LOSER_DIALOG = "MainFragment.TAG_LOSER_DIALOG";
-    private static final int REQUEST_EXIT_MATCH_DIALOG = 1;
     private static final String EXIT_MATCH_TAG = "GameFragment.EXIT_MATCH_TAG";
+
+    private static final int REQUEST_EXIT_MATCH_DIALOG = 1;
     private static final int REQUEST_END_OF_GAME_DIALOG = 2;
 
-    @InjectView(R.id.update_button)
-    protected Button mUpdateButton;
-    @InjectView(R.id.fragment_main_guesses_container)
+    @InjectView(R.id.fragment_game_guesses_container)
     protected LinearLayout mGuessContainer;
-    @InjectView(R.id.fragment_main_input_container)
+    @InjectView(R.id.fragment_game_input_container)
     protected LinearLayout mInputContainer;
 
     @Inject
     protected DataManager mDataManager;
 
+    private SubmitButton mSubmitButton;
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
     private int mRowHeightPx;
@@ -76,7 +75,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         View view = inflater.inflate(R.layout.fragment_game, container, false);
         ButterKnife.inject(this, view);
 
-        setupInputButtons();
         createRows();
 
         ActionBar actionBar = getActivity().getActionBar();
@@ -85,6 +83,12 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         }
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupInputButtons(); // we want to setup input buttons after the rest of the view has been created
     }
 
     public void onEventMainThread(MatchEndedEvent matchEndedEvent) {
@@ -114,6 +118,8 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         Feedback feedback = feedbackEvent.getFeedback();
         handleFeedback(feedback);
 
+        mSubmitButton.setEnabled(false);
+
         mCurrentGuessRow.setNotCurrent();
 
         mCurrentTurn++;
@@ -134,13 +140,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         if (requestCode == REQUEST_END_OF_GAME_DIALOG) {
             getActivity().finish();
         }
-    }
-
-    @OnClick(R.id.update_button)
-    public void onUpdateClick() {
-        Guess guess = mCurrentGuessRow.getGuess();
-        mDataManager.sendGuess(guess);
-        mUpdateButton.setEnabled(false); // don't allow spamming
     }
 
     private void createRows() {
@@ -212,7 +211,9 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
             }
         }
 
-        setStateOfUpdateButton();
+        // add submit button
+        setupSubmitButton();
+        mInputContainer.addView(mSubmitButton);
     }
 
     private void setupInputButton(final TYPE type) {
@@ -225,10 +226,9 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         inputButton.setColor(color);
 
         // set layout params
-        int size = (int) getResources().getDimension(R.dimen.input_button_size);
-        int padding = (int) getResources().getDimension(R.dimen.input_button_padding);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
-        layoutParams.setMargins(padding, padding, padding, padding);
+        int margin = (int) getResources().getDimension(R.dimen.input_button_margin);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1);
+        layoutParams.setMargins(margin, margin, margin, margin);
         inputButton.setLayoutParams(layoutParams);
 
         // setup click listener
@@ -236,21 +236,37 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
             @Override
             public void onClick(View v) {
                 mCurrentGuessRow.setActivePegType(type);
-                setStateOfUpdateButton();
+                setStateOfSubmitButton();
             }
         });
 
         mInputContainer.addView(inputButton);
     }
 
-    private void setStateOfUpdateButton() {
+    private void setupSubmitButton() {
+        mSubmitButton = new SubmitButton(getActivity());
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mSubmitButton.setLayoutParams(layoutParams);
+
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Guess guess = mCurrentGuessRow.getGuess();
+                mDataManager.sendGuess(guess);
+                mSubmitButton.setPending();
+            }
+        });
+    }
+
+    private void setStateOfSubmitButton() {
         if (mCurrentGuessRow == null) { // setting state for the first time
-            mUpdateButton.setEnabled(false);
+            mSubmitButton.setEnabled(false);
             return;
         }
 
         // if all pegs have a type then and only then enable update button
-        mUpdateButton.setEnabled(mCurrentGuessRow.areAllPegsSet());
+        mSubmitButton.setEnabled(mCurrentGuessRow.areAllPegsSet());
     }
 
     private void displayWinnerDialog(String title) {
