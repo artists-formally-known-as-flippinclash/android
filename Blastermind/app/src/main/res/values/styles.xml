@@ -1,18 +1,23 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:colorBackground">@color/background_material_dark</item>
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/material_light</item>
+        <item name="colorPrimaryDark">@color/material_dark</item>
+        <item name="colorAccent">@color/material_light</item>
     </style>
 
     <style name="SquareButton" parent="android:Widget.Button">
         <!-- height = width -->
-        <item name="android:minHeight">3dip</item>
-        <item name="android:minWidth">3dip</item>
+        <item name="android:minHeight">3dp</item>
+        <item name="android:minWidth">3dp</item>
     </style>
 
-    <style name="CustomEditText" parent="android:Widget.Holo.Light.EditText">
+    <style name="CustomEditText" parent="AppTheme">
         <item name="android:textColor">@color/light_text</item>
         <item name="android:textColorHint">@color/light_text</item>
     </style>
+
+    <!-- app compat doesn't style buttons -->
+    <style name="CustomButton" parent="android:Widget.Holo.Button"/>
 
 </resources>

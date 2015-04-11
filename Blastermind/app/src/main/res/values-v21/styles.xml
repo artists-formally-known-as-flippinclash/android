@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Material">
-        <!-- Customize your theme here. -->
-    </style>
+    <!-- app compat doesn't style buttons -->
+    <style name="CustomButton" parent="android:Widget.Material.Button"/>
 
-    <style name="SquareButton" parent="android:Widget.Button">
-        <!-- height = width -->
-        <item name="android:minHeight">3dip</item>
-        <item name="android:minWidth">3dip</item>
-    </style>
 </resources>
