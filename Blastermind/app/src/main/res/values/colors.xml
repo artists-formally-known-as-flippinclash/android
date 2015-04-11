@@ -36,8 +36,9 @@
     </array>
 
     <color name="material_dark">#ff303030</color>
-    <color name="material_light">#DDDDDD</color>v
+    <color name="material_light">#DDDDDD</color>
     <color name="less_transparent">#BB303030</color>
+    <color name="full_transparent">#00FFFFFF</color>
 
     <color name="dark_text">#ff303030</color>
     <color name="light_text">#FFFFFF</color>

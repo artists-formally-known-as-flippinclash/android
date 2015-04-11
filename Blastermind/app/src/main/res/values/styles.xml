@@ -8,8 +8,8 @@
 
     <style name="SquareButton" parent="android:Widget.Button">
         <!-- height = width -->
-        <item name="android:minHeight">3dip</item>
-        <item name="android:minWidth">3dip</item>
+        <item name="android:minHeight">3dp</item>
+        <item name="android:minWidth">3dp</item>
     </style>
 
     <style name="CustomEditText" parent="AppTheme">
