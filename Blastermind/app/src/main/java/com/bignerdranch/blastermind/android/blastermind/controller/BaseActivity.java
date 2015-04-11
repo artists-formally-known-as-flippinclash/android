@@ -49,7 +49,7 @@ public abstract class BaseActivity extends Activity {
             return true;
         }
         return super.onKeyUp(keyCode, event);
-    } q
+    }
 
     /**
      * volume buttons control screen brightness
