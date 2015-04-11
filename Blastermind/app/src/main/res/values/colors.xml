@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- pegs -->
     <color name="inactive_peg_color">#111111</color>
     <color name="active_peg_color">#ff1493</color>
 
     <!-- feedback -->
-    <color name="feedback_color_color">#BBBBBB</color>
+    <color name="feedback_color_color">#FFFFFF</color>
     <color name="feedback_position_and_color_color">#222222</color>
 
-    <!-- styling -->
-    <color name="background_material_dark">#ff303030</color>
-    <color name="less_transparent">#BB303030</color>
-    <color name="light_text">#DDDDDD</color>
-
+    <!-- guess -->
     <array name="guess_colors">
         <item>@color/red</item>
         <item>@color/orange</item>
@@ -27,5 +24,22 @@
     <color name="green">#4CAF50</color>
     <color name="blue">#2196F3</color>
     <color name="purple">#9C27B0</color>
+
+    <!-- background and text -->
+    <array name="background_brightness">
+        <item>@color/material_dark</item>
+        <item>#ff535353</item>
+        <item>#ff767676</item>
+        <item>#ff999999</item>
+        <item>#ffBCBCBC</item>
+        <item>@color/material_light</item>
+    </array>
+
+    <color name="material_dark">#ff303030</color>
+    <color name="material_light">#DDDDDD</color>v
+    <color name="less_transparent">#BB303030</color>
+
+    <color name="dark_text">#ff303030</color>
+    <color name="light_text">#FFFFFF</color>
 
 </resources>

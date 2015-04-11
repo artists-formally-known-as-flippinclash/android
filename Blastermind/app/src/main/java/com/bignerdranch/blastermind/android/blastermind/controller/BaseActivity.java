@@ -2,24 +2,25 @@ package com.bignerdranch.blastermind.android.blastermind.controller;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 
+import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.utils.DialogUtils;
 
 public abstract class BaseActivity extends Activity {
 
+    public static final String PREF_SCREEN_BRIGHTNESS = "BaseActivity.PREF_SCREEN_BRIGHTNESS";
 
-    private static final String PREF_SCREEN_BRIGHTNESS = "BaseActivity.PREF_SCREEN_BRIGHTNESS";
     private int mBrightness;
+    private BrightnessCallbacks mCallbacks;
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        // pull brightness from SharedPrefs
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        mBrightness = sharedPreferences.getInt(PREF_SCREEN_BRIGHTNESS, 50);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mBrightness = preferences.getInt(PREF_SCREEN_BRIGHTNESS, 0);
     }
 
     protected void showProgressDialog(String message) {
@@ -30,31 +31,53 @@ public abstract class BaseActivity extends Activity {
         DialogUtils.hideLoadingDialog(getFragmentManager());
     }
 
+    public void registerBrightnessCallbacks(BrightnessCallbacks callbacks) {
+        mCallbacks = callbacks;
+        mCallbacks.setBrightness(mBrightness);
+    }
+
+    public void unregisterBrightnessCallbacks(BrightnessCallbacks callbacks) {
+        if (callbacks == mCallbacks) {
+            mCallbacks = null;
+        }
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        // intercept ACTION_UP on volume keys so that we don't pass on to OS and hear volume adjusting "beep"
+        return keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP;
+    }
+
+    /**
+     * volume buttons control screen brightness
+     *
+     * @param keyCode
+     * @param event
+     * @return
+     */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         switch (keyCode) {
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-                makeLessBright();
-                return true;
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                makeMoreBright();
-                return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+            case android.view.KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (mCallbacks != null && mBrightness > 0) { // if callbacks are registered and brightness is not already at lowest setting
+                    mBrightness--;
+                    mCallbacks.setBrightness(mBrightness);
+                    updateSharedPref();
 
-    private void makeLessBright() {
-        if (mBrightness > 0) {
-            mBrightness--;
-            updateSharedPref();
-        }
-    }
+                }
+                return true;
 
-    private void makeMoreBright() {
-        if (mBrightness < 100) {
-            mBrightness++;
-            updateSharedPref();
+            case android.view.KeyEvent.KEYCODE_VOLUME_UP:
+                int maxBrightness = getResources().getInteger(R.integer.max_brightness_setting);
+                if (mCallbacks != null && mBrightness < maxBrightness) { // if callbacks are registered and brightness is not already at highest setting
+                    mBrightness++;
+                    mCallbacks.setBrightness(mBrightness);
+                    updateSharedPref();
+                }
+                return true;
         }
+        return false;
     }
 
     private void updateSharedPref() {
@@ -62,5 +85,16 @@ public abstract class BaseActivity extends Activity {
         sharedPreferences.edit()
                 .putInt(PREF_SCREEN_BRIGHTNESS, mBrightness)
                 .apply();
+    }
+
+    /**
+     * Changes in game brightness.
+     * Any Fragment/Activity can decide what "brightness" means within the context of its own view.
+     */
+    public interface BrightnessCallbacks {
+        /**
+         * @param brightness int from 0 (less bright) to {res.values.constants.max_brightness} (more bright)
+         */
+        void setBrightness(int brightness);
     }
 }
