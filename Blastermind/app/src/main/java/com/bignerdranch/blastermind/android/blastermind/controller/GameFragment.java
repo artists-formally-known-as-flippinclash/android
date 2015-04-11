@@ -40,7 +40,7 @@ import butterknife.OnClick;
 
 import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
 
-public class GameFragment extends BaseFragment implements GameActivity.BackPressedCallback {
+public class GameFragment extends BaseFragment implements GameActivity.BackPressedCallback, BaseActivity.BrightnessCallbacks {
 
     private static final String TAG = GameFragment.class.getSimpleName();
     private static final String TAG_WINNER_DIALOG = "MainFragment.TAG_WINNER_DIALOG";
@@ -84,7 +84,26 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
             actionBar.setTitle(mDataManager.getCurrentMatchName());
         }
 
+        ((BaseActivity) getActivity()).registerBrightnessCallbacks(this);
+
         return view;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ((BaseActivity) getActivity()).unregisterBrightnessCallbacks(this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_EXIT_MATCH_DIALOG && resultCode == Activity.RESULT_OK) {
+            getActivity().finish();
+        }
+
+        if (requestCode == REQUEST_END_OF_GAME_DIALOG) {
+            getActivity().finish();
+        }
     }
 
     public void onEventMainThread(MatchEndedEvent matchEndedEvent) {
@@ -123,17 +142,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
         mCurrentGuessRow = mGuessRows.get(mCurrentTurn);
         mCurrentGuessRow.setCurrent();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_EXIT_MATCH_DIALOG && resultCode == Activity.RESULT_OK) {
-            getActivity().finish();
-        }
-
-        if (requestCode == REQUEST_END_OF_GAME_DIALOG) {
-            getActivity().finish();
-        }
     }
 
     @OnClick(R.id.update_button)
@@ -285,6 +293,30 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         alertDialogFragment.show(getActivity().getFragmentManager(), EXIT_MATCH_TAG);
 
         Log.d(TAG, "display dialog");
+    }
+
+    @Override
+    public void setBrightness(int brightness) {
+        // set background color
+        int backgroundColor;
+        TypedArray typedArray = getResources().obtainTypedArray(R.array.background_brightness);
+        backgroundColor = typedArray.getColor(brightness, 0);
+        typedArray.recycle();
+
+        mGuessContainer.setBackgroundColor(backgroundColor);
+        mInputContainer.setBackgroundColor(backgroundColor);
+        mUpdateButton.setBackgroundColor(backgroundColor);
+
+        // set text color
+        int maxBrightness = getResources().getInteger(R.integer.max_brightness_setting);
+        int medianBrightness = (int) ((float) maxBrightness / 2);
+        int textColor;
+        if (brightness <= medianBrightness) {
+            textColor= getResources().getColor(R.color.light_text);
+        } else {
+            textColor = getResources().getColor(R.color.dark_text);
+        }
+        mUpdateButton.setTextColor(textColor);
     }
 
     @Override
