@@ -1,8 +1,12 @@
 <resources>
 
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
-        <item name="android:colorBackground">@color/material_dark</item>
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/material_dark</item>
+        <!--<item name="colorPrimaryDark">@color/primary_dark</item>-->
+        <item name="android:textColorPrimary">@color/light_text</item>
+        <!--<item name="colorAccent">@color/light_text</item>-->
     </style>
+
 
     <style name="SquareButton" parent="android:Widget.Button">
         <!-- height = width -->
@@ -10,7 +14,7 @@
         <item name="android:minWidth">3dip</item>
     </style>
 
-    <style name="CustomEditText" parent="android:Widget.Holo.Light.EditText">
+    <style name="CustomEditText" parent="@style/Base.Widget.AppCompat.EditText">
         <item name="android:textColor">@color/light_text</item>
         <item name="android:textColorHint">@color/light_text</item>
     </style>

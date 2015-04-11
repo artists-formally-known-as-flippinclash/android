@@ -297,6 +297,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
     @Override
     public void setBrightness(int brightness) {
+        // set background color
         int backgroundColor;
         TypedArray typedArray = getResources().obtainTypedArray(R.array.background_brightness);
         backgroundColor = typedArray.getColor(brightness, 0);
@@ -316,7 +317,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
             textColor = getResources().getColor(R.color.dark_text);
         }
         mUpdateButton.setTextColor(textColor);
-
     }
 
     @Override
