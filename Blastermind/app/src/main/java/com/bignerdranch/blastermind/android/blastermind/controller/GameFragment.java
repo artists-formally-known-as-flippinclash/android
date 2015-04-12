@@ -3,7 +3,9 @@ package com.bignerdranch.blastermind.android.blastermind.controller;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -42,12 +44,12 @@ import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
 
 public class GameFragment extends BaseFragment implements GameActivity.BackPressedCallback, BaseActivity.BrightnessCallbacks {
 
-    private static final String TAG = GameFragment.class.getSimpleName();
-    private static final String TAG_WINNER_DIALOG = "MainFragment.TAG_WINNER_DIALOG";
-    private static final String TAG_LOSER_DIALOG = "MainFragment.TAG_LOSER_DIALOG";
     private static final int REQUEST_EXIT_MATCH_DIALOG = 1;
-    private static final String EXIT_MATCH_TAG = "GameFragment.EXIT_MATCH_TAG";
     private static final int REQUEST_END_OF_GAME_DIALOG = 2;
+
+    private static final String TAG = GameFragment.class.getSimpleName();
+    private static final String EXIT_MATCH_TAG = "GameFragment.EXIT_MATCH_TAG";
+    private static final String TAG_END_OF_GAME_DIALOG = "GameFragment.TAG_END_OF_GAME_DIALOG";
 
     @InjectView(R.id.update_button)
     protected Button mUpdateButton;
@@ -97,8 +99,14 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_EXIT_MATCH_DIALOG && resultCode == Activity.RESULT_OK) {
-            getActivity().finish();
+        if (requestCode == REQUEST_EXIT_MATCH_DIALOG
+                && resultCode == Activity.RESULT_OK) {
+
+            // user clicked on one of the buttons, but which one?
+            int whichButton = data.getExtras().getInt(MaterialDialogFragment.EXTRA_WHICH, 0);
+            if (whichButton == DialogInterface.BUTTON_POSITIVE) {
+                getActivity().finish();
+            }
         }
 
         if (requestCode == REQUEST_END_OF_GAME_DIALOG) {
@@ -115,17 +123,17 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
         if (winnerId == -1) {
             // nobody won
-            displayLoserDialog("You all lose!");
+            displayEndOfGameDialog("You all lose");
         } else if (mCurrentPlayer.getId() == winnerId) {
             // you won
             mDataManager.getCurrentPlayer();
 
             String dialogText = String.format(getResources().getString(R.string.you_won), mCurrentPlayer.getName());
-            displayWinnerDialog(dialogText);
+            displayEndOfGameDialog(dialogText);
         } else {
             // you lost; somebody else won
             String dialogText = String.format(getResources().getString(R.string.somebody_else_won), winnerName);
-            displayLoserDialog(dialogText);
+            displayEndOfGameDialog(dialogText);
         }
     }
 
@@ -261,38 +269,26 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         mUpdateButton.setEnabled(mCurrentGuessRow.areAllPegsSet());
     }
 
-    private void displayWinnerDialog(String title) {
-        AlertDialogFragment alertDialog = new AlertDialogFragment.Builder()
-                .setTitle(title)
-                .setPositiveButtonResId(android.R.string.ok)
-                .setViewResId(R.layout.view_winner_dialog)
+    private void  displayEndOfGameDialog(String title) {
+        DialogFragment dialogFragment = new MaterialDialogFragment.FragmentBuilder()
+                .title(title)
+                .positiveButtonResId(android.R.string.ok)
                 .build();
-        alertDialog.setTargetFragment(this, REQUEST_END_OF_GAME_DIALOG);
-        alertDialog.show(getFragmentManager(), TAG_WINNER_DIALOG);
-    }
-
-    private void displayLoserDialog(String title) {
-        AlertDialogFragment alertDialog = new AlertDialogFragment.Builder()
-                .setTitle(title)
-                .setPositiveButtonResId(android.R.string.ok)
-                .build();
-        alertDialog.setTargetFragment(this, REQUEST_END_OF_GAME_DIALOG);
-        alertDialog.show(getFragmentManager(), TAG_LOSER_DIALOG);
+        dialogFragment.setTargetFragment(this, REQUEST_END_OF_GAME_DIALOG);
+        dialogFragment.show(getFragmentManager(), TAG_END_OF_GAME_DIALOG);
     }
 
     @Override
     public void onBackPressed() {
-        AlertDialogFragment alertDialogFragment = new AlertDialogFragment.Builder()
-                .setMessage("Do you want to leave the match?")
-                .setTitle("Exit match")
-                .setPositiveButtonResId(android.R.string.ok)
-                .setNegativeButtonResId(R.string.cancel)
+        DialogFragment dialogFragment = new MaterialDialogFragment.FragmentBuilder()
+                .titleResId(R.string.exit_match)
+                .contentResId(R.string.leave_match_msg)
+                .positiveButtonResId(R.string.leave)
+                .negativeButtonResId(R.string.stay)
                 .build();
 
-        alertDialogFragment.setTargetFragment(this, REQUEST_EXIT_MATCH_DIALOG);
-        alertDialogFragment.show(getActivity().getFragmentManager(), EXIT_MATCH_TAG);
-
-        Log.d(TAG, "display dialog");
+        dialogFragment.setTargetFragment(this, REQUEST_EXIT_MATCH_DIALOG);
+        dialogFragment.show(getActivity().getFragmentManager(), EXIT_MATCH_TAG);
     }
 
     @Override
@@ -312,7 +308,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         int medianBrightness = (int) ((float) maxBrightness / 2);
         int textColor;
         if (brightness <= medianBrightness) {
-            textColor= getResources().getColor(R.color.light_text);
+            textColor = getResources().getColor(R.color.light_text);
         } else {
             textColor = getResources().getColor(R.color.dark_text);
         }

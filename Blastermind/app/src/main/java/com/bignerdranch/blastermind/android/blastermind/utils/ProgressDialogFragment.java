@@ -2,9 +2,10 @@ package com.bignerdranch.blastermind.android.blastermind.utils;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
+
+import com.afollestad.materialdialogs.MaterialDialog;
 
 public class ProgressDialogFragment extends DialogFragment {
 
@@ -35,10 +36,17 @@ public class ProgressDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        ProgressDialog dialog = new ProgressDialog(getActivity());
         if (!TextUtils.isEmpty(mMessage)) {
-            dialog.setMessage(mMessage);
+            return new MaterialDialog.Builder(getActivity())
+                    .content(mMessage)
+                    .progress(true, 0)
+                    .build();
+
+        } else {
+            return new MaterialDialog.Builder(getActivity())
+                    .progress(true, 0)
+                    .build();
+
         }
-        return dialog;
     }
 }
