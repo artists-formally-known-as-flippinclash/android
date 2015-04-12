@@ -151,7 +151,7 @@ public class LiveDataManager implements DataManager {
         mPusher.connect(new ConnectionEventListener() {
             @Override
             public void onConnectionStateChange(ConnectionStateChange change) {
-                Log.d(TAG, "state changed from :" + change.getPreviousState() + " to " + change.getCurrentState());
+                // do nothing
             }
 
             @Override

@@ -16,4 +16,8 @@
     <string name="cancel">Cancel</string>
     <string name="somebody_else_won">You lose! %1$s won.</string>
     <string name="match_started">Match started</string>
+    <string name="leave_match_msg">Do you want to leave the match?</string>
+    <string name="exit_match">Exit Match?</string>
+    <string name="leave">Leave</string>
+    <string name="stay">Stay</string>
 </resources>
