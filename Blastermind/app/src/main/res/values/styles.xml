@@ -3,7 +3,7 @@
     <style name="AppTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/material_light</item>
         <item name="colorPrimaryDark">@color/material_dark</item>
-        <item name="colorAccent">@color/material_light</item>
+        <item name="colorAccent">@color/blue</item>
     </style>
 
     <style name="SquareButton" parent="android:Widget.Button">
