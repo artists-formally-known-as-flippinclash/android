@@ -5,23 +5,18 @@
                 android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/fragment_main_guesses_container"
+        android:id="@+id/fragment_game_guesses_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical"/>
 
     <LinearLayout
-        android:id="@+id/fragment_main_input_container"
+        android:id="@+id/fragment_game_input_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/max_input_button_size"
+        android:layout_gravity="center"
         android:gravity="center"
         android:orientation="horizontal"/>
-
-    <Button
-        android:id="@+id/update_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/update"/>
 
 </LinearLayout>

@@ -1,15 +1,15 @@
 package com.bignerdranch.blastermind.android.blastermind.controller;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 
 import com.bignerdranch.blastermind.android.blastermind.R;
 import com.bignerdranch.blastermind.android.blastermind.utils.DialogUtils;
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends ActionBarActivity {
 
     public static final String PREF_SCREEN_BRIGHTNESS = "BaseActivity.PREF_SCREEN_BRIGHTNESS";
 

@@ -1,6 +1,5 @@
 package com.bignerdranch.blastermind.android.blastermind.controller;
 
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -10,13 +9,13 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.bignerdranch.blastermind.andorid.core.Feedback;
@@ -30,6 +29,7 @@ import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchEndedEvent;
 import com.bignerdranch.blastermind.android.blastermind.view.GuessRowView;
 import com.bignerdranch.blastermind.android.blastermind.view.InputButton;
+import com.bignerdranch.blastermind.android.blastermind.view.SubmitButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,6 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import butterknife.OnClick;
 
 import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
 
@@ -51,22 +50,22 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     private static final String EXIT_MATCH_TAG = "GameFragment.EXIT_MATCH_TAG";
     private static final String TAG_END_OF_GAME_DIALOG = "GameFragment.TAG_END_OF_GAME_DIALOG";
 
-    @InjectView(R.id.update_button)
-    protected Button mUpdateButton;
-    @InjectView(R.id.fragment_main_guesses_container)
+    @InjectView(R.id.fragment_game_guesses_container)
     protected LinearLayout mGuessContainer;
-    @InjectView(R.id.fragment_main_input_container)
+    @InjectView(R.id.fragment_game_input_container)
     protected LinearLayout mInputContainer;
 
     @Inject
     protected DataManager mDataManager;
 
+    private SubmitButton mSubmitButton;
     private int mCurrentTurn;
     private GuessRowView mCurrentGuessRow;
     private int mRowHeightPx;
     private int mGuessContainerHeightPx;
     private List<GuessRowView> mGuessRows;
     private Player mCurrentPlayer;
+    private ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener;
 
     public static Fragment newInstance() {
         return new GameFragment();
@@ -78,8 +77,8 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         View view = inflater.inflate(R.layout.fragment_game, container, false);
         ButterKnife.inject(this, view);
 
-        setupInputButtons();
         createRows();
+        setupInputButtons();
 
         ActionBar actionBar = getActivity().getActionBar();
         if (actionBar != null) {
@@ -141,6 +140,8 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         Feedback feedback = feedbackEvent.getFeedback();
         handleFeedback(feedback);
 
+        mSubmitButton.setState(SubmitButton.STATE.DISABLED);
+
         mCurrentGuessRow.setNotCurrent();
 
         mCurrentTurn++;
@@ -152,21 +153,12 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         mCurrentGuessRow.setCurrent();
     }
 
-    @OnClick(R.id.update_button)
-    public void onUpdateClick() {
-        Guess guess = mCurrentGuessRow.getGuess();
-        mDataManager.sendGuess(guess);
-        mUpdateButton.setEnabled(false); // don't allow spamming
-    }
-
     private void createRows() {
         // we need to manually compute the height of a guess container
         // so that all guesses can fit on the screen and take up the whole screen
         // we can only do this after the view tree has been layed out
 
         mGuessContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @SuppressLint("NewApi")
-            @SuppressWarnings("deprecation")
             @Override
             public void onGlobalLayout() {
                 mGuessContainerHeightPx = mGuessContainer.getHeight();
@@ -176,10 +168,8 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
                 populateEmptyRows();
 
                 // cleanup by removing listener
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
-                    mGuessContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                else
-                    mGuessContainer.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                mGuessContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
             }
         });
     }
@@ -219,19 +209,36 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     }
 
     private void setupInputButtons() {
-        // get types in order
-        for (int i = 0; i < TYPE.values().length; i++) {
-            for (final TYPE type : TYPE.values()) {
-                if (type.getPosition() == i) {
-                    setupInputButton(type);
-                }
-            }
-        }
 
-        setStateOfUpdateButton();
+        mInputContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                // add submit button
+                setupSubmitButton();
+                mInputContainer.addView(mSubmitButton);
+
+                // get types in order
+                for (int i = 0; i < TYPE.values().length; i++) {
+                    for (final TYPE type : TYPE.values()) {
+                        if (type.getPosition() == i) {
+                            setupInputButton(type, i);
+                        }
+                    }
+                }
+
+                // cleanup by removing listener
+                mInputContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
     }
 
-    private void setupInputButton(final TYPE type) {
+    /**
+     * setup individual input (color) button
+     *
+     * @param type
+     */
+    private void setupInputButton(final TYPE type, int childPosition) {
         InputButton inputButton = new InputButton(getActivity());
 
         TypedArray typedArray = getResources().obtainTypedArray(R.array.guess_colors);
@@ -240,11 +247,12 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         typedArray.recycle();
         inputButton.setColor(color);
 
-        // set layout params
-        int size = (int) getResources().getDimension(R.dimen.input_button_size);
-        int padding = (int) getResources().getDimension(R.dimen.input_button_padding);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
-        layoutParams.setMargins(padding, padding, padding, padding);
+        // manually compute width based on available space:
+        int submitButtonWidth = (int) getResources().getDimension(R.dimen.submit_button_size);
+        int totalWidth = mInputContainer.getWidth();
+        int inputButtonWidth = (totalWidth - submitButtonWidth) / TYPE.values().length;
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(inputButtonWidth, inputButtonWidth);
         inputButton.setLayoutParams(layoutParams);
 
         // setup click listener
@@ -252,24 +260,45 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
             @Override
             public void onClick(View v) {
                 mCurrentGuessRow.setActivePegType(type);
-                setStateOfUpdateButton();
+                setStateOfSubmitButton();
             }
         });
 
-        mInputContainer.addView(inputButton);
+        mInputContainer.addView(inputButton, childPosition);
     }
 
-    private void setStateOfUpdateButton() {
+    private void setupSubmitButton() {
+        mSubmitButton = new SubmitButton(getActivity());
+
+        int size = (int) getResources().getDimension(R.dimen.submit_button_size);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
+        mSubmitButton.setLayoutParams(layoutParams);
+
+        mSubmitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Guess guess = mCurrentGuessRow.getGuess();
+                mDataManager.sendGuess(guess);
+                mSubmitButton.setState(SubmitButton.STATE.PENDING);
+            }
+        });
+    }
+
+    private void setStateOfSubmitButton() {
         if (mCurrentGuessRow == null) { // setting state for the first time
-            mUpdateButton.setEnabled(false);
+            mSubmitButton.setState(SubmitButton.STATE.DISABLED);
             return;
         }
 
         // if all pegs have a type then and only then enable update button
-        mUpdateButton.setEnabled(mCurrentGuessRow.areAllPegsSet());
+        if (mCurrentGuessRow.areAllPegsSet()) {
+            mSubmitButton.setState(SubmitButton.STATE.ENABLED);
+        } else {
+            mSubmitButton.setState(SubmitButton.STATE.DISABLED);
+        }
     }
 
-    private void  displayEndOfGameDialog(String title) {
+    private void displayEndOfGameDialog(String title) {
         DialogFragment dialogFragment = new MaterialDialogFragment.FragmentBuilder()
                 .title(title)
                 .positiveButtonResId(android.R.string.ok)
@@ -301,18 +330,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
         mGuessContainer.setBackgroundColor(backgroundColor);
         mInputContainer.setBackgroundColor(backgroundColor);
-        mUpdateButton.setBackgroundColor(backgroundColor);
-
-        // set text color
-        int maxBrightness = getResources().getInteger(R.integer.max_brightness_setting);
-        int medianBrightness = (int) ((float) maxBrightness / 2);
-        int textColor;
-        if (brightness <= medianBrightness) {
-            textColor = getResources().getColor(R.color.light_text);
-        } else {
-            textColor = getResources().getColor(R.color.dark_text);
-        }
-        mUpdateButton.setTextColor(textColor);
     }
 
     @Override
