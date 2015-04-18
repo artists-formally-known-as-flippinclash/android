@@ -1,6 +1,5 @@
 package com.bignerdranch.blastermind.android.blastermind.controller;
 
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
@@ -12,6 +11,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -64,6 +65,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     private int mGuessContainerHeightPx;
     private List<GuessRowView> mGuessRows;
     private Player mCurrentPlayer;
+    private ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener;
 
     public static Fragment newInstance() {
         return new GameFragment();
@@ -76,6 +78,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         ButterKnife.inject(this, view);
 
         createRows();
+        setupInputButtons();
 
         ActionBar actionBar = getActivity().getActionBar();
         if (actionBar != null) {
@@ -85,12 +88,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         ((BaseActivity) getActivity()).registerBrightnessCallbacks(this);
 
         return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setupInputButtons(); // we want to setup input buttons after the rest of the view has been created
     }
 
     @Override
@@ -143,7 +140,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         Feedback feedback = feedbackEvent.getFeedback();
         handleFeedback(feedback);
 
-        mSubmitButton.setEnabled(false);
+        mSubmitButton.setState(SubmitButton.STATE.DISABLED);
 
         mCurrentGuessRow.setNotCurrent();
 
@@ -162,8 +159,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         // we can only do this after the view tree has been layed out
 
         mGuessContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @SuppressLint("NewApi")
-            @SuppressWarnings("deprecation")
             @Override
             public void onGlobalLayout() {
                 mGuessContainerHeightPx = mGuessContainer.getHeight();
@@ -173,10 +168,8 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
                 populateEmptyRows();
 
                 // cleanup by removing listener
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
-                    mGuessContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                else
-                    mGuessContainer.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                mGuessContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
             }
         });
     }
@@ -216,21 +209,36 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     }
 
     private void setupInputButtons() {
-        // get types in order
-        for (int i = 0; i < TYPE.values().length; i++) {
-            for (final TYPE type : TYPE.values()) {
-                if (type.getPosition() == i) {
-                    setupInputButton(type);
-                }
-            }
-        }
 
-        // add submit button
-        setupSubmitButton();
-        mInputContainer.addView(mSubmitButton);
+        mInputContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+
+                // add submit button
+                setupSubmitButton();
+                mInputContainer.addView(mSubmitButton);
+
+                // get types in order
+                for (int i = 0; i < TYPE.values().length; i++) {
+                    for (final TYPE type : TYPE.values()) {
+                        if (type.getPosition() == i) {
+                            setupInputButton(type, i);
+                        }
+                    }
+                }
+
+                // cleanup by removing listener
+                mInputContainer.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
     }
 
-    private void setupInputButton(final TYPE type) {
+    /**
+     * setup individual input (color) button
+     *
+     * @param type
+     */
+    private void setupInputButton(final TYPE type, int childPosition) {
         InputButton inputButton = new InputButton(getActivity());
 
         TypedArray typedArray = getResources().obtainTypedArray(R.array.guess_colors);
@@ -239,10 +247,12 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         typedArray.recycle();
         inputButton.setColor(color);
 
-        // set layout params
-        int margin = (int) getResources().getDimension(R.dimen.input_button_margin);
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 1);
-        layoutParams.setMargins(margin, margin, margin, margin);
+        // manually compute width based on available space:
+        int submitButtonWidth = (int) getResources().getDimension(R.dimen.submit_button_size);
+        int totalWidth = mInputContainer.getWidth();
+        int inputButtonWidth = (totalWidth - submitButtonWidth) / TYPE.values().length;
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(inputButtonWidth, inputButtonWidth);
         inputButton.setLayoutParams(layoutParams);
 
         // setup click listener
@@ -254,13 +264,14 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
             }
         });
 
-        mInputContainer.addView(inputButton);
+        mInputContainer.addView(inputButton, childPosition);
     }
 
     private void setupSubmitButton() {
         mSubmitButton = new SubmitButton(getActivity());
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        int size = (int) getResources().getDimension(R.dimen.submit_button_size);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(size, size);
         mSubmitButton.setLayoutParams(layoutParams);
 
         mSubmitButton.setOnClickListener(new View.OnClickListener() {
@@ -268,22 +279,26 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
             public void onClick(View v) {
                 Guess guess = mCurrentGuessRow.getGuess();
                 mDataManager.sendGuess(guess);
-                mSubmitButton.setPending();
+                mSubmitButton.setState(SubmitButton.STATE.PENDING);
             }
         });
     }
 
     private void setStateOfSubmitButton() {
         if (mCurrentGuessRow == null) { // setting state for the first time
-            mSubmitButton.setEnabled(false);
+            mSubmitButton.setState(SubmitButton.STATE.DISABLED);
             return;
         }
 
         // if all pegs have a type then and only then enable update button
-        mSubmitButton.setEnabled(mCurrentGuessRow.areAllPegsSet());
+        if (mCurrentGuessRow.areAllPegsSet()) {
+            mSubmitButton.setState(SubmitButton.STATE.ENABLED);
+        } else {
+            mSubmitButton.setState(SubmitButton.STATE.DISABLED);
+        }
     }
 
-    private void  displayEndOfGameDialog(String title) {
+    private void displayEndOfGameDialog(String title) {
         DialogFragment dialogFragment = new MaterialDialogFragment.FragmentBuilder()
                 .title(title)
                 .positiveButtonResId(android.R.string.ok)

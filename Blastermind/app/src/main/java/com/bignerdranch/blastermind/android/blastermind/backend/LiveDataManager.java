@@ -7,6 +7,7 @@ import com.bignerdranch.blastermind.andorid.core.Feedback;
 import com.bignerdranch.blastermind.andorid.core.Guess;
 import com.bignerdranch.blastermind.andorid.core.MatchEnd;
 import com.bignerdranch.blastermind.andorid.core.Player;
+import com.bignerdranch.blastermind.android.blastermind.BuildConfig;
 import com.bignerdranch.blastermind.android.blastermind.backend.request.GuessBody;
 import com.bignerdranch.blastermind.android.blastermind.backend.request.PlayerBody;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.GuessResponse;
@@ -39,8 +40,6 @@ import retrofit.client.Response;
 public class LiveDataManager implements DataManager {
 
     private static final String APP_KEY = "a8dc613841aa8963a8a4";
-
-    private static final boolean DEBUG = false;
 
     public static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
     public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
@@ -133,7 +132,7 @@ public class LiveDataManager implements DataManager {
 
     private void setupRestAdapter() {
         String url;
-        if (DEBUG) {
+        if (BuildConfig.DEBUG) {
             url = TEST_BASE_REST_URL;
         } else {
             url = BASE_REST_URL;
@@ -190,7 +189,7 @@ public class LiveDataManager implements DataManager {
         });
 
 
-        if (DEBUG) { // immediately start game
+        if (BuildConfig.DEBUG) { // immediately start game
             EventBus.getDefault().post(new MatchStartedEvent());
         }
     }

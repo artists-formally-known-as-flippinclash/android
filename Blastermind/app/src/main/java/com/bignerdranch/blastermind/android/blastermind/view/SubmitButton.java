@@ -13,20 +13,13 @@ import com.bignerdranch.blastermind.android.blastermind.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-/**
- * Button has three states:
- * - enabled
- * - disabled
- * - pending
- */
 public class SubmitButton extends FrameLayout {
 
+    private static final String TAG = SubmitButton.class.getSimpleName();
     @InjectView(R.id.button_submit_progress)
-    protected ProgressBar mProgressBar;
-    @InjectView(R.id.button_submit_disable)
-    protected ImageView mDisabledImage;
-    @InjectView(R.id.button_submit_enable)
-    protected ImageView mEnabledImage;
+    protected ProgressBar mProgressIndicator;
+    @InjectView(R.id.send_icon)
+    protected ImageView mSendIcon;
 
     public SubmitButton(Context context) {
         this(context, null);
@@ -38,24 +31,52 @@ public class SubmitButton extends FrameLayout {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.button_submit, this);
         ButterKnife.inject(this, view);
 
-        setEnabled(false);
+        setState(STATE.DISABLED);
     }
 
     @Override
     public void setEnabled(boolean enabled) {
-        mProgressBar.setVisibility(GONE);
-        if (enabled) {
-            mDisabledImage.setVisibility(GONE);
-            mEnabledImage.setVisibility(VISIBLE);
-        } else {
-            mDisabledImage.setVisibility(VISIBLE);
-            mEnabledImage.setVisibility(GONE);
+        throw new UnsupportedOperationException("This View does not support direct usage of setEnabled(). Instead use setState().");
+    }
+
+    /**
+     * Use this to set button enabled, disabled, or "pending".
+     *
+     * @param state
+     */
+    public void setState(STATE state) {
+        // use VISIBLE / INVISIBLE instead of VISIBLE/GONE so that view doesn't resize itself
+
+        switch (state) {
+            case PENDING:
+                mProgressIndicator.setVisibility(VISIBLE);
+                mSendIcon.setVisibility(INVISIBLE);
+                super.setEnabled(false);
+                break;
+
+            case ENABLED:
+                mProgressIndicator.setVisibility(INVISIBLE);
+                mSendIcon.setVisibility(VISIBLE);
+                super.setEnabled(true);
+                break;
+
+            case DISABLED:
+                mProgressIndicator.setVisibility(INVISIBLE);
+                mSendIcon.setVisibility(VISIBLE);
+                super.setEnabled(false);
+                break;
         }
     }
 
-    public void setPending() {
-        mProgressBar.setVisibility(VISIBLE);
-        mDisabledImage.setVisibility(GONE);
-        mEnabledImage.setVisibility(GONE);
+    /**
+     * Button has three states:
+     * - enabled
+     * - disabled
+     * - pending
+     */
+    public enum STATE {
+        PENDING,
+        ENABLED,
+        DISABLED
     }
 }

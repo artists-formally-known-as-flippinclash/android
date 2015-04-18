@@ -14,7 +14,7 @@
     <LinearLayout
         android:id="@+id/fragment_game_input_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/max_input_button_size"
         android:layout_gravity="center"
         android:gravity="center"
         android:orientation="horizontal"/>
