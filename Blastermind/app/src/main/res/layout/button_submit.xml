@@ -4,14 +4,21 @@
              android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/send_icon"
+        android:id="@+id/send_enable"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:src="@drawable/send"/>
+        android:src="@drawable/send_enabled"/>
+
+    <ImageView
+        android:id="@+id/send_disabled"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:src="@drawable/send_disabled"/>
 
     <ProgressBar
-        android:id="@+id/button_submit_progress"
+        android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"

@@ -16,10 +16,13 @@ import butterknife.InjectView;
 public class SubmitButton extends FrameLayout {
 
     private static final String TAG = SubmitButton.class.getSimpleName();
-    @InjectView(R.id.button_submit_progress)
+
+    @InjectView(R.id.progress)
     protected ProgressBar mProgressIndicator;
-    @InjectView(R.id.send_icon)
-    protected ImageView mSendIcon;
+    @InjectView(R.id.send_enable)
+    protected ImageView mSendEnabledIcon;
+    @InjectView(R.id.send_disabled)
+    protected ImageView mSendDisabledIcon;
 
     public SubmitButton(Context context) {
         this(context, null);
@@ -46,23 +49,28 @@ public class SubmitButton extends FrameLayout {
      */
     public void setState(STATE state) {
         // use VISIBLE / INVISIBLE instead of VISIBLE/GONE so that view doesn't resize itself
+        // call to super.setEnabled() is just used to handle all other aspects of setEnabled() except for visual state change (i.e. disableing click)
+
 
         switch (state) {
             case PENDING:
                 mProgressIndicator.setVisibility(VISIBLE);
-                mSendIcon.setVisibility(INVISIBLE);
+                mSendEnabledIcon.setVisibility(INVISIBLE);
+                mSendDisabledIcon.setVisibility(INVISIBLE);
                 super.setEnabled(false);
                 break;
 
             case ENABLED:
                 mProgressIndicator.setVisibility(INVISIBLE);
-                mSendIcon.setVisibility(VISIBLE);
+                mSendEnabledIcon.setVisibility(VISIBLE);
+                mSendDisabledIcon.setVisibility(INVISIBLE);
                 super.setEnabled(true);
                 break;
 
             case DISABLED:
                 mProgressIndicator.setVisibility(INVISIBLE);
-                mSendIcon.setVisibility(VISIBLE);
+                mSendEnabledIcon.setVisibility(INVISIBLE);
+                mSendDisabledIcon.setVisibility(VISIBLE);
                 super.setEnabled(false);
                 break;
         }
