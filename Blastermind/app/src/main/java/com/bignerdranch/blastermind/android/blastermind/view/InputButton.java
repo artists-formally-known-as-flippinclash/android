@@ -44,5 +44,4 @@ public class InputButton extends ImageButton {
 
         setMeasuredDimension(size, size);
     }
-
 }

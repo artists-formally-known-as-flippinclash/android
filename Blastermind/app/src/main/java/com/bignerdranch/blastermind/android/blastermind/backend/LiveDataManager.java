@@ -13,7 +13,6 @@ import com.bignerdranch.blastermind.android.blastermind.backend.request.PlayerBo
 import com.bignerdranch.blastermind.android.blastermind.backend.response.GuessResponse;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.MatchEndResponse;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.NullResponse;
-import com.bignerdranch.blastermind.android.blastermind.backend.response.RoundEndResponse;
 import com.bignerdranch.blastermind.android.blastermind.backend.response.StartMatchResponse;
 import com.bignerdranch.blastermind.android.blastermind.event.FeedbackEvent;
 import com.bignerdranch.blastermind.android.blastermind.event.MatchCreateFailedEvent;
@@ -39,14 +38,16 @@ import retrofit.client.Response;
 
 public class LiveDataManager implements DataManager {
 
-    private static final String APP_KEY = "a8dc613841aa8963a8a4";
-
     public static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
     public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
 
     private static final int MANUALLY_TRIGGER_MATCH_START_TIMEOUT = 15 * 1000; // fifteen seconds, in milliseconds
+
     private static final String TAG = LiveDataManager.class.getSimpleName();
     private static final String RETROFIT_TAG = "RETROFIT: ";
+    private static final String APP_KEY = "a8dc613841aa8963a8a4";
+
+    private static final boolean USE_FAKE_WEB_SERVICES = false;
 
     private BlasterRestService mRestService;
     private Pusher mPusher;
@@ -132,7 +133,7 @@ public class LiveDataManager implements DataManager {
 
     private void setupRestAdapter() {
         String url;
-        if (BuildConfig.DEBUG) {
+        if (USE_FAKE_WEB_SERVICES && BuildConfig.DEBUG) {
             url = TEST_BASE_REST_URL;
         } else {
             url = BASE_REST_URL;
@@ -181,14 +182,6 @@ public class LiveDataManager implements DataManager {
             }
         });
 
-        channel.bind("round-ended", new SubscriptionEventListener() {
-            @Override
-            public void onEvent(String channelName, String eventName, String data) {
-                parseRoundEndJson(data);
-            }
-        });
-
-
         if (BuildConfig.DEBUG) { // immediately start game
             EventBus.getDefault().post(new MatchStartedEvent());
         }
@@ -215,15 +208,6 @@ public class LiveDataManager implements DataManager {
                 // we don't care
             }
         });
-    }
-
-    private void parseRoundEndJson(String json) {
-        Gson gson = new Gson();
-        RoundEndResponse response = gson.fromJson(json, RoundEndResponse.class);
-        int id = response.getMatchId();
-        Guess solution = response.getSolution();
-        int winnerId = response.getWinnerId();
-        String winnerName = response.getWinnerName();
     }
 
     private MatchEnd parseMatchEndedJson(String json) {
