@@ -8,8 +8,8 @@ android {
         applicationId "com.tir38.android.blastermind"
         minSdkVersion 16
         targetSdkVersion 21
-        versionCode 4
-        versionName "0.4"
+        versionCode 5
+        versionName "0.5"
     }
 
     packagingOptions {
