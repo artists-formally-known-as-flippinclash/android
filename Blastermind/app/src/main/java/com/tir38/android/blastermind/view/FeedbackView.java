@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.bignerdranch.blastermind.andorid.core.Feedback;
-import com.bignerdranch.blastermind.android.blastermind.R;
+import com.tir38.android.blastermind.R;
+import com.tir38.android.blastermind.core.Feedback;
 
 import java.util.ArrayList;
 import java.util.List;

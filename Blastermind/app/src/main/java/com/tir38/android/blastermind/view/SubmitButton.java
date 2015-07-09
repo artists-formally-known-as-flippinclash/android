@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import com.bignerdranch.blastermind.android.blastermind.R;
+import com.tir38.android.blastermind.R;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

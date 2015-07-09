@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.bignerdranch.blastermind.andorid.core.Player;
-import com.bignerdranch.blastermind.android.blastermind.R;
+import com.tir38.android.blastermind.R;
 import com.tir38.android.blastermind.backend.DataManager;
+import com.tir38.android.blastermind.core.Player;
 import com.tir38.android.blastermind.event.MatchCreateFailedEvent;
 import com.tir38.android.blastermind.event.MatchCreateSuccessEvent;
 import com.tir38.android.blastermind.event.MatchStartedEvent;

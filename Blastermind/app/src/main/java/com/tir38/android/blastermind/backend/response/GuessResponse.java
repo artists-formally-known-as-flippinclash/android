@@ -1,6 +1,6 @@
 package com.tir38.android.blastermind.backend.response;
 
-import com.bignerdranch.blastermind.andorid.core.Feedback;
+import com.tir38.android.blastermind.core.Feedback;
 import com.google.gson.annotations.SerializedName;
 
 /**

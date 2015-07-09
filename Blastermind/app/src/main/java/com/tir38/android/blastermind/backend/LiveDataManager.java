@@ -4,11 +4,6 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.bignerdranch.blastermind.andorid.core.Feedback;
-import com.bignerdranch.blastermind.andorid.core.Guess;
-import com.bignerdranch.blastermind.andorid.core.MatchEnd;
-import com.bignerdranch.blastermind.andorid.core.Player;
-import com.bignerdranch.blastermind.android.blastermind.BuildConfig;
 import com.google.gson.Gson;
 import com.pusher.client.Pusher;
 import com.pusher.client.channel.Channel;
@@ -16,13 +11,17 @@ import com.pusher.client.channel.SubscriptionEventListener;
 import com.pusher.client.connection.ConnectionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
+import com.tir38.android.blastermind.BuildConfig;
 import com.tir38.android.blastermind.backend.request.GuessBody;
 import com.tir38.android.blastermind.backend.request.PlayerBody;
 import com.tir38.android.blastermind.backend.response.GuessResponse;
 import com.tir38.android.blastermind.backend.response.MatchEndResponse;
 import com.tir38.android.blastermind.backend.response.NullResponse;
-import com.tir38.android.blastermind.backend.response.RoundEndResponse;
 import com.tir38.android.blastermind.backend.response.StartMatchResponse;
+import com.tir38.android.blastermind.core.Feedback;
+import com.tir38.android.blastermind.core.Guess;
+import com.tir38.android.blastermind.core.MatchEnd;
+import com.tir38.android.blastermind.core.Player;
 import com.tir38.android.blastermind.event.FeedbackEvent;
 import com.tir38.android.blastermind.event.MatchCreateFailedEvent;
 import com.tir38.android.blastermind.event.MatchCreateSuccessEvent;
@@ -41,14 +40,16 @@ import retrofit.client.Response;
 
 public class LiveDataManager implements DataManager {
 
-    private static final String APP_KEY = "a8dc613841aa8963a8a4";
-
     public static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
     public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
 
     private static final int MANUALLY_TRIGGER_MATCH_START_TIMEOUT = 15 * 1000; // fifteen seconds, in milliseconds
+
     private static final String TAG = LiveDataManager.class.getSimpleName();
     private static final String RETROFIT_TAG = "RETROFIT: ";
+    private static final String APP_KEY = "a8dc613841aa8963a8a4";
+
+    private static final boolean USE_FAKE_WEB_SERVICES = false;
 
     private BlasterRestService mRestService;
     private Pusher mPusher;
@@ -145,7 +146,12 @@ public class LiveDataManager implements DataManager {
 
     private void setupRestAdapter() {
         String url;
-        url = BASE_REST_URL;
+
+        if (USE_FAKE_WEB_SERVICES && BuildConfig.DEBUG) {
+            url = TEST_BASE_REST_URL;
+        } else {
+            url = BASE_REST_URL;
+        }
 
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(url)
@@ -189,18 +195,6 @@ public class LiveDataManager implements DataManager {
                 handleMatchEndEvent(matchEnd);
             }
         });
-
-        channel.bind("round-ended", new SubscriptionEventListener() {
-            @Override
-            public void onEvent(String channelName, String eventName, String data) {
-                parseRoundEndJson(data);
-            }
-        });
-
-
-        if (BuildConfig.DEBUG) { // immediately start game
-            EventBus.getDefault().post(new MatchStartedEvent());
-        }
     }
 
     private void handleRetrofitError(RetrofitError error) {
@@ -224,15 +218,6 @@ public class LiveDataManager implements DataManager {
                 // we don't care
             }
         });
-    }
-
-    private void parseRoundEndJson(String json) {
-        Gson gson = new Gson();
-        RoundEndResponse response = gson.fromJson(json, RoundEndResponse.class);
-        int id = response.getMatchId();
-        Guess solution = response.getSolution();
-        int winnerId = response.getWinnerId();
-        String winnerName = response.getWinnerName();
     }
 
     private MatchEnd parseMatchEndedJson(String json) {

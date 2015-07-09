@@ -1,6 +1,4 @@
-package com.bignerdranch.blastermind.android.core;
-
-import com.bignerdranch.blastermind.andorid.core.Logic;
+package com.tir38.android.blastermind.core;
 
 import org.junit.Test;
 

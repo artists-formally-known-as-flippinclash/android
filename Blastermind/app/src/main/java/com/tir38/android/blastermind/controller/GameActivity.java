@@ -5,7 +5,7 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 
-import com.bignerdranch.blastermind.android.blastermind.R;
+import com.tir38.android.blastermind.R;
 
 
 public class GameActivity extends SingleFragmentActivity {

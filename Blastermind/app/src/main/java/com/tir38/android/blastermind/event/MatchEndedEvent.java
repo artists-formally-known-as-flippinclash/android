@@ -1,6 +1,6 @@
 package com.tir38.android.blastermind.event;
 
-import com.bignerdranch.blastermind.andorid.core.MatchEnd;
+import com.tir38.android.blastermind.core.MatchEnd;
 
 public class MatchEndedEvent {
 

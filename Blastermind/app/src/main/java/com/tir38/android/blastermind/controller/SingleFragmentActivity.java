@@ -6,7 +6,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import com.tir38.android.blastermind.BlastermindApplication;
-import com.bignerdranch.blastermind.android.blastermind.R;
+import com.tir38.android.blastermind.R;
 
 public abstract class SingleFragmentActivity extends BaseActivity {
 

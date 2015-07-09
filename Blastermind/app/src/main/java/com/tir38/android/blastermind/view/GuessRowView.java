@@ -7,9 +7,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.bignerdranch.blastermind.andorid.core.Feedback;
-import com.bignerdranch.blastermind.andorid.core.Guess;
-import com.bignerdranch.blastermind.andorid.core.Logic;
+import com.tir38.android.blastermind.core.Feedback;
+import com.tir38.android.blastermind.core.Guess;
+import com.tir38.android.blastermind.core.Logic;
 
 import java.util.ArrayList;
 import java.util.List;

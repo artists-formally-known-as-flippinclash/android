@@ -1,6 +1,4 @@
-package com.bignerdranch.blastermind.android.core;
-
-import com.bignerdranch.blastermind.andorid.core.Feedback;
+package com.tir38.android.blastermind.core;
 
 import org.junit.Before;
 import org.junit.Test;

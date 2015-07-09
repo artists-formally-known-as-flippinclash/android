@@ -1,6 +1,6 @@
-package com.bignerdranch.blastermind.android.core;
+package com.tir38.android.blastermind.core;
 
-import com.bignerdranch.blastermind.andorid.core.Player;
+import com.tir38.android.blastermind.core.Player;
 
 import org.junit.Test;
 

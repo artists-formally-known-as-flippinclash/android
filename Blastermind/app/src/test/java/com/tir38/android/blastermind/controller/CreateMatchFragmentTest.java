@@ -4,8 +4,8 @@ import android.app.Fragment;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.bignerdranch.blastermind.android.blastermind.BuildConfig;
-import com.bignerdranch.blastermind.android.blastermind.R;
+import com.tir38.android.blastermind.BuildConfig;
+import com.tir38.android.blastermind.R;
 import com.tir38.android.blastermind.helpers.FragmentTestHelper;
 
 import org.junit.Before;
@@ -21,7 +21,7 @@ import static com.tir38.android.blastermind.helpers.ActivityTestHelper.assertAct
 import static org.assertj.android.api.Assertions.assertThat;
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class, emulateSdk = 21)
+@Config(constants = BuildConfig.class, sdk = 21)
 public class CreateMatchFragmentTest {
 
     @InjectView(R.id.fragment_create_match_start_match_button)

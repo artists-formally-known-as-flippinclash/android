@@ -1,8 +1,8 @@
-package com.bignerdranch.blastermind.android.core;
+package com.tir38.android.blastermind.core;
 
-import com.bignerdranch.blastermind.andorid.core.Guess;
-import com.bignerdranch.blastermind.andorid.core.Logic;
-import com.bignerdranch.blastermind.andorid.core.MatchEnd;
+import com.tir38.android.blastermind.core.Guess;
+import com.tir38.android.blastermind.core.Logic;
+import com.tir38.android.blastermind.core.MatchEnd;
 
 import org.junit.Before;
 import org.junit.Test;

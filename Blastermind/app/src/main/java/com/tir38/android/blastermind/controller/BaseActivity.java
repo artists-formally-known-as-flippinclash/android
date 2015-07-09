@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.KeyEvent;
 
-import com.bignerdranch.blastermind.android.blastermind.R;
+import com.tir38.android.blastermind.R;
 import com.tir38.android.blastermind.utils.DialogUtils;
 
 public abstract class BaseActivity extends ActionBarActivity {

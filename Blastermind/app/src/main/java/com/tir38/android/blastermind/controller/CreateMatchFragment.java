@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.bignerdranch.blastermind.andorid.core.Player;
-import com.bignerdranch.blastermind.android.blastermind.R;
+import com.tir38.android.blastermind.R;
+import com.tir38.android.blastermind.core.Player;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

@@ -1,4 +1,4 @@
-package com.bignerdranch.blastermind.andorid.core;
+package com.tir38.android.blastermind.core;
 
 import java.io.Serializable;
 

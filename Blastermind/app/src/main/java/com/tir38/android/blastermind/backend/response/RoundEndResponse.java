@@ -1,6 +1,6 @@
 package com.tir38.android.blastermind.backend.response;
 
-import com.bignerdranch.blastermind.andorid.core.Guess;
+import com.tir38.android.blastermind.core.Guess;
 
 import java.util.List;
 

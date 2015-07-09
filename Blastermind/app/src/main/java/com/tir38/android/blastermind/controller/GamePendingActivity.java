@@ -4,7 +4,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 
-import com.bignerdranch.blastermind.andorid.core.Player;
+import com.tir38.android.blastermind.core.Player;
 
 public class GamePendingActivity extends SingleFragmentActivity {
 

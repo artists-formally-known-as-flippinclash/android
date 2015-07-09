@@ -3,12 +3,12 @@ package com.tir38.android.blastermind.controller;
 import android.app.FragmentManager;
 import android.content.Context;
 
-import com.bignerdranch.blastermind.andorid.core.Player;
-import com.bignerdranch.blastermind.android.blastermind.BuildConfig;
-import com.bignerdranch.blastermind.android.blastermind.R;
 import com.tir38.android.blastermind.BaseTest;
+import com.tir38.android.blastermind.BuildConfig;
 import com.tir38.android.blastermind.DummyModule;
+import com.tir38.android.blastermind.R;
 import com.tir38.android.blastermind.backend.DataManager;
+import com.tir38.android.blastermind.core.Player;
 import com.tir38.android.blastermind.event.MatchCreateFailedEvent;
 import com.tir38.android.blastermind.event.MatchCreateSuccessEvent;
 import com.tir38.android.blastermind.event.MatchStartedEvent;
@@ -42,7 +42,7 @@ import static org.mockito.Mockito.verify;
 
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class, emulateSdk = 21)
+@Config(constants = BuildConfig.class, sdk = 21)
 public class GamePendingFragmentTest extends BaseTest {
 
     @Inject

@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
-import com.bignerdranch.blastermind.andorid.core.Logic;
-import com.bignerdranch.blastermind.android.blastermind.R;
+import com.tir38.android.blastermind.R;
+import com.tir38.android.blastermind.core.Logic;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

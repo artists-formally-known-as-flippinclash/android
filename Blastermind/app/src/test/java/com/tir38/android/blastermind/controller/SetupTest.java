@@ -1,7 +1,7 @@
 package com.tir38.android.blastermind.controller;
 
 
-import com.bignerdranch.blastermind.android.blastermind.BuildConfig;
+import com.tir38.android.blastermind.BuildConfig;
 import com.tir38.android.blastermind.TestBaseActivity;
 
 import org.junit.Test;
@@ -13,7 +13,7 @@ import org.robolectric.annotation.Config;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(RobolectricGradleTestRunner.class)
-@Config(constants = BuildConfig.class, emulateSdk = 21)
+@Config(constants = BuildConfig.class, sdk = 21)
 public class SetupTest {
 
     // This test isn't really testing anything.

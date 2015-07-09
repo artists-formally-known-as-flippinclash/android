@@ -8,7 +8,7 @@ import android.support.annotation.ColorRes;
 import android.util.AttributeSet;
 import android.widget.ImageButton;
 
-import com.bignerdranch.blastermind.android.blastermind.R;
+import com.tir38.android.blastermind.R;
 
 
 public class InputButton extends ImageButton {
@@ -44,5 +44,4 @@ public class InputButton extends ImageButton {
 
         setMeasuredDimension(size, size);
     }
-
 }

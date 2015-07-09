@@ -16,13 +16,13 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 
-import com.bignerdranch.blastermind.andorid.core.Feedback;
-import com.bignerdranch.blastermind.andorid.core.Guess;
-import com.bignerdranch.blastermind.andorid.core.Logic;
-import com.bignerdranch.blastermind.andorid.core.MatchEnd;
-import com.bignerdranch.blastermind.andorid.core.Player;
-import com.bignerdranch.blastermind.android.blastermind.R;
+import com.tir38.android.blastermind.R;
 import com.tir38.android.blastermind.backend.DataManager;
+import com.tir38.android.blastermind.core.Feedback;
+import com.tir38.android.blastermind.core.Guess;
+import com.tir38.android.blastermind.core.Logic;
+import com.tir38.android.blastermind.core.MatchEnd;
+import com.tir38.android.blastermind.core.Player;
 import com.tir38.android.blastermind.event.FeedbackEvent;
 import com.tir38.android.blastermind.event.MatchEndedEvent;
 import com.tir38.android.blastermind.view.GuessRowView;
@@ -37,7 +37,7 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-import static com.bignerdranch.blastermind.andorid.core.Logic.TYPE;
+import static com.tir38.android.blastermind.core.Logic.TYPE;
 
 public class GameFragment extends BaseFragment implements GameActivity.BackPressedCallback, BaseActivity.BrightnessCallbacks {
 

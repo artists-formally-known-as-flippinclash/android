@@ -1,6 +1,6 @@
 package com.tir38.android.blastermind.backend.request;
 
-import com.bignerdranch.blastermind.andorid.core.Player;
+import com.tir38.android.blastermind.core.Player;
 import com.google.gson.annotations.SerializedName;
 
 /**

@@ -1,6 +1,6 @@
 package com.tir38.android.blastermind.event;
 
-import com.bignerdranch.blastermind.andorid.core.Feedback;
+import com.tir38.android.blastermind.core.Feedback;
 
 public class FeedbackEvent {
 
