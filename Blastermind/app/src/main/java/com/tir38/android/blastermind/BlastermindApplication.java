@@ -3,6 +3,7 @@ package com.tir38.android.blastermind;
 import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.core.CrashlyticsCore;
 
 import dagger.ObjectGraph;
 import io.fabric.sdk.android.Fabric;
@@ -15,9 +16,11 @@ public class BlastermindApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        if (!BuildConfig.DEBUG) {
-            Fabric.with(this, new Crashlytics());
-        }
+        Fabric.with(this, new Crashlytics.Builder()
+                .core(new CrashlyticsCore.Builder()
+                        .disabled(BuildConfig.DEBUG)
+                        .build())
+                .build());
         mApplicationGraph = createObjectGraph();
     }
 

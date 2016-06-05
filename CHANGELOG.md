@@ -1,3 +1,7 @@
+v0.6
+----
+- add crash reporting
+
 v0.5
 ---
 

@@ -23,7 +23,7 @@ public class InputButton extends ImageButton {
         setPadding(padding, padding, padding, padding);
     }
 
-    public void setColor(@ColorRes int color) {
+    public void setColor(int color) {
         Drawable drawable = getResources().getDrawable(R.drawable.input_button);
         drawable.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
         setImageDrawable(drawable);
