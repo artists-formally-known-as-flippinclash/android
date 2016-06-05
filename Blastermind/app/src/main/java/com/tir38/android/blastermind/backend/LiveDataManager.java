@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.pusher.client.Pusher;
 import com.pusher.client.channel.Channel;
@@ -170,6 +171,7 @@ public class LiveDataManager implements DataManager {
 
             @Override
             public void onError(String message, String code, Exception e) {
+                Crashlytics.logException(e);
                 Log.e(TAG, "error: " + message + "; code: " + code);
             }
         }, ConnectionState.ALL);
@@ -198,6 +200,7 @@ public class LiveDataManager implements DataManager {
     }
 
     private void handleRetrofitError(RetrofitError error) {
+        Crashlytics.logException(error);
         Log.e(RETROFIT_TAG, "Failure: " + error.toString() + " accessing: " + error.getUrl(), error.getCause());
         Toast.makeText(mContext, "network connection error: " + error.toString(), Toast.LENGTH_SHORT).show();
     }

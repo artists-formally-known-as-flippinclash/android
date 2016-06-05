@@ -1,4 +1,6 @@
+
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 23
@@ -47,4 +49,8 @@ dependencies {
     }
     testCompile 'junit:junit:4.12'
     compile 'com.squareup.assertj:assertj-android:1.0.0'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.6@aar') {
+        transitive = true;
+    }
 }
