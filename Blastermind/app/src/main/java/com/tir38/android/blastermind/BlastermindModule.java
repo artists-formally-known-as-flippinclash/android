@@ -2,6 +2,8 @@ package com.tir38.android.blastermind;
 
 import android.content.Context;
 
+import com.tir38.android.blastermind.analytics.AnalyticsFunnel;
+import com.tir38.android.blastermind.analytics.CrashlyticsAnalyticsFunnel;
 import com.tir38.android.blastermind.backend.DataManager;
 import com.tir38.android.blastermind.backend.LiveDataManager;
 import com.tir38.android.blastermind.controller.CreateMatchActivity;
@@ -18,6 +20,8 @@ import dagger.Provides;
 
 @Module(
         injects = {
+                BlastermindApplication.class,
+
                 GameFragment.class,
                 GameActivity.class,
 
@@ -41,6 +45,12 @@ public class BlastermindModule {
     @Singleton
     DataManager provideDataManager() {
         return new LiveDataManager(mContext);
+    }
+
+    @Provides
+    @Singleton
+    AnalyticsFunnel provideAnalyticsFunnel() {
+        return new CrashlyticsAnalyticsFunnel(mContext);
     }
 }
 

@@ -1,6 +1,6 @@
 v0.6
 ----
-- add crash reporting
+- Add crash reporting
 
 v0.5
 ---
@@ -12,5 +12,5 @@ v0.5
 v0.4
 ----
 
-- changes "start match" screen: now using Material colors
-- removes "unlock" after winning first match
+- Changes "start match" screen: now using Material colors
+- Removes "unlock" after winning first match

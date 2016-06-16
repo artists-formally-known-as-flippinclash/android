@@ -2,6 +2,7 @@ package com.tir38.android.blastermind;
 
 import android.util.Log;
 
+import com.tir38.android.blastermind.analytics.AnalyticsFunnel;
 import com.tir38.android.blastermind.backend.DataManager;
 
 import javax.inject.Singleton;
@@ -18,7 +19,8 @@ import dagger.Provides;
  * Object class,
  */
 @Module(
-        library = true
+        library = true,
+        injects = {TestBlastermindApplication.class}
 )
 public class DummyModule {
 
@@ -28,6 +30,13 @@ public class DummyModule {
     @Provides
     @Singleton
     protected DataManager provideDataManager() {
+        Log.e(TAG, ERROR_MESSAGE);
+        return null;
+    }
+
+    @Provides
+    @Singleton
+    protected AnalyticsFunnel provideAnalyticsFunnel() {
         Log.e(TAG, ERROR_MESSAGE);
         return null;
     }

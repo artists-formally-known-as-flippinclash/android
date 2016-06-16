@@ -7,6 +7,7 @@ import com.tir38.android.blastermind.BaseTest;
 import com.tir38.android.blastermind.BuildConfig;
 import com.tir38.android.blastermind.DummyModule;
 import com.tir38.android.blastermind.R;
+import com.tir38.android.blastermind.TestBlastermindApplication;
 import com.tir38.android.blastermind.backend.DataManager;
 import com.tir38.android.blastermind.core.Player;
 import com.tir38.android.blastermind.event.MatchCreateFailedEvent;

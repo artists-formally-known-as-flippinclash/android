@@ -12,10 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.crashlytics.android.answers.Answers;
-import com.crashlytics.android.answers.CustomEvent;
 import com.tir38.android.blastermind.R;
+import com.tir38.android.blastermind.analytics.AnalyticsFunnel;
 import com.tir38.android.blastermind.core.Player;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -25,6 +26,9 @@ import butterknife.OnTextChanged;
 public class CreateMatchFragment extends BaseFragment {
 
     private static final String PREF_PLAYER_NAME = "CreateMatchFragment.PREF_PLAYER_NAME";
+
+    @Inject
+    protected AnalyticsFunnel mAnalyticsFunnel;
 
     @InjectView(R.id.fragment_create_match_start_match_button)
     protected Button mStartMatchButton;
@@ -61,8 +65,7 @@ public class CreateMatchFragment extends BaseFragment {
 
         Player player = new Player(name);
 
-        Answers.getInstance().logCustom(new CustomEvent("Player tried to start new game")
-                .putCustomAttribute("PlayerName", name));
+        mAnalyticsFunnel.trackPlayerStartedMatch(player.getName());
 
         Intent intent = GamePendingActivity.newIntent(getActivity(), player);
         startActivity(intent);
