@@ -21,7 +21,8 @@ public final class CrashlyticsAnalyticsFunnel implements AnalyticsFunnel {
     @Override
     public void initialize() {
         Fabric.with(context, new Crashlytics.Builder()
-                .core(new CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build())
+                .core(new CrashlyticsCore.Builder()
+                        .disabled(BuildConfig.DEBUG).build())
                 .build());
     }
 

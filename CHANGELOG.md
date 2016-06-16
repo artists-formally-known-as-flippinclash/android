@@ -1,17 +1,19 @@
 v0.6
 ----
 - Add crash reporting
-- Bug fix: broken web request
+- [USER FACING] Bug fix: broken web request
+- Remove com.afollestad.material-dialogs:core dependency
+
 
 v0.5
 ---
 
-- User can change brightness with volume buttons
-- Updated game control layout
+- [USER FACING] User can change brightness with volume buttons
+- [USER FACING] Updated game control layout
 
 
 v0.4
 ----
 
-- Changes "start match" screen: now using Material colors
-- Removes "unlock" after winning first match
+- [USER FACING] Changes "start match" screen: now using Material colors
+- [USER FACING] Removes "unlock" after winning first match

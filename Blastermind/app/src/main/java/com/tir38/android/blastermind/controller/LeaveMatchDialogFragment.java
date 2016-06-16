@@ -10,32 +10,25 @@ import android.support.v7.app.AlertDialog;
 
 import com.tir38.android.blastermind.R;
 
-public class EndOfGameDialogFragment extends DialogFragment {
+public class LeaveMatchDialogFragment extends DialogFragment {
 
-    private static final String ARGS_MESSAGE = "ARGS_MESSAGE";
-
-    public static EndOfGameDialogFragment newInstance(String message) {
-
-        Bundle args = new Bundle();
-        args.putString(ARGS_MESSAGE, message);
-        EndOfGameDialogFragment fragment = new EndOfGameDialogFragment();
-        fragment.setArguments(args);
-        return fragment;
+    public static LeaveMatchDialogFragment newInstance() {
+        return new LeaveMatchDialogFragment();
     }
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-        String title = getArguments().getString(ARGS_MESSAGE);
         return new AlertDialog.Builder(getContext())
-                .setMessage(title)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                .setTitle(R.string.exit_match)
+                .setMessage(R.string.leave_match_msg)
+                .setPositiveButton(R.string.leave, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
                     }
                 })
+                .setNegativeButton(R.string.stay, null)
                 .create();
     }
 }

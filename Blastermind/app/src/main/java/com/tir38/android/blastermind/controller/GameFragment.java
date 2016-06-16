@@ -2,12 +2,10 @@ package com.tir38.android.blastermind.controller;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -98,12 +96,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_EXIT_MATCH_DIALOG
                 && resultCode == Activity.RESULT_OK) {
-
-            // user clicked on one of the buttons, but which one?
-            int whichButton = data.getExtras().getInt(MaterialDialogFragment.EXTRA_WHICH, 0);
-            if (whichButton == DialogInterface.BUTTON_POSITIVE) {
-                getActivity().finish();
-            }
+            getActivity().finish();
         }
 
         if (requestCode == REQUEST_END_OF_GAME_DIALOG) {
@@ -120,7 +113,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
         if (winnerId == -1) {
             // nobody won
-            if (mDataManager.isCurrentMatchMultiplayer())  {
+            if (mDataManager.isCurrentMatchMultiplayer()) {
                 displayEndOfGameDialog("You all lose.");
             } else {
                 displayEndOfGameDialog("You lose.");
@@ -300,24 +293,15 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         }
     }
 
-    private void displayEndOfGameDialog(String title) {
-        DialogFragment dialogFragment = new MaterialDialogFragment.FragmentBuilder()
-                .title(title)
-                .positiveButtonResId(android.R.string.ok)
-                .build();
+    private void displayEndOfGameDialog(String message) {
+        EndOfGameDialogFragment dialogFragment = EndOfGameDialogFragment.newInstance(message);
         dialogFragment.setTargetFragment(this, REQUEST_END_OF_GAME_DIALOG);
         dialogFragment.show(getFragmentManager(), TAG_END_OF_GAME_DIALOG);
     }
 
     @Override
     public void onBackPressed() {
-        DialogFragment dialogFragment = new MaterialDialogFragment.FragmentBuilder()
-                .titleResId(R.string.exit_match)
-                .contentResId(R.string.leave_match_msg)
-                .positiveButtonResId(R.string.leave)
-                .negativeButtonResId(R.string.stay)
-                .build();
-
+        LeaveMatchDialogFragment dialogFragment = LeaveMatchDialogFragment.newInstance();
         dialogFragment.setTargetFragment(this, REQUEST_EXIT_MATCH_DIALOG);
         dialogFragment.show(getActivity().getSupportFragmentManager(), EXIT_MATCH_TAG);
     }

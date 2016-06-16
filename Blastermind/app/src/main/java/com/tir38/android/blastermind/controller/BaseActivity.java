@@ -24,11 +24,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void showProgressDialog(String message) {
-        DialogUtils.showLoadingDialog(getFragmentManager(), message);
+        DialogUtils.showLoadingDialog(getSupportFragmentManager(), message);
     }
 
     protected void dismissProgressDialog() {
-        DialogUtils.hideLoadingDialog(getFragmentManager());
+        DialogUtils.hideLoadingDialog(getSupportFragmentManager());
     }
 
     public void registerBrightnessCallbacks(BrightnessCallbacks callbacks) {
