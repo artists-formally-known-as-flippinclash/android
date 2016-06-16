@@ -1,9 +1,9 @@
 package com.tir38.android.blastermind.controller;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import com.tir38.android.blastermind.R;
 
@@ -24,7 +24,7 @@ public class GameActivity extends SingleFragmentActivity {
     @Override
     public void onBackPressed() {
         // get fragment and call its onBackPressed
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         BackPressedCallback fragment = (BackPressedCallback) fragmentManager.findFragmentById(R.id.fragment_container);
         fragment.onBackPressed();
     }

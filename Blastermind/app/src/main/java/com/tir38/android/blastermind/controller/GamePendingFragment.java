@@ -1,11 +1,12 @@
 package com.tir38.android.blastermind.controller;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.tir38.android.blastermind.R;
 import com.tir38.android.blastermind.backend.DataManager;
 import com.tir38.android.blastermind.core.Player;
@@ -38,6 +39,7 @@ public class GamePendingFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         mPlayer = (Player) getArguments().getSerializable(ARG_PLAYER);
         if (mPlayer == null) {
+            Crashlytics.logException(new Throwable("player is null"));
             Log.e(TAG, "player is null!");
             getActivity().finish();
         }

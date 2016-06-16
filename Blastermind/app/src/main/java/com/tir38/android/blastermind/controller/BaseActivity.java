@@ -3,13 +3,13 @@ package com.tir38.android.blastermind.controller;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 
 import com.tir38.android.blastermind.R;
 import com.tir38.android.blastermind.utils.DialogUtils;
 
-public abstract class BaseActivity extends ActionBarActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     public static final String PREF_SCREEN_BRIGHTNESS = "BaseActivity.PREF_SCREEN_BRIGHTNESS";
 
@@ -24,11 +24,11 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     protected void showProgressDialog(String message) {
-        DialogUtils.showLoadingDialog(getFragmentManager(), message);
+        DialogUtils.showLoadingDialog(getSupportFragmentManager(), message);
     }
 
     protected void dismissProgressDialog() {
-        DialogUtils.hideLoadingDialog(getFragmentManager());
+        DialogUtils.hideLoadingDialog(getSupportFragmentManager());
     }
 
     public void registerBrightnessCallbacks(BrightnessCallbacks callbacks) {

@@ -1,10 +1,10 @@
 package com.tir38.android.blastermind.controller;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.tir38.android.blastermind.R;
+import com.tir38.android.blastermind.analytics.AnalyticsFunnel;
 import com.tir38.android.blastermind.core.Player;
+
+import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -23,6 +26,9 @@ import butterknife.OnTextChanged;
 public class CreateMatchFragment extends BaseFragment {
 
     private static final String PREF_PLAYER_NAME = "CreateMatchFragment.PREF_PLAYER_NAME";
+
+    @Inject
+    protected AnalyticsFunnel mAnalyticsFunnel;
 
     @InjectView(R.id.fragment_create_match_start_match_button)
     protected Button mStartMatchButton;
@@ -58,6 +64,9 @@ public class CreateMatchFragment extends BaseFragment {
         savePlayerName(name);
 
         Player player = new Player(name);
+
+        mAnalyticsFunnel.trackPlayerStartedMatch(player.getName());
+
         Intent intent = GamePendingActivity.newIntent(getActivity(), player);
         startActivity(intent);
     }
