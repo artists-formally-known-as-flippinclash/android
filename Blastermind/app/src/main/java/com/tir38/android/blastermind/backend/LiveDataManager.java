@@ -42,7 +42,7 @@ import retrofit.client.Response;
 public class LiveDataManager implements DataManager {
 
     public static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
-    public static final String BASE_REST_URL = "http://api.blasterminds.com/"; // live
+    public static final String BASE_REST_URL = "https://blastermind.herokuapp.com/"; // live
 
     private static final int MANUALLY_TRIGGER_MATCH_START_TIMEOUT = 15 * 1000; // fifteen seconds, in milliseconds
 

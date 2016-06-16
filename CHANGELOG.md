@@ -1,6 +1,7 @@
 v0.6
 ----
 - Add crash reporting
+- Bug fix: broken web request
 
 v0.5
 ---
