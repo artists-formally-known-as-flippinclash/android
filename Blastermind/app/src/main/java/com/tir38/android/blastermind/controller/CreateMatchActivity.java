@@ -1,6 +1,7 @@
 package com.tir38.android.blastermind.controller;
 
-import android.app.Fragment;
+
+import android.support.v4.app.Fragment;
 
 public class CreateMatchActivity extends SingleFragmentActivity {
     @Override

@@ -1,8 +1,8 @@
 package com.tir38.android.blastermind.controller;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 
 import com.tir38.android.blastermind.core.Player;
 

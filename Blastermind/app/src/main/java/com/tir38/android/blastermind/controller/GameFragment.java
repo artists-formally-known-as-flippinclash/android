@@ -2,13 +2,13 @@ package com.tir38.android.blastermind.controller;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -319,7 +319,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
                 .build();
 
         dialogFragment.setTargetFragment(this, REQUEST_EXIT_MATCH_DIALOG);
-        dialogFragment.show(getActivity().getFragmentManager(), EXIT_MATCH_TAG);
+        dialogFragment.show(getActivity().getSupportFragmentManager(), EXIT_MATCH_TAG);
     }
 
     @Override
