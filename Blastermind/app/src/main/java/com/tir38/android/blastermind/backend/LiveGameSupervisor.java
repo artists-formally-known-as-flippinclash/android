@@ -136,12 +136,7 @@ public class LiveGameSupervisor implements GameSupervisor {
     public boolean isCurrentMatchMultiplayer() {
         return mCurrentMatchPlayers.size() > 1;
     }
-
-    @Override
-    public List<String> getCurrentMatcpPlayers() {
-        return mCurrentMatchPlayers;
-    }
-
+    
     private void setupRestAdapter() {
         String url;
 
