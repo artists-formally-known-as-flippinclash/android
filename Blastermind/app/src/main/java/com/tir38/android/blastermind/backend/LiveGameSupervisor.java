@@ -38,14 +38,14 @@ import retrofit.RestAdapter;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class LiveDataManager implements DataManager {
+public class LiveGameSupervisor implements GameSupervisor {
 
     private static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
     private static final String BASE_REST_URL = "https://blastermind.herokuapp.com/"; // live
 
     private static final int MANUALLY_TRIGGER_MATCH_START_TIMEOUT = 15 * 1000; // fifteen seconds, in milliseconds
 
-    private static final String TAG = LiveDataManager.class.getSimpleName();
+    private static final String TAG = LiveGameSupervisor.class.getSimpleName();
     private static final String RETROFIT_TAG = "RETROFIT: ";
     private static final String APP_KEY = "a8dc613841aa8963a8a4";
 
@@ -58,7 +58,7 @@ public class LiveDataManager implements DataManager {
     private String mCurrentMatchName;
     private List<String> mCurrentMatchPlayers; // includes mPlayer
 
-    public LiveDataManager() {
+    public LiveGameSupervisor() {
         mPusher = new Pusher(APP_KEY);
         setupRestAdapter();
     }

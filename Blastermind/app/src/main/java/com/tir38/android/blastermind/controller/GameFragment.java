@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.tir38.android.blastermind.R;
-import com.tir38.android.blastermind.backend.DataManager;
+import com.tir38.android.blastermind.backend.GameSupervisor;
 import com.tir38.android.blastermind.core.Feedback;
 import com.tir38.android.blastermind.core.Guess;
 import com.tir38.android.blastermind.core.Logic;
@@ -54,7 +54,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     protected LinearLayout mInputContainer;
 
     @Inject
-    protected DataManager mDataManager;
+    protected GameSupervisor mGameSupervisor;
 
     private SubmitButton mSubmitButton;
     private int mCurrentTurn;
@@ -80,7 +80,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
         ActionBar actionBar = getActivity().getActionBar();
         if (actionBar != null) {
-            actionBar.setTitle(mDataManager.getCurrentMatchName());
+            actionBar.setTitle(mGameSupervisor.getCurrentMatchName());
         }
 
         ((BaseActivity) getActivity()).registerBrightnessCallbacks(this);
@@ -109,13 +109,13 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     public void onEventMainThread(MatchEndedEvent matchEndedEvent) {
 
         MatchEnd matchEnd = matchEndedEvent.getMatchEnd();
-        mCurrentPlayer = mDataManager.getCurrentPlayer();
+        mCurrentPlayer = mGameSupervisor.getCurrentPlayer();
         int winnerId = matchEnd.getWinnerId();
         String winnerName = matchEnd.getWinnerName();
 
         if (winnerId == -1) {
             // nobody won
-            if (mDataManager.isCurrentMatchMultiplayer()) {
+            if (mGameSupervisor.isCurrentMatchMultiplayer()) {
                 displayEndOfGameDialog("You all lose.");
             } else {
                 displayEndOfGameDialog("You lose.");
@@ -123,7 +123,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
         } else if (mCurrentPlayer.getId() == winnerId) {
             // you won
-            mDataManager.getCurrentPlayer();
+            mGameSupervisor.getCurrentPlayer();
             String dialogText = String.format(getResources().getString(R.string.you_won), mCurrentPlayer.getName());
             displayEndOfGameDialog(dialogText);
         } else {
@@ -280,7 +280,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
             @Override
             public void onClick(View v) {
                 Guess guess = mCurrentGuessRow.getGuess();
-                mDataManager.sendGuess(guess);
+                mGameSupervisor.sendGuess(guess);
                 mSubmitButton.setState(SubmitButton.STATE.PENDING);
             }
         });

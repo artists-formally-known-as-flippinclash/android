@@ -5,7 +5,10 @@ import com.tir38.android.blastermind.core.Player;
 
 import java.util.List;
 
-public interface DataManager {
+/**
+ * The central brain. Handles interaction with servers and local storage.
+ */
+public interface GameSupervisor {
 
     void startMatch(Player player);
 
@@ -16,7 +19,5 @@ public interface DataManager {
     Player getCurrentPlayer();
 
     boolean isCurrentMatchMultiplayer();
-
-    List<String> getCurrentMatcpPlayers();
 
 }

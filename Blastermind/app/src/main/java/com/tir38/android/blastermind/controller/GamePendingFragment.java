@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.tir38.android.blastermind.R;
-import com.tir38.android.blastermind.backend.DataManager;
+import com.tir38.android.blastermind.backend.GameSupervisor;
 import com.tir38.android.blastermind.core.Player;
 import com.tir38.android.blastermind.event.MatchCreateFailedEvent;
 import com.tir38.android.blastermind.event.MatchCreateSuccessEvent;
@@ -22,7 +22,7 @@ public class GamePendingFragment extends BaseFragment {
     private static final String TAG = GamePendingFragment.class.getSimpleName();
 
     @Inject
-    protected DataManager mDataManager;
+    protected GameSupervisor mGameSupervisor;
 
     private Player mPlayer;
 
@@ -49,7 +49,7 @@ public class GamePendingFragment extends BaseFragment {
         showProgressDialog(message);
 
         // create game
-        mDataManager.startMatch(mPlayer);
+        mGameSupervisor.startMatch(mPlayer);
     }
 
     public void onEventMainThread(MatchCreateSuccessEvent matchCreateSuccessEvent) {

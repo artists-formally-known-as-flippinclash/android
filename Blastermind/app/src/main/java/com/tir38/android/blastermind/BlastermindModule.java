@@ -4,8 +4,8 @@ import android.content.Context;
 
 import com.tir38.android.blastermind.analytics.AnalyticsFunnel;
 import com.tir38.android.blastermind.analytics.CrashlyticsAnalyticsFunnel;
-import com.tir38.android.blastermind.backend.DataManager;
-import com.tir38.android.blastermind.backend.LiveDataManager;
+import com.tir38.android.blastermind.backend.GameSupervisor;
+import com.tir38.android.blastermind.backend.LiveGameSupervisor;
 import com.tir38.android.blastermind.controller.CreateMatchActivity;
 import com.tir38.android.blastermind.controller.CreateMatchFragment;
 import com.tir38.android.blastermind.controller.GameActivity;
@@ -43,8 +43,8 @@ public class BlastermindModule {
 
     @Provides
     @Singleton
-    DataManager provideDataManager() {
-        return new LiveDataManager();
+    GameSupervisor provideGameSupervisor() {
+        return new LiveGameSupervisor();
     }
 
     @Provides
