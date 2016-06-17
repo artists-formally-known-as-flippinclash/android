@@ -8,13 +8,9 @@ android:
   - android-23
   - extra-android-m2repository
   - extra-google-m2repository
-install: bundle install --jobs=3 --retry=3 --deployment --path=${BUNDLE_PATH:-vendor/bundle}
-before_cache:
-  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
   directories:
   - "$HOME/.gradle/caches/"
   - "$HOME/.gradle/wrapper/"
-  - ./vendor/bundle
 script:
   - ./gradlew assembleDebug
