@@ -15,14 +15,14 @@ import android.widget.RelativeLayout;
 import com.tir38.android.blastermind.R;
 import com.tir38.android.blastermind.core.Logic;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class PegView extends RelativeLayout {
 
-    @InjectView(R.id.view_peg_border)
+    @BindView(R.id.view_peg_border)
     protected Button mBorder;
-    @InjectView(R.id.view_peg_button)
+    @BindView(R.id.view_peg_button)
     protected Button mButton;
 
     private Logic.TYPE mType;
@@ -67,12 +67,12 @@ public class PegView extends RelativeLayout {
 
     private void init() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.view_peg, this);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         reset();
     }
 
     private void setColor(@Nullable Logic.TYPE type) {
-        if (type == null)  {
+        if (type == null) {
             mButton.setBackground(null);
             return;
         }

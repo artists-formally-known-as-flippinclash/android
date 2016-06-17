@@ -34,8 +34,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
+import butterknife.Unbinder;
 
 import static com.tir38.android.blastermind.core.Logic.TYPE;
 
@@ -47,9 +48,9 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     private static final String EXIT_MATCH_TAG = "GameFragment.EXIT_MATCH_TAG";
     private static final String TAG_END_OF_GAME_DIALOG = "GameFragment.TAG_END_OF_GAME_DIALOG";
 
-    @InjectView(R.id.fragment_game_guesses_container)
+    @BindView(R.id.fragment_game_guesses_container)
     protected LinearLayout mGuessContainer;
-    @InjectView(R.id.fragment_game_input_container)
+    @BindView(R.id.fragment_game_input_container)
     protected LinearLayout mInputContainer;
 
     @Inject
@@ -62,6 +63,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     private int mGuessContainerHeightPx;
     private List<GuessRowView> mGuessRows;
     private Player mCurrentPlayer;
+    private Unbinder mUnbinder;
 
     public static Fragment newInstance() {
         return new GameFragment();
@@ -71,7 +73,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_game, container, false);
-        ButterKnife.inject(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
 
         createRows();
         setupInputButtons();
@@ -90,6 +92,12 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     public void onDetach() {
         super.onDetach();
         ((BaseActivity) getActivity()).unregisterBrightnessCallbacks(this);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
     @Override

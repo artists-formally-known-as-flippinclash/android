@@ -13,22 +13,21 @@ import com.tir38.android.blastermind.core.Feedback;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 /**
  * This class is hacky and gross. Don't go looking for good ideas here.
  */
 public class FeedbackView extends LinearLayout {
 
-    private static final String TAG = FeedbackView.class.getSimpleName();
-    @InjectView(R.id.feedback_peg1)
+    @BindView(R.id.feedback_peg1)
     ImageView mFeedbackPeg1;
-    @InjectView(R.id.feedback_peg2)
+    @BindView(R.id.feedback_peg2)
     ImageView mFeedbackPeg2;
-    @InjectView(R.id.feedback_peg3)
+    @BindView(R.id.feedback_peg3)
     ImageView mFeedbackPeg3;
-    @InjectView(R.id.feedback_peg4)
+    @BindView(R.id.feedback_peg4)
     ImageView mFeedbackPeg4;
     private List<ImageView> mFeedbackPegs;
 
@@ -59,7 +58,7 @@ public class FeedbackView extends LinearLayout {
 
     private void init() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.view_feedback, this);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
         mFeedbackPegs = new ArrayList<>();
         mFeedbackPegs.add(mFeedbackPeg1);
         mFeedbackPegs.add(mFeedbackPeg2);

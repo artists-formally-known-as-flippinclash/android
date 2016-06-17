@@ -10,18 +10,17 @@ import android.widget.ProgressBar;
 
 import com.tir38.android.blastermind.R;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class SubmitButton extends FrameLayout {
 
-    private static final String TAG = SubmitButton.class.getSimpleName();
 
-    @InjectView(R.id.progress)
+    @BindView(R.id.progress)
     protected ProgressBar mProgressIndicator;
-    @InjectView(R.id.send_enable)
+    @BindView(R.id.send_enable)
     protected ImageView mSendEnabledIcon;
-    @InjectView(R.id.send_disabled)
+    @BindView(R.id.send_disabled)
     protected ImageView mSendDisabledIcon;
 
     public SubmitButton(Context context) {
@@ -32,7 +31,7 @@ public class SubmitButton extends FrameLayout {
         super(context, attrs);
 
         View view = LayoutInflater.from(getContext()).inflate(R.layout.button_submit, this);
-        ButterKnife.inject(this, view);
+        ButterKnife.bind(this, view);
 
         setState(STATE.DISABLED);
     }

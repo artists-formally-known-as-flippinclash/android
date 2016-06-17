@@ -18,10 +18,11 @@ import com.tir38.android.blastermind.core.Player;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import butterknife.Unbinder;
 
 public class CreateMatchFragment extends BaseFragment {
 
@@ -30,10 +31,11 @@ public class CreateMatchFragment extends BaseFragment {
     @Inject
     protected AnalyticsFunnel mAnalyticsFunnel;
 
-    @InjectView(R.id.fragment_create_match_start_match_button)
+    @BindView(R.id.fragment_create_match_start_match_button)
     protected Button mStartMatchButton;
-    @InjectView(R.id.fragment_create_match_name_edit_text)
+    @BindView(R.id.fragment_create_match_name_edit_text)
     protected EditText mNameEditText;
+    private Unbinder mUnbinder;
 
     public static Fragment newInstance() {
         return new CreateMatchFragment();
@@ -43,7 +45,7 @@ public class CreateMatchFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_match, container, false);
-        ButterKnife.inject(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
         mStartMatchButton.setEnabled(false);
 
         String name = PreferenceManager.getDefaultSharedPreferences(getActivity())
@@ -51,6 +53,12 @@ public class CreateMatchFragment extends BaseFragment {
         mNameEditText.setText(name);
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mUnbinder.unbind();
     }
 
     @OnTextChanged(R.id.fragment_create_match_name_edit_text)
