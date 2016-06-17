@@ -2,7 +2,6 @@ package com.tir38.android.blastermind.backend;
 
 import android.util.Log;
 
-import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.pusher.client.Pusher;
 import com.pusher.client.channel.Channel;
@@ -11,6 +10,7 @@ import com.pusher.client.connection.ConnectionEventListener;
 import com.pusher.client.connection.ConnectionState;
 import com.pusher.client.connection.ConnectionStateChange;
 import com.tir38.android.blastermind.BuildConfig;
+import com.tir38.android.blastermind.analytics.AnalyticsFunnel;
 import com.tir38.android.blastermind.backend.request.GuessBody;
 import com.tir38.android.blastermind.backend.request.PlayerBody;
 import com.tir38.android.blastermind.backend.response.GuessResponse;
@@ -33,10 +33,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import de.greenrobot.event.EventBus;
-import retrofit.Callback;
-import retrofit.RestAdapter;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+
 
 public class LiveGameSupervisor implements GameSupervisor {
 
@@ -51,14 +57,16 @@ public class LiveGameSupervisor implements GameSupervisor {
 
     private static final boolean USE_FAKE_WEB_SERVICES = false;
 
-    private BlasterRestService mRestService;
     private Pusher mPusher;
     private int mCurrentMatchId;
     private Player mPlayer;
     private String mCurrentMatchName;
     private List<String> mCurrentMatchPlayers; // includes mPlayer
+    private BlastermindWebService mWebService;
+    private AnalyticsFunnel mAnalyticsFunnel;
 
-    public LiveGameSupervisor() {
+    public LiveGameSupervisor(AnalyticsFunnel analyticsFunnel) {
+        mAnalyticsFunnel = analyticsFunnel;
         mPusher = new Pusher(APP_KEY);
         setupRestAdapter();
     }
@@ -67,11 +75,15 @@ public class LiveGameSupervisor implements GameSupervisor {
     public void startMatch(Player player) {
         mPlayer = player;
         PlayerBody playerBody = PlayerBody.mapPlayerToBody(player);
-        mRestService.startMatch(playerBody, new Callback<StartMatchResponse>() {
+
+        Observable<StartMatchResponse> startMatchResponseObservable = mWebService.startMatch(playerBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        startMatchResponseObservable.subscribe(new Action1<StartMatchResponse>() {
             @Override
-            public void success(StartMatchResponse startMatchResponse, Response response) {
-                Log.d(RETROFIT_TAG, "my id: " + startMatchResponse.getMyId()
-                        + "; match name: " + startMatchResponse.getMatchName());
+            public void call(StartMatchResponse startMatchResponse) {
+                Log.d(RETROFIT_TAG, "my id: " + startMatchResponse.getMyId() + "; match name: " + startMatchResponse.getMatchName());
                 mCurrentMatchId = startMatchResponse.getMatchId();
                 mPlayer.setId(startMatchResponse.getMyId());
                 mCurrentMatchName = startMatchResponse.getMatchName();
@@ -83,10 +95,10 @@ public class LiveGameSupervisor implements GameSupervisor {
                 subscribeToPusherChannel(channel);
                 EventBus.getDefault().post(new MatchCreateSuccessEvent(mCurrentMatchName));
             }
-
+        }, new Action1<Throwable>() {
             @Override
-            public void failure(RetrofitError error) {
-                handleRetrofitError(error);
+            public void call(Throwable throwable) {
+                handleError(throwable);
                 EventBus.getDefault().post(new MatchCreateFailedEvent());
             }
         });
@@ -105,19 +117,24 @@ public class LiveGameSupervisor implements GameSupervisor {
 
         int playerId = mPlayer.getId();
         GuessBody guessBody = GuessBody.mapGuessToBody(guess);
-        mRestService.sendGuess(mCurrentMatchId, playerId, guessBody, new Callback<GuessResponse>() {
+
+        Observable<GuessResponse> guessResponseObservable = mWebService.sendGuess(mCurrentMatchId, playerId, guessBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        guessResponseObservable.subscribe(new Action1<GuessResponse>() {
             @Override
-            public void success(GuessResponse guessResponse, Response response) {
+            public void call(GuessResponse guessResponse) {
                 Log.d(RETROFIT_TAG, guessResponse.toString());
                 Feedback feedback = GuessResponse.mapResponseToFeedback(guessResponse);
 
                 EventBus.getDefault().post(new FeedbackEvent(feedback));
             }
-
+        }, new Action1<Throwable>() {
             @Override
-            public void failure(RetrofitError error) {
+            public void call(Throwable throwable) {
                 EventBus.getDefault().post(new NetworkFailureEvent());
-                handleRetrofitError(error);
+                handleError(throwable);
             }
         });
     }
@@ -136,7 +153,7 @@ public class LiveGameSupervisor implements GameSupervisor {
     public boolean isCurrentMatchMultiplayer() {
         return mCurrentMatchPlayers.size() > 1;
     }
-    
+
     private void setupRestAdapter() {
         String url;
 
@@ -146,11 +163,19 @@ public class LiveGameSupervisor implements GameSupervisor {
             url = BASE_REST_URL;
         }
 
-        RestAdapter restAdapter = new RestAdapter.Builder()
-                .setEndpoint(url)
-                .build();
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(url)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create());
 
-        mRestService = restAdapter.create(BlasterRestService.class);
+        if (BuildConfig.DEBUG) {
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+            builder.client(client);
+        }
+
+        mWebService = builder.build().create(BlastermindWebService.class);
     }
 
     private void subscribeToPusherChannel(String channelName) {
@@ -163,7 +188,7 @@ public class LiveGameSupervisor implements GameSupervisor {
 
             @Override
             public void onError(String message, String code, Exception e) {
-                Crashlytics.logException(e);
+                mAnalyticsFunnel.logException(e);
                 Log.e(TAG, "error: " + message + "; code: " + code);
             }
         }, ConnectionState.ALL);
@@ -191,9 +216,9 @@ public class LiveGameSupervisor implements GameSupervisor {
         });
     }
 
-    private void handleRetrofitError(RetrofitError error) {
-        Crashlytics.logException(error);
-        Log.e(RETROFIT_TAG, "Failure: " + error.toString() + " accessing: " + error.getUrl(), error.getCause());
+    private void handleError(Throwable throwable) {
+        mAnalyticsFunnel.logThrowable(throwable);
+        Log.e(RETROFIT_TAG, "Failure: " + throwable.toString());
     }
 
     /**
@@ -201,15 +226,19 @@ public class LiveGameSupervisor implements GameSupervisor {
      * But there is an API endpoint to manually trigger the Pusher Notification ourselves
      */
     private void manuallyTriggerMatchStart() {
-        mRestService.triggerMatchStart(mCurrentMatchId, new Callback<NullResponse>() {
-            @Override
-            public void success(NullResponse nullResponse, Response response) {
-                // we don't care
-            }
+        Observable<NullResponse> nullResponseObservable = mWebService.triggerMatchStart(mCurrentMatchId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
 
+        nullResponseObservable.subscribe(new Action1<NullResponse>() {
             @Override
-            public void failure(RetrofitError error) {
-                // we don't care
+            public void call(NullResponse nullResponse) {
+                // do nothing;
+            }
+        }, new Action1<Throwable>() {
+            @Override
+            public void call(Throwable throwable) {
+                // do nothing
             }
         });
     }

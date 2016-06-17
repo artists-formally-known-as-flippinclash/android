@@ -25,6 +25,13 @@ public interface AnalyticsFunnel {
     void logErrorMessage(String errorMessage);
 
     /**
+     * Log a {@link Throwable}
+     *
+     * @param throwable
+     */
+    void logThrowable(Throwable throwable);
+
+    /**
      * Pass a specific event off to the analytics tools
      *
      * @param event

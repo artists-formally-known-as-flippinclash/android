@@ -23,7 +23,7 @@ public class BlastermindApplication extends Application {
         setupAnalytics();
     }
 
-    protected void setupDependencyInjection() {
+    private void setupDependencyInjection() {
         mApplicationGraph = createObjectGraph();
         mApplicationGraph.inject(this);
     }
@@ -32,11 +32,14 @@ public class BlastermindApplication extends Application {
         return ObjectGraph.create(new BlastermindModule(getApplicationContext()));
     }
 
+    private void setupAnalytics() {
+        if (!BuildConfig.DEBUG) {
+            mAnalyticsFunnel.initialize();
+        }
+    }
+
     public final void inject(Object object) {
         mApplicationGraph.inject(object);
     }
 
-    protected void setupAnalytics() {
-        mAnalyticsFunnel.initialize();
-    }
 }
