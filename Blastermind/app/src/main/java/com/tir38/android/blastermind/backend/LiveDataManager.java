@@ -1,8 +1,6 @@
 package com.tir38.android.blastermind.backend;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
@@ -42,8 +40,8 @@ import retrofit.client.Response;
 
 public class LiveDataManager implements DataManager {
 
-    public static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
-    public static final String BASE_REST_URL = "https://blastermind.herokuapp.com/"; // live
+    private static final String TEST_BASE_REST_URL = "http://private-2ec32-blastermind.apiary-mock.com"; // testing
+    private static final String BASE_REST_URL = "https://blastermind.herokuapp.com/"; // live
 
     private static final int MANUALLY_TRIGGER_MATCH_START_TIMEOUT = 15 * 1000; // fifteen seconds, in milliseconds
 
@@ -58,11 +56,9 @@ public class LiveDataManager implements DataManager {
     private int mCurrentMatchId;
     private Player mPlayer;
     private String mCurrentMatchName;
-    private Context mContext;
     private List<String> mCurrentMatchPlayers; // includes mPlayer
 
-    public LiveDataManager(Context context) {
-        mContext = context;
+    public LiveDataManager() {
         mPusher = new Pusher(APP_KEY);
         setupRestAdapter();
     }

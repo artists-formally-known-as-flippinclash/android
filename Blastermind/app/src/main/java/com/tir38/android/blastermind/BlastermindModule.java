@@ -44,7 +44,7 @@ public class BlastermindModule {
     @Provides
     @Singleton
     DataManager provideDataManager() {
-        return new LiveDataManager(mContext);
+        return new LiveDataManager();
     }
 
     @Provides
