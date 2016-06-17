@@ -44,7 +44,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     private static final int REQUEST_EXIT_MATCH_DIALOG = 1;
     private static final int REQUEST_END_OF_GAME_DIALOG = 2;
 
-    private static final String TAG = GameFragment.class.getSimpleName();
     private static final String EXIT_MATCH_TAG = "GameFragment.EXIT_MATCH_TAG";
     private static final String TAG_END_OF_GAME_DIALOG = "GameFragment.TAG_END_OF_GAME_DIALOG";
 
@@ -63,7 +62,6 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
     private int mGuessContainerHeightPx;
     private List<GuessRowView> mGuessRows;
     private Player mCurrentPlayer;
-    private ViewTreeObserver.OnGlobalLayoutListener mOnGlobalLayoutListener;
 
     public static Fragment newInstance() {
         return new GameFragment();
@@ -106,6 +104,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         }
     }
 
+    @SuppressWarnings("unused")
     public void onEventMainThread(MatchEndedEvent matchEndedEvent) {
 
         MatchEnd matchEnd = matchEndedEvent.getMatchEnd();
@@ -133,6 +132,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         }
     }
 
+    @SuppressWarnings("unused")
     public void onEventMainThread(FeedbackEvent feedbackEvent) {
         Feedback feedback = feedbackEvent.getFeedback();
         handleFeedback(feedback);
@@ -150,6 +150,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
         mCurrentGuessRow.setCurrent();
     }
 
+    @SuppressWarnings("unused")
     public void onEventMainThread(NetworkFailureEvent networkFailureEvent) {
         Toast.makeText(getContext(), R.string.network_error_msg, Toast.LENGTH_SHORT).show();
         setStateOfSubmitButton();
