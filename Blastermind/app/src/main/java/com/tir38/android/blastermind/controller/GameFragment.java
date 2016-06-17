@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.tir38.android.blastermind.R;
 import com.tir38.android.blastermind.backend.DataManager;
@@ -23,6 +24,7 @@ import com.tir38.android.blastermind.core.MatchEnd;
 import com.tir38.android.blastermind.core.Player;
 import com.tir38.android.blastermind.event.FeedbackEvent;
 import com.tir38.android.blastermind.event.MatchEndedEvent;
+import com.tir38.android.blastermind.event.NetworkFailureEvent;
 import com.tir38.android.blastermind.view.GuessRowView;
 import com.tir38.android.blastermind.view.InputButton;
 import com.tir38.android.blastermind.view.SubmitButton;
@@ -146,6 +148,11 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
 
         mCurrentGuessRow = mGuessRows.get(mCurrentTurn);
         mCurrentGuessRow.setCurrent();
+    }
+
+    public void onEventMainThread(NetworkFailureEvent networkFailureEvent) {
+        Toast.makeText(getContext(), R.string.network_error_msg, Toast.LENGTH_SHORT).show();
+        setStateOfSubmitButton();
     }
 
     private void createRows() {
@@ -285,7 +292,7 @@ public class GameFragment extends BaseFragment implements GameActivity.BackPress
             return;
         }
 
-        // if all pegs have a type then and only then enable update button
+        // if all pegs have a type,then and only then enable update button
         if (mCurrentGuessRow.areAllPegsSet()) {
             mSubmitButton.setState(SubmitButton.STATE.ENABLED);
         } else {

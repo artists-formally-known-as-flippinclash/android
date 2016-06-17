@@ -28,6 +28,7 @@ import com.tir38.android.blastermind.event.MatchCreateFailedEvent;
 import com.tir38.android.blastermind.event.MatchCreateSuccessEvent;
 import com.tir38.android.blastermind.event.MatchEndedEvent;
 import com.tir38.android.blastermind.event.MatchStartedEvent;
+import com.tir38.android.blastermind.event.NetworkFailureEvent;
 
 import java.util.List;
 import java.util.Timer;
@@ -114,12 +115,12 @@ public class LiveDataManager implements DataManager {
                 Log.d(RETROFIT_TAG, guessResponse.toString());
                 Feedback feedback = GuessResponse.mapResponseToFeedback(guessResponse);
 
-
                 EventBus.getDefault().post(new FeedbackEvent(feedback));
             }
 
             @Override
             public void failure(RetrofitError error) {
+                EventBus.getDefault().post(new NetworkFailureEvent());
                 handleRetrofitError(error);
             }
         });
@@ -202,7 +203,6 @@ public class LiveDataManager implements DataManager {
     private void handleRetrofitError(RetrofitError error) {
         Crashlytics.logException(error);
         Log.e(RETROFIT_TAG, "Failure: " + error.toString() + " accessing: " + error.getUrl(), error.getCause());
-        Toast.makeText(mContext, "network connection error: " + error.toString(), Toast.LENGTH_SHORT).show();
     }
 
     /**

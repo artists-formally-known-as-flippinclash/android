@@ -62,7 +62,6 @@ public class GamePendingFragment extends BaseFragment {
 
     public void onEventMainThread(MatchStartedEvent matchStartedEvent) {
         dismissProgressDialog();
-        Toast.makeText(getActivity(), getString(R.string.match_started), Toast.LENGTH_SHORT).show();
         Intent intent = GameActivity.newIntent(getActivity());
         startActivity(intent);
     }
