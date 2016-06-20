@@ -1,6 +1,7 @@
 Upcoming
 ----
 * Better error handling on network failure
+* Upgrade from Retrofit1 to Retrofit2
 
 
 v0.6
