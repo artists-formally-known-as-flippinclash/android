@@ -1,0 +1,18 @@
+language: android
+jdk: oraclejdk8
+android:
+  components:
+  - platform-tools
+  - tools
+  - build-tools-23.0.3
+  - android-23
+  - extra-android-m2repository
+  - extra-google-m2repository
+cache:
+  directories:
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+script:
+  - ./gradlew assembleDebug
+notifications:
+  email: false

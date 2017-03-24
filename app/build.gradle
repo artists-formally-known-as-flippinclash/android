@@ -1,0 +1,63 @@
+apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+apply plugin: 'android-apt'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    defaultConfig {
+        applicationId "com.tir38.android.blastermind"
+        minSdkVersion 16
+        targetSdkVersion 23
+        versionCode 6
+        versionName "0.6"
+    }
+
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'LICENSE' // two dependencies are both trying to add a file called LICENSE
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile project(':core')
+
+    // Dependency Injection of views
+    // https://github.com/JakeWharton/butterknife
+    // Apache 2.0
+    compile 'com.jakewharton:butterknife:8.1.0'
+    apt 'com.jakewharton:butterknife-compiler:8.1.0'
+
+    // A type-safe HTTP client
+    // http://square.github.io/retrofit/
+    // Apache 2.0
+    compile 'com.squareup.retrofit2:retrofit:2.1.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
+
+    // RX Java and Reactive Extensions for Android
+    // https://github.com/ReactiveX/RxAndroid
+    // Apache 2.0
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.1.3'
+
+    compile 'com.pusher:pusher-java-client:0.3.3'
+    compile 'de.greenrobot:eventbus:2.4.0'
+    compile 'com.squareup.dagger:dagger:1.2.1'
+    provided 'com.squareup.dagger:dagger-compiler:1.2.2'
+
+    compile 'com.android.support:appcompat-v7:23.4.0'
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.6@aar') {
+        transitive = true;
+    }
+}
